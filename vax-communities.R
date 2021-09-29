@@ -53,14 +53,21 @@ dat_chart <- dat |>
   # Summarise by dhb, ethnicity, age group
   group_by(dhb_of_residence, ethnic_group, age_group_2) |> 
   summarise(second_dose_administered = sum(second_dose_administered), 
+            first_dose_administered = sum(first_dose_administered), 
             population = sum(population)) |> 
   ungroup() |> 
-  mutate(fully_vax_rate = second_dose_administered / population) |> 
-  # Categorise vax rate
+  mutate(fully_vax_rate = second_dose_administered / population, 
+         first_dose_rate = first_dose_administered / population) |> 
+  # Categorise vax rates
   mutate(vax_category = case_when(
     fully_vax_rate > 0.9 ~ "Greater than 90% fully vaccinated", 
     (fully_vax_rate >= 0.8) & (fully_vax_rate <= 0.9) ~ "80% to 90% fully vaccinated", 
     TRUE ~ "Less than 80% fully vaccinated"
+  )) |> 
+  mutate(first_dose_category = case_when(
+    first_dose_rate > 0.9 ~ "Greater than 90% first doses", 
+    (first_dose_rate >= 0.8) & (first_dose_rate <= 0.9) ~ "80% to 90% first doses", 
+    TRUE ~ "Less than 80% first doses"
   )) |> 
   # Create factors for ordering
   mutate(vax_category = factor(x = vax_category, 
@@ -68,6 +75,11 @@ dat_chart <- dat |>
                                           "80% to 90% fully vaccinated", 
                                           "Less than 80% fully vaccinated"), 
                                ordered = TRUE)) |> 
+  mutate(first_dose_category = factor(x = first_dose_category, 
+                                      levels = c("Greater than 90% first doses", 
+                                                 "80% to 90% first doses", 
+                                                 "Less than 80% first doses"), 
+                                      ordered = TRUE)) |> 
   mutate(ethnic_group = factor(x = ethnic_group, 
                                levels = c("Maori", 
                                           "Pacific Peoples", 
@@ -114,7 +126,8 @@ dat_chart <- dat |>
 # *****************************************************************************
 # Visualise ----
 
-chart <- ggplot(dat_chart) + 
+# Fully vaccinated
+chart_fully_vax <- ggplot(dat_chart) + 
   geom_tile(mapping = aes(y = fct_rev(ethnicity_age), 
                           x = dhb_of_residence, 
                           fill = vax_category), 
@@ -131,14 +144,54 @@ chart <- ggplot(dat_chart) +
                              override.aes = list(size = 0.5))) + 
   xlab("") + 
   ylab("") + 
+  ggtitle("Fully vaccinated (two doses)") + 
   theme_minimal(base_family = "Fira Sans") + 
   theme(axis.text.x.top = element_text(angle = 45, hjust = 0), 
         legend.justification = c(0, 0), 
         legend.position = c(0, 1.2), 
-        plot.margin = margin(24, 32, 8, 8, "pt"))
+        plot.margin = margin(8, 32, 8, 8, "pt"), 
+        plot.title = element_text(size = rel(1.1), 
+                                  face = "bold", 
+                                  margin = margin(0, 0, 16, 0, "pt")))
 
 ggsave(filename = here(glue("outputs/vax_communities_{latest_date}.png")), 
-       plot = chart, 
+       plot = chart_fully_vax, 
+       device = "png", 
+       width = 2400, 
+       height = 1800, 
+       units = "px", 
+       bg = "white")
+
+# First doses
+chart_first_doses <- ggplot(dat_chart) + 
+  geom_tile(mapping = aes(y = fct_rev(ethnicity_age), 
+                          x = dhb_of_residence, 
+                          fill = first_dose_category), 
+            colour = grey(0.95),  size = 3) + 
+  geom_hline(yintercept = 3.5, colour = "black") + 
+  geom_hline(yintercept = 6.5, colour = "black") + 
+  geom_hline(yintercept = 9.5, colour = "black") + 
+  scale_fill_manual(values = c("Greater than 90% first doses" = grey(0.05), 
+                               "80% to 90% first doses" = "pink", 
+                               "Less than 80% first doses" = "firebrick"), 
+                    name = NULL) + 
+  scale_x_discrete(position = "top") + 
+  guides(fill = guide_legend(ncol = 1, 
+                             override.aes = list(size = 0.5))) + 
+  xlab("") + 
+  ylab("") + 
+  ggtitle("First doses") + 
+  theme_minimal(base_family = "Fira Sans") + 
+  theme(axis.text.x.top = element_text(angle = 45, hjust = 0), 
+        legend.justification = c(0, 0), 
+        legend.position = c(0, 1.2), 
+        plot.margin = margin(8, 32, 8, 8, "pt"), 
+        plot.title = element_text(size = rel(1.1), 
+                                  face = "bold", 
+                                  margin = margin(0, 0, 16, 0, "pt")))
+
+ggsave(filename = here(glue("outputs/first_doses_communities_{latest_date}.png")), 
+       plot = chart_first_doses, 
        device = "png", 
        width = 2400, 
        height = 1800, 
