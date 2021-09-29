@@ -136,7 +136,7 @@ chart_fully_vax <- ggplot(dat_chart) +
   geom_hline(yintercept = 3.5, colour = "black") + 
   geom_hline(yintercept = 6.5, colour = "black") + 
   geom_hline(yintercept = 9.5, colour = "black") + 
-  scale_fill_manual(values = c("Greater than 90% fully vaccinated" = grey(0.05), 
+  scale_fill_manual(values = c("Greater than 90% fully vaccinated" = grey(0.9), 
                                "80% to 90% fully vaccinated" = "pink", 
                                "Less than 80% fully vaccinated" = "firebrick"), 
                     name = NULL) + 
@@ -172,7 +172,7 @@ chart_first_doses <- ggplot(dat_chart) +
   geom_hline(yintercept = 3.5, colour = "black") + 
   geom_hline(yintercept = 6.5, colour = "black") + 
   geom_hline(yintercept = 9.5, colour = "black") + 
-  scale_fill_manual(values = c("Greater than 90% first doses" = grey(0.05), 
+  scale_fill_manual(values = c("Greater than 90% first doses" = grey(0.9), 
                                "80% to 90% first doses" = "pink", 
                                "Less than 80% first doses" = "firebrick"), 
                     name = NULL) + 
