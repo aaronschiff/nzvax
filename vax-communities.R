@@ -10,6 +10,7 @@ library(readxl)
 library(glue)
 
 latest_date <- "28_09_2021"
+latest_date_nice <- "28 September 2021"
 
 # *****************************************************************************
 
@@ -144,7 +145,7 @@ chart_fully_vax <- ggplot(dat_chart) +
                              override.aes = list(size = 0.5))) + 
   xlab("") + 
   ylab("") + 
-  ggtitle("Fully vaccinated (two doses)") + 
+  ggtitle(glue("Fully vaccinated (two doses) to {latest_date_nice}")) + 
   theme_minimal(base_family = "Fira Sans") + 
   theme(axis.text.x.top = element_text(angle = 45, hjust = 0), 
         legend.justification = c(0, 0), 
@@ -180,7 +181,7 @@ chart_first_doses <- ggplot(dat_chart) +
                              override.aes = list(size = 0.5))) + 
   xlab("") + 
   ylab("") + 
-  ggtitle("First doses") + 
+  ggtitle(glue("First doses to {latest_date_nice}")) + 
   theme_minimal(base_family = "Fira Sans") + 
   theme(axis.text.x.top = element_text(angle = 45, hjust = 0), 
         legend.justification = c(0, 0), 
