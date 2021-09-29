@@ -8,6 +8,7 @@ library(here)
 library(janitor)
 library(readxl)
 library(glue)
+library(colorspace)
 
 latest_date <- "28_09_2021"
 latest_date_nice <- "28 September 2021"
@@ -132,11 +133,13 @@ chart_fully_vax <- ggplot(dat_chart) +
   geom_tile(mapping = aes(y = fct_rev(ethnicity_age), 
                           x = dhb_of_residence, 
                           fill = vax_category), 
-            colour = grey(0.95),  size = 3) + 
+            colour = grey(0.97),  size = 3) + 
   geom_hline(yintercept = 3.5, colour = "black") + 
   geom_hline(yintercept = 6.5, colour = "black") + 
   geom_hline(yintercept = 9.5, colour = "black") + 
-  scale_fill_manual(values = c("Greater than 90% fully vaccinated" = grey(0.9), 
+  scale_fill_manual(values = c("Greater than 90% fully vaccinated" = lighten(rgb(99, 149, 236, 
+                                                                                 maxColorValue = 255), 
+                                                                             amount = 0.8), 
                                "80% to 90% fully vaccinated" = "pink", 
                                "Less than 80% fully vaccinated" = "firebrick"), 
                     name = NULL) + 
@@ -168,11 +171,13 @@ chart_first_doses <- ggplot(dat_chart) +
   geom_tile(mapping = aes(y = fct_rev(ethnicity_age), 
                           x = dhb_of_residence, 
                           fill = first_dose_category), 
-            colour = grey(0.95),  size = 3) + 
+            colour = grey(0.97),  size = 3) + 
   geom_hline(yintercept = 3.5, colour = "black") + 
   geom_hline(yintercept = 6.5, colour = "black") + 
   geom_hline(yintercept = 9.5, colour = "black") + 
-  scale_fill_manual(values = c("Greater than 90% first doses" = grey(0.9), 
+  scale_fill_manual(values = c("Greater than 90% first doses" = lighten(rgb(99, 149, 236, 
+                                                                            maxColorValue = 255), 
+                                                                        amount = 0.85), 
                                "80% to 90% first doses" = "pink", 
                                "Less than 80% first doses" = "firebrick"), 
                     name = NULL) + 
