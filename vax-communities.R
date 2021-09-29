@@ -9,7 +9,7 @@ library(janitor)
 library(readxl)
 library(glue)
 
-latest_date <- "21_09_2021"
+latest_date <- "28_09_2021"
 
 # *****************************************************************************
 
