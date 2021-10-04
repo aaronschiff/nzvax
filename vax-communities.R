@@ -28,8 +28,7 @@ dat <- read_excel(path = here(glue("data/covid_vaccinations_{latest_date}.xlsx")
 # Chart data
 dat_chart <- dat |> 
   # Remove unknown categories
-  filter(gender != "Unknown/Other", 
-         ethnic_group != "Unknown", 
+  filter(ethnic_group != "Unknown", 
          ethnic_group != "Various", 
          dhb_of_residence != "Overseas / Unknown") |> 
   # Create custom age groups
@@ -63,24 +62,28 @@ dat_chart <- dat |>
   # Categorise vax rates
   mutate(vax_category = case_when(
     fully_vax_rate > 0.9 ~ "Greater than 90% fully vaccinated", 
-    (fully_vax_rate >= 0.8) & (fully_vax_rate <= 0.9) ~ "80% to 90% fully vaccinated", 
-    TRUE ~ "Less than 80% fully vaccinated"
+    (fully_vax_rate > 0.8) & (fully_vax_rate <= 0.9) ~ "80% to 90% fully vaccinated", 
+    (fully_vax_rate >= 0.7) & (fully_vax_rate <= 0.8) ~ "70% to 80% fully vaccinated", 
+    TRUE ~ "Less than 70% fully vaccinated"
   )) |> 
   mutate(first_dose_category = case_when(
     first_dose_rate > 0.9 ~ "Greater than 90% first doses", 
-    (first_dose_rate >= 0.8) & (first_dose_rate <= 0.9) ~ "80% to 90% first doses", 
-    TRUE ~ "Less than 80% first doses"
+    (first_dose_rate > 0.8) & (first_dose_rate <= 0.9) ~ "80% to 90% first doses", 
+    (first_dose_rate >= 0.7) & (first_dose_rate <= 0.8) ~ "70% to 80% first doses", 
+    TRUE ~ "Less than 70% first doses"
   )) |> 
   # Create factors for ordering
   mutate(vax_category = factor(x = vax_category, 
                                levels = c("Greater than 90% fully vaccinated", 
                                           "80% to 90% fully vaccinated", 
-                                          "Less than 80% fully vaccinated"), 
+                                          "70% to 80% fully vaccinated", 
+                                          "Less than 70% fully vaccinated"), 
                                ordered = TRUE)) |> 
   mutate(first_dose_category = factor(x = first_dose_category, 
                                       levels = c("Greater than 90% first doses", 
                                                  "80% to 90% first doses", 
-                                                 "Less than 80% first doses"), 
+                                                 "70% to 80% first doses", 
+                                                 "Less than 70% first doses"), 
                                       ordered = TRUE)) |> 
   mutate(ethnic_group = factor(x = ethnic_group, 
                                levels = c("Maori", 
@@ -141,28 +144,39 @@ chart_fully_vax <- ggplot(dat_chart) +
                                                                                  maxColorValue = 255), 
                                                                              amount = 0.8), 
                                "80% to 90% fully vaccinated" = "pink", 
-                               "Less than 80% fully vaccinated" = "firebrick"), 
+                               "70% to 80% fully vaccinated" = "firebrick", 
+                               "Less than 70% fully vaccinated" = darken(col = "firebrick4", 
+                                                                         amount = 0.7)), 
                     name = NULL) + 
   scale_x_discrete(position = "top") + 
   guides(fill = guide_legend(ncol = 1, 
                              override.aes = list(size = 0.5))) + 
   xlab("") + 
   ylab("") + 
+  annotate(geom = "text", 
+           x = 0.4, 
+           y = -0.5, 
+           label = "Chart by Aaron Schiff using data from the NZ Ministry of Health\ngithub.com/aaronschiff/nzvax", 
+           hjust = 0, 
+           family = "Fira Sans", 
+           size = 2) + 
+  coord_cartesian(clip = "off") + 
   ggtitle(glue("Fully vaccinated (two doses) to {latest_date_nice}")) + 
   theme_minimal(base_family = "Fira Sans") + 
   theme(axis.text.x.top = element_text(angle = 45, hjust = 0), 
         legend.justification = c(0, 0), 
-        legend.position = c(0, 1.2), 
-        plot.margin = margin(8, 32, 8, 8, "pt"), 
+        legend.position = c(-0.015, 1.17), 
+        panel.grid = element_blank(), 
+        plot.margin = margin(8, 32, 16, 8, "pt"), 
         plot.title = element_text(size = rel(1.1), 
                                   face = "bold", 
-                                  margin = margin(0, 0, 16, 0, "pt")))
+                                  margin = margin(0, 0, 24, 0, "pt")))
 
 ggsave(filename = here(glue("outputs/vax_communities_{latest_date}.png")), 
        plot = chart_fully_vax, 
        device = "png", 
        width = 2400, 
-       height = 1800, 
+       height = 2000, 
        units = "px", 
        bg = "white")
 
@@ -179,28 +193,39 @@ chart_first_doses <- ggplot(dat_chart) +
                                                                             maxColorValue = 255), 
                                                                         amount = 0.85), 
                                "80% to 90% first doses" = "pink", 
-                               "Less than 80% first doses" = "firebrick"), 
+                               "70% to 80% first doses" = "firebrick", 
+                               "Less than 70% first doses" = darken(col = "firebrick4", 
+                                                                    amount = 0.7)), 
                     name = NULL) + 
   scale_x_discrete(position = "top") + 
   guides(fill = guide_legend(ncol = 1, 
                              override.aes = list(size = 0.5))) + 
   xlab("") + 
   ylab("") + 
+  annotate(geom = "text", 
+           x = 0.4, 
+           y = -0.5, 
+           label = "Chart by Aaron Schiff using data from the NZ Ministry of Health\ngithub.com/aaronschiff/nzvax", 
+           hjust = 0, 
+           family = "Fira Sans", 
+           size = 2) + 
+  coord_cartesian(clip = "off") + 
   ggtitle(glue("First doses to {latest_date_nice}")) + 
   theme_minimal(base_family = "Fira Sans") + 
   theme(axis.text.x.top = element_text(angle = 45, hjust = 0), 
         legend.justification = c(0, 0), 
-        legend.position = c(0, 1.2), 
-        plot.margin = margin(8, 32, 8, 8, "pt"), 
+        legend.position = c(-0.015, 1.17), 
+        panel.grid = element_blank(), 
+        plot.margin = margin(8, 32, 16, 8, "pt"), 
         plot.title = element_text(size = rel(1.1), 
                                   face = "bold", 
-                                  margin = margin(0, 0, 16, 0, "pt")))
+                                  margin = margin(0, 0, 24, 0, "pt")))
 
 ggsave(filename = here(glue("outputs/first_doses_communities_{latest_date}.png")), 
        plot = chart_first_doses, 
        device = "png", 
        width = 2400, 
-       height = 1800, 
+       height = 2000, 
        units = "px", 
        bg = "white")
 
