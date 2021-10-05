@@ -257,29 +257,37 @@ dat_chart_vax_rate_change <- dat_combined |>
   mutate(fully_vax_rate_change = fully_vax_rate_current - fully_vax_rate_previous, 
          first_dose_rate_change = first_dose_rate_current - first_dose_rate_previous) |> 
   mutate(fully_vax_rate_change_category = case_when(
-    fully_vax_rate_change < 0.05 ~ "Less than 5% increase", 
-    (fully_vax_rate_change >= 0.05) & (fully_vax_rate_change < 0.1) ~ "5% to 10% increase", 
-    (fully_vax_rate_change >= 0.1) & (fully_vax_rate_change < 0.15) ~ "10% to 15% increase", 
-    (fully_vax_rate_change >= 0.15) & (fully_vax_rate_change < 0.2) ~ "15% to 20% increase"
+    (fully_vax_rate_change < 0.02) ~ "Less than 2% increase", 
+    (fully_vax_rate_change >= 0.02) & (fully_vax_rate_change < 0.04) ~ "2% to 4% increase", 
+    (fully_vax_rate_change >= 0.04) & (fully_vax_rate_change < 0.06) ~ "4% to 6% increase", 
+    (fully_vax_rate_change >= 0.06) & (fully_vax_rate_change < 0.08) ~ "6% to 8% increase", 
+    (fully_vax_rate_change >= 0.08) & (fully_vax_rate_change < 0.1) ~ "8% to 10% increase", 
+    (fully_vax_rate_change >= 0.1) ~ "Greater than 10% increase"
   )) |> 
   mutate(first_dose_rate_change_category = case_when(
-    first_dose_rate_change < 0.05 ~ "Less than 5% increase", 
-    (first_dose_rate_change >= 0.05) & (first_dose_rate_change < 0.1) ~ "5% to 10% increase", 
-    (first_dose_rate_change >= 0.1) & (first_dose_rate_change < 0.15) ~ "10% to 15% increase", 
-    (first_dose_rate_change >= 0.15) & (first_dose_rate_change < 0.2) ~ "15% to 20% increase"
+    (first_dose_rate_change < 0.02) ~ "Less than 2% increase", 
+    (first_dose_rate_change >= 0.02) & (first_dose_rate_change < 0.04) ~ "2% to 4% increase", 
+    (first_dose_rate_change >= 0.04) & (first_dose_rate_change < 0.06) ~ "4% to 6% increase", 
+    (first_dose_rate_change >= 0.06) & (first_dose_rate_change < 0.08) ~ "6% to 8% increase", 
+    (first_dose_rate_change >= 0.08) & (first_dose_rate_change < 0.1) ~ "8% to 10% increase", 
+    (first_dose_rate_change >= 0.1) ~ "Greater than 10% increase"
   )) |> 
   # Create factors for ordering
   mutate(fully_vax_rate_change_category = factor(x= fully_vax_rate_change_category, 
-                                                 levels = c("Less than 5% increase", 
-                                                            "5% to 10% increase", 
-                                                            "10% to 15% increase", 
-                                                            "15% to 20% increase"), 
+                                                 levels = c("Less than 2% increase", 
+                                                            "2% to 4% increase", 
+                                                            "4% to 6% increase", 
+                                                            "6% to 8% increase", 
+                                                            "8% to 10% increase", 
+                                                            "Greater than 10% increase"), 
                                                  ordered = TRUE)) |> 
   mutate(first_dose_rate_change_category = factor(x= first_dose_rate_change_category, 
-                                                  levels = c("Less than 5% increase", 
-                                                             "5% to 10% increase", 
-                                                             "10% to 15% increase", 
-                                                             "15% to 20% increase"), 
+                                                  levels = c("Less than 2% increase", 
+                                                             "2% to 4% increase", 
+                                                             "4% to 6% increase", 
+                                                             "6% to 8% increase", 
+                                                             "8% to 10% increase", 
+                                                             "Greater than 10% increase"),
                                                   ordered = TRUE))
 
 # Change in fully vaccinated rate chart
@@ -291,14 +299,13 @@ chart_fully_vax_change <- ggplot(dat_chart_vax_rate_change,
   geom_text(mapping = aes(angle = 90 * (fully_vax_rate_change / 0.25)), 
             colour = "white", label = "—", 
             family = "Fira Sans", 
-            fontface = "bold", 
             size = 4) + 
   geom_hline(yintercept = 3.5, colour = "black") + 
   geom_hline(yintercept = 6.5, colour = "black") + 
   geom_hline(yintercept = 9.5, colour = "black") + 
   scale_fill_viridis_d(drop = FALSE, name = NULL) + 
   scale_x_discrete(position = "top") + 
-  guides(fill = guide_legend(ncol = 1, 
+  guides(fill = guide_legend(ncol = 2, 
                              override.aes = list(size = 0.5))) + 
   xlab("") + 
   ylab("") + 
@@ -314,7 +321,7 @@ chart_fully_vax_change <- ggplot(dat_chart_vax_rate_change,
   theme_minimal(base_family = "Fira Sans") + 
   theme(axis.text.x.top = element_text(angle = 45, hjust = 0), 
         legend.justification = c(0, 0), 
-        legend.position = c(-0.015, 1.17), 
+        legend.position = c(-0.015, 1.2), 
         panel.grid = element_blank(), 
         plot.margin = margin(8, 32, 16, 8, "pt"), 
         plot.title = element_text(size = rel(1.1), 
@@ -338,14 +345,13 @@ chart_first_doses_change <- ggplot(dat_chart_vax_rate_change,
   geom_text(mapping = aes(angle = 90 * (first_dose_rate_change / 0.25)), 
             colour = "white", label = "—", 
             family = "Fira Sans", 
-            fontface = "bold", 
             size = 4) + 
   geom_hline(yintercept = 3.5, colour = "black") + 
   geom_hline(yintercept = 6.5, colour = "black") + 
   geom_hline(yintercept = 9.5, colour = "black") + 
   scale_fill_viridis_d(drop = FALSE, name = NULL) + 
   scale_x_discrete(position = "top") + 
-  guides(fill = guide_legend(ncol = 1, 
+  guides(fill = guide_legend(ncol = 2, 
                              override.aes = list(size = 0.5))) + 
   xlab("") + 
   ylab("") + 
@@ -361,7 +367,7 @@ chart_first_doses_change <- ggplot(dat_chart_vax_rate_change,
   theme_minimal(base_family = "Fira Sans") + 
   theme(axis.text.x.top = element_text(angle = 45, hjust = 0), 
         legend.justification = c(0, 0), 
-        legend.position = c(-0.015, 1.17), 
+        legend.position = c(-0.015, 1.2), 
         panel.grid = element_blank(), 
         plot.margin = margin(8, 32, 16, 8, "pt"), 
         plot.title = element_text(size = rel(1.1), 
