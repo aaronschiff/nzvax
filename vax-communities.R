@@ -10,9 +10,9 @@ library(readxl)
 library(glue)
 library(colorspace)
 
-latest_date <- "28_09_2021"               # Date of most recent week's data
-prev_date <- "21_09_2021"                 # Date of previous week's data
-latest_date_nice <- "28 September 2021"   # For chart title
+latest_date <- "05_10_2021"               # Date of most recent week's data
+prev_date <- "28_09_2021"                 # Date of previous week's data
+latest_date_nice <- "5 October 2021"   # For chart title
 
 # *****************************************************************************
 
@@ -381,6 +381,5 @@ ggsave(filename = here(glue("outputs/first_doses_change_communities_{latest_date
        height = 2000, 
        units = "px", 
        bg = "white")
-
 
 # *****************************************************************************
