@@ -159,7 +159,7 @@ chart_fully_vax_rate <- ggplot(dat_chart_vax_rate) +
                                "80% to 90% fully vaccinated" = "pink", 
                                "70% to 80% fully vaccinated" = "firebrick", 
                                "Less than 70% fully vaccinated" = darken(col = "firebrick4", 
-                                                                         amount = 0.7)), 
+                                                                         amount = 0.7)),
                     name = NULL) + 
   scale_x_discrete(position = "top") + 
   guides(fill = guide_legend(ncol = 1, 
