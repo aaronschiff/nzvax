@@ -1,5 +1,10 @@
 # NZ COVID vaccination rates visualised by 'community'
 
+# Feedback to consider: 
+# - Use a single colour scale (all blue?). Avoid colours that might appear brown.
+# - Include a title or description to frame the intent of the charts. 
+# - Include vaccination % numbers in the boxes?
+
 # *****************************************************************************
 # Setup ----
 
