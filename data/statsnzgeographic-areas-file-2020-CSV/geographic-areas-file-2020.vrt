@@ -1,0 +1,74 @@
+<OGRVRTDataSource>
+  <OGRVRTLayer name="geographic-areas-file-2020">
+    <SrcDataSource relativeToVRT="1">geographic-areas-file-2020.csv</SrcDataSource>
+    <FeatureCount>53596</FeatureCount>
+    <Field name="MB2020_code" src="MB2020_code" type="String" />
+    <Field name="MB2019_code" src="MB2019_code" type="String" />
+    <Field name="MB2018_code" src="MB2018_code" type="String" />
+    <Field name="MB2013_code" src="MB2013_code" type="String" />
+    <Field name="MB2011_code" src="MB2011_code" type="String" />
+    <Field name="MB2010_code" src="MB2010_code" type="String" />
+    <Field name="MB2006_code" src="MB2006_code" type="String" />
+    <Field name="MB2001_code" src="MB2001_code" type="String" />
+    <Field name="SA12020_code" src="SA12020_code" type="String" />
+    <Field name="SA12018_code" src="SA12018_code" type="String" />
+    <Field name="SA22020_code" src="SA22020_code" type="String" />
+    <Field name="SA22020_name" src="SA22020_name" type="String" />
+    <Field name="SA22020_name_ascii" src="SA22020_name_ascii" type="String" />
+    <Field name="SA22018_code" src="SA22018_code" type="String" />
+    <Field name="SA22018_name" src="SA22018_name" type="String" />
+    <Field name="UR2020_code" src="UR2020_code" type="String" />
+    <Field name="UR2020_name" src="UR2020_name" type="String" />
+    <Field name="UR2020_name_ascii" src="UR2020_name_ascii" type="String" />
+    <Field name="IUR2020_code" src="IUR2020_code" type="String" />
+    <Field name="IUR2020_name" src="IUR2020_name" type="String" />
+    <Field name="UR2018_code" src="UR2018_code" type="String" />
+    <Field name="UR2018_name" src="UR2018_name" type="String" />
+    <Field name="IUR2018_code" src="IUR2018_code" type="String" />
+    <Field name="IUR2018_name" src="IUR2018_name" type="String" />
+    <Field name="TA2020_code" src="TA2020_code" type="String" />
+    <Field name="TA2020_name" src="TA2020_name" type="String" />
+    <Field name="TA2020_name_ascii" src="TA2020_name_ascii" type="String" />
+    <Field name="WARD2020_code" src="WARD2020_code" type="String" />
+    <Field name="WARD2020_name" src="WARD2020_name" type="String" />
+    <Field name="WARD2020_name_ascii" src="WARD2020_name_ascii" type="String" />
+    <Field name="MWARD2020_code" src="MWARD2020_code" type="String" />
+    <Field name="MWARD2020_name" src="MWARD2020_name" type="String" />
+    <Field name="MWARD2020_name_ascii" src="MWARD2020_name_ascii" type="String" />
+    <Field name="CB2020_code" src="CB2020_code" type="String" />
+    <Field name="CB2020_name" src="CB2020_name" type="String" />
+    <Field name="CB2020_name_ascii" src="CB2020_name_ascii" type="String" />
+    <Field name="TASUB2020_code" src="TASUB2020_code" type="String" />
+    <Field name="TASUB2020_name" src="TASUB2020_name" type="String" />
+    <Field name="TASUB2020_name_ascii" src="TASUB2020_name_ascii" type="String" />
+    <Field name="REGC2020_code" src="REGC2020_code" type="String" />
+    <Field name="REGC2020_name" src="REGC2020_name" type="String" />
+    <Field name="REGC2020_name_ascii" src="REGC2020_name_ascii" type="String" />
+    <Field name="CON2020_code" src="CON2020_code" type="String" />
+    <Field name="CON2020_name" src="CON2020_name" type="String" />
+    <Field name="CON2020_name_ascii" src="CON2020_name_ascii" type="String" />
+    <Field name="MCON2020_code" src="MCON2020_code" type="String" />
+    <Field name="MCON2020_name" src="MCON2020_name" type="String" />
+    <Field name="MCON2020_name_ascii" src="MCON2020_name_ascii" type="String" />
+    <Field name="TALB2020_code" src="TALB2020_code" type="String" />
+    <Field name="TALB2020_name" src="TALB2020_name" type="String" />
+    <Field name="TALB2020_name_ascii" src="TALB2020_name_ascii" type="String" />
+    <Field name="GED2014_code" src="GED2014_code" type="String" />
+    <Field name="GED2014_name" src="GED2014_name" type="String" />
+    <Field name="MED2014_code" src="MED2014_code" type="String" />
+    <Field name="MED2014_name" src="MED2014_name" type="String" />
+    <Field name="DHB2015_code" src="DHB2015_code" type="String" />
+    <Field name="DHB2015_name" src="DHB2015_name" type="String" />
+    <Field name="DHBCON2015_code" src="DHBCON2015_code" type="String" />
+    <Field name="DHBCON2015_name" src="DHBCON2015_name" type="String" />
+    <Field name="HDOM2013_code" src="HDOM2013_code" type="String" />
+    <Field name="TA2010_code" src="TA2010_code" type="String" />
+    <Field name="TA2010_name" src="TA2010_name" type="String" />
+    <Field name="AU2017_code" src="AU2017_code" type="String" />
+    <Field name="AU2017_name" src="AU2017_name" type="String" />
+    <Field name="AU2013_code" src="AU2013_code" type="String" />
+    <Field name="AU2013_name" src="AU2013_name" type="String" />
+    <Field name="UA2017_code" src="UA2017_code" type="String" />
+    <Field name="UA2017_name" src="UA2017_name" type="String" />
+  </OGRVRTLayer>
+</OGRVRTDataSource>

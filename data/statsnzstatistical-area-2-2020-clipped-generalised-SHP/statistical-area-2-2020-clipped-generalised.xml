@@ -1,0 +1,221 @@
+<gmd:MD_Metadata xmlns:gts="http://www.isotc211.org/2005/gts" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gml="http://www.opengis.net/gml" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns="http://www.isotc211.org/2005/gmd">
+  <gmd:fileIdentifier>
+    <gco:CharacterString>a915b0ed-4689-735a-e8b2-ab764f4e8e9e</gco:CharacterString>
+  </gmd:fileIdentifier>
+  <gmd:language>
+    <gco:CharacterString>eng</gco:CharacterString>
+  </gmd:language>
+  <gmd:characterSet>
+    <gmd:MD_CharacterSetCode codeList="./resources/codeList.xml#MD_CharacterSetCode" codeListValue="004"/>
+  </gmd:characterSet>
+  <gmd:hierarchyLevel>
+    <gmd:MD_ScopeCode codeList="./resources/codeList.xml#MD_ScopeCode" codeListValue="005"/>
+  </gmd:hierarchyLevel>
+  <gmd:hierarchyLevelName>
+    <gco:CharacterString>dataset</gco:CharacterString>
+  </gmd:hierarchyLevelName>
+  <gmd:contact>
+    <gmd:CI_ResponsibleParty>
+      <gmd:individualName>
+        <gco:CharacterString>Geospatial Team</gco:CharacterString>
+      </gmd:individualName>
+      <gmd:organisationName>
+        <gco:CharacterString>Stats NZ</gco:CharacterString>
+      </gmd:organisationName>
+      <gmd:contactInfo>
+        <gmd:CI_Contact>
+          <gmd:phone>
+            <gmd:CI_Telephone>
+              <gmd:voice>
+                <gco:CharacterString>0508 525 525</gco:CharacterString>
+              </gmd:voice>
+            </gmd:CI_Telephone>
+          </gmd:phone>
+          <gmd:address>
+            <gmd:CI_Address>
+              <gmd:electronicMailAddress>
+                <gco:CharacterString>geography@stats.govt.nz</gco:CharacterString>
+              </gmd:electronicMailAddress>
+            </gmd:CI_Address>
+          </gmd:address>
+        </gmd:CI_Contact>
+      </gmd:contactInfo>
+      <gmd:role>
+        <gmd:CI_RoleCode codeList="./resources/codeList.xml#CI_RoleCode" codeListValue="003"/>
+      </gmd:role>
+    </gmd:CI_ResponsibleParty>
+  </gmd:contact>
+  <gmd:dateStamp>
+    <gco:DateTime>20200128</gco:DateTime>
+  </gmd:dateStamp>
+  <gmd:metadataStandardName>
+    <gco:CharacterString>ISO 19115:2003/19139</gco:CharacterString>
+  </gmd:metadataStandardName>
+  <gmd:metadataStandardVersion>
+    <gco:CharacterString>1.0</gco:CharacterString>
+  </gmd:metadataStandardVersion>
+  <gmd:spatialRepresentationInfo>
+    <gmd:MD_VectorSpatialRepresentation>
+      <gmd:topologyLevel>
+        <gmd:MD_TopologyLevelCode codeList="./resources/codeList.xml#MD_TopologyLevelCode" codeListValue="001"/>
+      </gmd:topologyLevel>
+      <gmd:geometricObjects>
+        <gmd:MD_GeometricObjects>
+          <gmd:geometricObjectType>
+            <gmd:MD_GeometricObjectTypeCode codeList="./resources/codeList.xml#MD_GeometricObjectTypeCode" codeListValue="002"/>
+          </gmd:geometricObjectType>
+          <gmd:geometricObjectCount>
+            <gco:Integer>2173</gco:Integer>
+          </gmd:geometricObjectCount>
+        </gmd:MD_GeometricObjects>
+      </gmd:geometricObjects>
+    </gmd:MD_VectorSpatialRepresentation>
+  </gmd:spatialRepresentationInfo>
+  <gmd:identificationInfo>
+    <gmd:MD_DataIdentification>
+      <gmd:citation>
+        <gmd:CI_Citation>
+          <gmd:title>
+            <gco:CharacterString>SA22020_V1_00_Clipped</gco:CharacterString>
+          </gmd:title>
+          <gmd:presentationForm>
+            <gmd:CI_PresentationFormCode codeList="./resources/codeList.xml#CI_PresentationFormCode" codeListValue="005"/>
+          </gmd:presentationForm>
+        </gmd:CI_Citation>
+      </gmd:citation>
+      <gmd:abstract>
+        <gco:CharacterString>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;This dataset contains the annually released &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN&gt;statistical area 2 (SA2) boundaries for 2020 as defined by Stats NZ&lt;/SPAN&gt;&lt;SPAN&gt;, &lt;/SPAN&gt;&lt;SPAN&gt;clipped to the coastline&lt;/SPAN&gt;&lt;SPAN&gt;.&lt;/SPAN&gt;&lt;SPAN&gt;This clipped version has been created for map creation/cartographic purposes and does not fully represent the official full extent boundaries.&lt;/SPAN&gt;&lt;/P&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;SA2s &lt;/SPAN&gt;&lt;SPAN&gt;were &lt;/SPAN&gt;&lt;SPAN&gt;&lt;SPAN&gt;introduced as part of t&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN&gt;he Statistical Standard for Geographic Areas 2018 (SSGA2018)&lt;/SPAN&gt;&lt;SPAN&gt;which replaced &lt;/SPAN&gt;&lt;SPAN&gt;he New Zealand Standard Areas Classification (NZSAC1992). The &lt;/SPAN&gt;&lt;SPAN&gt;SA2&lt;/SPAN&gt;&lt;SPAN&gt;geography &lt;/SPAN&gt;&lt;SPAN&gt;replaces the (NZSAC1992)&lt;/SPAN&gt;&lt;SPAN&gt;area unit geography.&lt;/SPAN&gt;&lt;/P&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;SA2&lt;/SPAN&gt;&lt;SPAN /&gt;&lt;SPAN&gt;is &lt;/SPAN&gt;&lt;SPAN&gt;an output geography that provides higher aggregations of population data than can be provided at the statistical area 1 (SA1) level. The SA2 geography aims to reflect communities that interact together socially and economically. In populated areas, SA2s generally contain similar sized populations.&lt;/SPAN&gt;&lt;/P&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;The SA2 should:&lt;/SPAN&gt;&lt;/P&gt;&lt;UL&gt;&lt;LI&gt;&lt;P&gt;&lt;SPAN&gt;form a contiguous cluster of one or more SA1s&lt;/SPAN&gt;&lt;/P&gt;&lt;/LI&gt;&lt;/UL&gt;&lt;UL&gt;&lt;LI&gt;&lt;P&gt;&lt;SPAN&gt;&lt;SPAN&gt;excluding exceptions below, allow the release of multivariate statistics with minimal data suppression &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/LI&gt;&lt;/UL&gt;&lt;UL&gt;&lt;LI&gt;&lt;P&gt;&lt;SPAN&gt;&lt;SPAN&gt;capture a similar type of area, such as high-density urban areas, farmland, wilderness areas, and water areas &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/LI&gt;&lt;/UL&gt;&lt;UL&gt;&lt;LI&gt;&lt;P&gt;&lt;SPAN&gt;be socially homogeneous and capture a community of interest. It may have, for example: &lt;/SPAN&gt;&lt;/P&gt;&lt;UL&gt;&lt;LI&gt;&lt;P&gt;&lt;SPAN&gt;a shared road network &lt;/SPAN&gt;&lt;/P&gt;&lt;/LI&gt;&lt;LI&gt;&lt;P&gt;&lt;SPAN&gt;shared community facilities &lt;/SPAN&gt;&lt;/P&gt;&lt;/LI&gt;&lt;LI&gt;&lt;P&gt;&lt;SPAN&gt;shared historical or social links, or &lt;/SPAN&gt;&lt;/P&gt;&lt;/LI&gt;&lt;LI&gt;&lt;P&gt;&lt;SPAN&gt;socio-economic similarity &lt;/SPAN&gt;&lt;/P&gt;&lt;/LI&gt;&lt;/UL&gt;&lt;/LI&gt;&lt;/UL&gt;&lt;UL&gt;&lt;LI&gt;&lt;P&gt;&lt;SPAN&gt;&lt;SPAN&gt;form a nested hierarchy with statistical output geographies and administrative boundaries. It must: &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/LI&gt;&lt;/UL&gt;&lt;UL&gt;&lt;LI&gt;&lt;P&gt;&lt;SPAN&gt;&lt;SPAN&gt;be built from SA1s &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/LI&gt;&lt;/UL&gt;&lt;UL&gt;&lt;LI&gt;&lt;P&gt;&lt;SPAN&gt;&lt;SPAN&gt;either define or aggregate to define urban rural areas, territorial authorities, and regional councils.&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/LI&gt;&lt;/UL&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;SA2s in city council areas generally have a population of 2,000–4,000 residents while SA2s in district council areas generally have a population of 1,000–3,000 residents. &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;In rural areas, many SA2s have fewer than 1,000 residents because they are in conservation areas or contain sparse populations that cover a large area, for example, Fiordland. &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;SA2s have been created in urban areas for areas that contain significant business and industrial activity, for example ports, airports, industrial, commercial, and retail areas. These areas have fewer than 1,000 residents and are useful for analysing business demographics, labour markets, and travel-to-work patterns. &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;In major urban areas, an SA2 or a group of SA2s often approximates a single suburb. A small urban area containing up to 5,000 residents may be represented by a single SA2. In rural areas, rural settlements are included in their respective SA2 with the surrounding rural area. &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Some SA2s with nil or nominal populations have been created to ensure that the SA2 geography covers all of New Zealand and aligns with New Zealand’s topography and local government boundaries. These types of SA2s are described below. &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;SA2s with nil or nominal resident populations are created to represent inland water, inlets or oceanic areas and include: &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;UL STYLE="margin:0 0 0 0;padding:0 0 0 0;"&gt;&lt;LI&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;inland lakes larger than 50 km&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN&gt;&lt;SPAN&gt;2 &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN&gt;&lt;SPAN&gt;(lakes smaller than 50 km&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN&gt;&lt;SPAN&gt;2&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN&gt;&lt;SPAN&gt;are included with the surrounding land SA2)&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/LI&gt;&lt;LI&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;harbours larger than 40 km&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;SPAN&gt;&lt;SPAN&gt;2&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/LI&gt;&lt;LI&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;major ports &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/LI&gt;&lt;LI&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;other non-contiguous inlets and harbours defined by territorial authority&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/LI&gt;&lt;LI&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;contiguous oceanic areas defined by regional council. &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/LI&gt;&lt;/UL&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;P /&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Stewart Island and Chatham Islands are represented by separate SA2s. &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;To minimise suppression of population data, small islands with nil or low populations close to the mainland are generally included with their adjacent land-based SA2. &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;SA2s have been created for populated single islands or groups of islands which are some distance from the mainland, or to separate large unpopulated islands from urban areas. These SA2s are: &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;UL STYLE="margin:0 0 0 0;padding:0 0 0 0;"&gt;&lt;LI&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Three Kings Islands &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/LI&gt;&lt;LI&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Barrier Islands (includes Great Barrier and Little Barrier Islands, and other nearby islands) &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/LI&gt;&lt;LI&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Gulf Islands (includes Motutapu, Rangitoto, and other islands in the Hauraki Gulf) &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/LI&gt;&lt;LI&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Islands Thames Coromandel District &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/LI&gt;&lt;LI&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Islands Bay of Plenty Region (Motiti Island, Mayor Island, Moutohora Island, and White Island) &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/LI&gt;&lt;LI&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Bare Island (in the Bay of Plenty region but outside the territorial authority area) &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/LI&gt;&lt;LI&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Matanaka Island &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/LI&gt;&lt;LI&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Kapiti Island &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/LI&gt;&lt;LI&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Mana Island &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/LI&gt;&lt;LI&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Islands Tasman District (Best Island, Bell Island, and Rabbit Island) &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/LI&gt;&lt;/UL&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;In rural areas where territorial authority boundaries straddle regional council boundaries, SA2s have been created to maintain the statistical geography and administrative area hierarchy. These SA2s each have fewer than 200 residents and are: Arahiwi, Tiroa, Rangataiki, Kaimanawa, Taharua, Te More, Ngamatea, Whangamomona, and Mara. &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;The SA2 classification is a flat classification. As at 2020, there are 2,253 SA2s, including 2,237 digitised SA2s and 16 non-digitised SA2s. &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Each SA2 is a single geographic entity with a name and a numeric code. The name refers to a geographic feature or a recognised place name or suburb. In some instances where place names are the same or very similar, the SA2s are differentiated by their territorial authority, for example, Gladstone (Invercargill City) and Gladstone (Carterton District). &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;SA2 codes have six digits. North Island SA2 codes start with a ‘1’ or ‘2’ and South Island SA2 codes start with a ‘3’. They are numbered approximately north to south within their respective territorial authorities. When first created in 2018, the last two digits of each code was 00. When SA2 boundaries change, only the last two digits of the code change to ensure the north-south pattern is maintained. &lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;Aggregated from meshblocks, SA2s cover the land area of New Zealand, the water area to the 12-mile limit, the Chatham Islands, Kermadec Islands, sub-Antarctic islands, off-shore oil rigs, and Ross Dependency. The following 16 SA2s are not held in digitised form.&lt;/SPAN&gt;&lt;/P&gt;&lt;TABLE&gt;&lt;TBODY&gt;&lt;TR&gt;&lt;TD&gt;&lt;P STYLE="font-weight:bold;margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;SA2 code&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;TD&gt;&lt;P STYLE="font-weight:bold;margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;SA2 name&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;&lt;TR&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;400001&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;New Zealand Economic Zone&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;&lt;TR&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;400002&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Oceanic Kermadec Islands&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;&lt;TR&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;400003&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Kermadec Islands&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;&lt;TR&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;400004&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Oceanic Oil Rig Taranaki&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;&lt;TR&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;400005&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Oceanic Campbell Island&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;&lt;TR&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;400006&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Campbell Island&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;&lt;TR&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;400007&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Oceanic Oil Rig Southland&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;&lt;TR&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;400008&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Oceanic Auckland Islands&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;&lt;TR&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;400009&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Auckland Islands&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;&lt;TR&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;400010&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Oceanic Bounty Islands&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;&lt;TR&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;400011&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Bounty Islands&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;&lt;TR&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;400012&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Oceanic Snares Islands&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;&lt;TR&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;400013&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Snares Islands&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;&lt;TR&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;400014&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Oceanic Antipodes Islands&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;&lt;TR&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;400015&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Antipodes Islands&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;&lt;TR&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;400016&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;TD&gt;&lt;P STYLE="margin:0 0 0 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Ross Dependency&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;&lt;/TBODY&gt;&lt;/TABLE&gt;&lt;P&gt;&lt;SPAN&gt;Names are provided with and without tohutō/macrons. The name field without macrons is suffixed ‘ascii’.&lt;/SPAN&gt;&lt;/P&gt;&lt;P STYLE="margin:0 0 11 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;This generalised version has been simplified for rapid drawing and is designed for thematic or web mapping purposes.&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;P STYLE="margin:0 0 14 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Digital boundary data became freely available on 1 July 2007.&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</gco:CharacterString>
+      </gmd:abstract>
+      <gmd:purpose>
+        <gco:CharacterString>This dataset contains the annually released  statistical area 2 (SA2) boundaries as at 1 January 2020, as defined by Stats NZ, clipped to the coastline.This clipped version has been created for map creation/cartographic purposes and does not fully represent the official full extent boundaries.
+This version contains 2,173 SA2s.</gco:CharacterString>
+      </gmd:purpose>
+      <gmd:credit>
+        <gco:CharacterString>Stats NZ</gco:CharacterString>
+      </gmd:credit>
+      <gmd:pointOfContact>
+        <gmd:CI_ResponsibleParty>
+          <gmd:individualName>
+            <gco:CharacterString>Geospatial Team</gco:CharacterString>
+          </gmd:individualName>
+          <gmd:organisationName>
+            <gco:CharacterString>Stats NZ</gco:CharacterString>
+          </gmd:organisationName>
+          <gmd:contactInfo>
+            <gmd:CI_Contact>
+              <gmd:phone>
+                <gmd:CI_Telephone>
+                  <gmd:voice>
+                    <gco:CharacterString>0508 525 525</gco:CharacterString>
+                  </gmd:voice>
+                </gmd:CI_Telephone>
+              </gmd:phone>
+              <gmd:address>
+                <gmd:CI_Address>
+                  <gmd:electronicMailAddress>
+                    <gco:CharacterString>geography@stats.govt.nz</gco:CharacterString>
+                  </gmd:electronicMailAddress>
+                </gmd:CI_Address>
+              </gmd:address>
+            </gmd:CI_Contact>
+          </gmd:contactInfo>
+          <gmd:role>
+            <gmd:CI_RoleCode codeList="./resources/codeList.xml#CI_RoleCode" codeListValue="003"/>
+          </gmd:role>
+        </gmd:CI_ResponsibleParty>
+      </gmd:pointOfContact>
+      <gmd:resourceConstraints>
+        <gmd:MD_Constraints>
+          <gmd:useLimitation>
+            <gco:CharacterString>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P STYLE="margin:0 0 11 0;"&gt;&lt;SPAN&gt;&lt;SPAN&gt;Creative Commons Attribution 4.0 International (CC BY 4.0)&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN /&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</gco:CharacterString>
+          </gmd:useLimitation>
+        </gmd:MD_Constraints>
+      </gmd:resourceConstraints>
+      <gmd:spatialRepresentationType>
+        <gmd:MD_SpatialRepresentationTypeCode codeList="./resources/codeList.xml#MD_SpatialRepresentationTypeCode" codeListValue="001"/>
+      </gmd:spatialRepresentationType>
+      <gmd:language>
+        <gco:CharacterString>eng</gco:CharacterString>
+      </gmd:language>
+      <gmd:characterSet>
+        <gmd:MD_CharacterSetCode codeList="./resources/codeList.xml#MD_CharacterSetCode" codeListValue="004"/>
+      </gmd:characterSet>
+      <gmd:topicCategory>
+        <gmd:MD_TopicCategoryCode>boundaries</gmd:MD_TopicCategoryCode>
+      </gmd:topicCategory>
+      <gmd:environmentDescription>
+        <gco:CharacterString>Version 6.2 (Build 9200) ; Esri ArcGIS 10.3.1.4959</gco:CharacterString>
+      </gmd:environmentDescription>
+      <gmd:extent>
+        <gmd:EX_Extent>
+          <gmd:geographicElement/>
+        </gmd:EX_Extent>
+      </gmd:extent>
+      <gmd:extent>
+        <gmd:EX_Extent>
+          <gmd:geographicElement>
+            <gmd:EX_GeographicBoundingBox>
+              <gmd:westBoundLongitude>
+                <gco:Decimal>166.262032582</gco:Decimal>
+              </gmd:westBoundLongitude>
+              <gmd:eastBoundLongitude>
+                <gco:Decimal>-175.905725572</gco:Decimal>
+              </gmd:eastBoundLongitude>
+              <gmd:southBoundLatitude>
+                <gco:Decimal>-47.2230467565</gco:Decimal>
+              </gmd:southBoundLatitude>
+              <gmd:northBoundLatitude>
+                <gco:Decimal>-34.129634647</gco:Decimal>
+              </gmd:northBoundLatitude>
+            </gmd:EX_GeographicBoundingBox>
+          </gmd:geographicElement>
+        </gmd:EX_Extent>
+      </gmd:extent>
+    </gmd:MD_DataIdentification>
+  </gmd:identificationInfo>
+  <gmd:distributionInfo>
+    <gmd:MD_Distribution>
+      <gmd:transferOptions>
+        <gmd:MD_DigitalTransferOptions>
+          <gmd:onLine>
+            <gmd:CI_OnlineResource>
+              <gmd:linkage>
+                <gmd:URL>https://datafinder.stats.govt.nz/layer/104270-statistical-area-2-2020-clipped-generalised/</gmd:URL>
+              </gmd:linkage>
+            </gmd:CI_OnlineResource>
+          </gmd:onLine>
+        </gmd:MD_DigitalTransferOptions>
+      </gmd:transferOptions>
+    </gmd:MD_Distribution>
+  </gmd:distributionInfo>
+  <gmd:dataQualityInfo>
+    <gmd:DQ_DataQuality>
+      <gmd:scope>
+        <gmd:DQ_Scope>
+          <gmd:level>
+            <gmd:MD_ScopeCode codeList="./resources/codeList.xml#MD_ScopeCode" codeListValue="005"/>
+          </gmd:level>
+        </gmd:DQ_Scope>
+      </gmd:scope>
+      <gmd:lineage>
+        <gmd:LI_Lineage>
+          <gmd:statement>
+            <gco:CharacterString>SA2s are based on the meshblock pattern. 
+Non-alignment of meshblock to cadastral boundaries is one of a number of reasons for meshblock boundary adjustments. Other reasons include requests from local authorities, Local Government Commission, Electoral Representation Commission, and to make census enumeration processes easier.
+From the meshblock pattern, higher geographies, including the 2020 statistical area 2 pattern, were dissolved using the dissolve tool in the Arc GIS suite.
+To derive the SA2 boundaries clipped to the coastline, meshblock polygons were dissolved to exclude meshblocks with a land/water attribute of Inlet or Oceanic.</gco:CharacterString>
+          </gmd:statement>
+        </gmd:LI_Lineage>
+      </gmd:lineage>
+    </gmd:DQ_DataQuality>
+  </gmd:dataQualityInfo>
+  <gmd:metadataConstraints>
+    <gmd:MD_LegalConstraints>
+      <gmd:useLimitation>Attribution 4.0 International</gmd:useLimitation>
+      <gmd:useLimitation>https://creativecommons.org/licenses/by/4.0/</gmd:useLimitation>
+      <gmd:useConstraints>
+        <gmd:MD_RestrictionCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/gmxCodelists.xml#MD_RestrictionCode" codeListValue="license">license</gmd:MD_RestrictionCode>
+      </gmd:useConstraints>
+    </gmd:MD_LegalConstraints>
+  </gmd:metadataConstraints>
+</gmd:MD_Metadata>

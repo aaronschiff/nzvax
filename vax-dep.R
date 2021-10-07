@@ -32,8 +32,10 @@ dat_vax_tla <- read_csv(file = here(glue("data/vaccination_tla_{latest_date_tla}
 dat_vax_sa2 <- read_csv(file = here(glue("data/uptake_sa2_dhb_{latest_date_sa2}.csv"))) |> 
   mutate(dose1_cnt = as.integer(dose1_cnt), 
          dose2_cnt = as.integer(dose2_cnt), 
-         pop_cnt = as.integer(pop_cnt), 
-         dose1_uptake = as.integer(dose1_uptake), 
+         pop_cnt = as.integer(pop_cnt)) |> 
+  mutate(dose1_uptake = ifelse(dose1_uptake == ">950", "950", dose1_uptake), 
+         dose2_uptake = ifelse(dose2_uptake == ">950", "950", dose2_uptake)) |> 
+  mutate(dose1_uptake = as.integer(dose1_uptake), 
          dose2_uptake = as.integer(dose2_uptake))
 
 # Deprivation index data
