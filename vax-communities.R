@@ -3,7 +3,7 @@
 # Feedback to consider: 
 # - Use a single colour scale (all blue?). Avoid colours that might appear brown.
 # - Include a title or description to frame the intent of the charts. 
-# - Include vaccination % numbers in the boxes?
+# - Include vaccination % numbers in the boxes? [No they are not accurate enough]
 # - Show as vulnerable % rather than vaccinated %?
 
 # *****************************************************************************
@@ -18,7 +18,7 @@ library(colorspace)
 
 latest_date <- "05_10_2021"               # Date of most recent week's data
 prev_date <- "28_09_2021"                 # Date of previous week's data
-latest_date_nice <- "5 October 2021"   # For chart title
+latest_date_nice <- "5 October 2021"      # For chart title
 
 # *****************************************************************************
 
@@ -159,13 +159,11 @@ chart_fully_vax_rate <- ggplot(dat_chart_vax_rate) +
   geom_hline(yintercept = 3.5, colour = "black") + 
   geom_hline(yintercept = 6.5, colour = "black") + 
   geom_hline(yintercept = 9.5, colour = "black") + 
-  scale_fill_manual(values = c("Greater than 90% fully vaccinated" = lighten(rgb(99, 149, 236, 
-                                                                                 maxColorValue = 255), 
-                                                                             amount = 0.8), 
+  scale_fill_manual(values = c("Greater than 90% fully vaccinated" = lighten(col = "pink", 
+                                                                             amount = 0.5), 
                                "80% to 90% fully vaccinated" = "pink", 
                                "70% to 80% fully vaccinated" = "firebrick", 
-                               "Less than 70% fully vaccinated" = darken(col = "firebrick4", 
-                                                                         amount = 0.7)),
+                               "Less than 70% fully vaccinated" = "red"),
                     name = NULL) + 
   scale_x_discrete(position = "top") + 
   guides(fill = guide_legend(ncol = 1, 
@@ -208,13 +206,11 @@ chart_first_doses_rate <- ggplot(dat_chart_vax_rate) +
   geom_hline(yintercept = 3.5, colour = "black") + 
   geom_hline(yintercept = 6.5, colour = "black") + 
   geom_hline(yintercept = 9.5, colour = "black") + 
-  scale_fill_manual(values = c("Greater than 90% first doses" = lighten(rgb(99, 149, 236, 
-                                                                            maxColorValue = 255), 
-                                                                        amount = 0.85), 
+  scale_fill_manual(values = c("Greater than 90% first doses" = lighten(col = "pink", 
+                                                                        amount = 0.5), 
                                "80% to 90% first doses" = "pink", 
                                "70% to 80% first doses" = "firebrick", 
-                               "Less than 70% first doses" = darken(col = "firebrick4", 
-                                                                    amount = 0.7)), 
+                               "Less than 70% first doses" = "red"), 
                     name = NULL) + 
   scale_x_discrete(position = "top") + 
   guides(fill = guide_legend(ncol = 1, 
