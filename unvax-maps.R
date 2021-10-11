@@ -52,13 +52,13 @@ dat_areas <- read_csv(file = here("data/statsnzgeographic-areas-file-2020-CSV/ge
 # Unvaccinated map for area ----
 
 # SA2 shapes
-dat_map_sa2 <- dat_areas |> 
+dat_unvax_map_sa2 <- dat_areas |> 
   filter(ta2020_name == "Kaipara District") |> 
   left_join(y = dat_sa2, by = c("sa22020_code" = "sa22020_v1")) |> 
   st_as_sf()
 
 # SA2 centroids and vax data
-dat_map_centroids <- bind_cols(
+dat_unvax_map_centroids <- bind_cols(
   # Vax data
   dat_areas |> 
     filter(ta2020_name == "Kaipara District") |> 
@@ -74,9 +74,9 @@ dat_map_centroids <- bind_cols(
     as_tibble()
 )
 
-map <- ggplot() + 
-  geom_sf(data = dat_map, fill = grey(0.85), colour = grey(0.7)) + 
-  geom_point(data = dat_map_centroids, 
+unvax_map <- ggplot() + 
+  geom_sf(data = dat_unvax_map, fill = grey(0.85), colour = grey(0.7)) + 
+  geom_point(data = dat_unvax_map_centroids, 
              mapping = aes(x = X, y = Y), 
              colour = "red") + 
   geom_text_repel(data = dat_map_centroids, 
@@ -86,5 +86,113 @@ map <- ggplot() +
                   size = 5) + 
   theme_map()
 
-map
+# *****************************************************************************
+
+
+# *****************************************************************************
+# Heat map of vaccination rate for an area ----
+
+coastline <- st_union(dat_sa2)
+
+dat_vax_map_sa2 <- dat_areas |> 
+  filter(ta2020_name == "Kaipara District") |> 
+  left_join(y = dat_vax, by = c("sa22020_code" = "sa2_code")) |> 
+  left_join(y = dat_sa2, by = c("sa22020_code" = "sa22020_v1")) |> 
+  st_as_sf() |> 
+  filter(!is.na(dose1_uptake)) |> 
+  mutate(dose1_uptake = as.integer(dose1_uptake)) |> 
+  mutate(dose1_uptake_category = case_when(
+    dose1_uptake > 900 ~ "More than 90% first doses", 
+    (dose1_uptake > 800) & (dose1_uptake <= 900) ~ "80% to 90% first doses", 
+    (dose1_uptake > 700) & (dose1_uptake <= 800) ~ "70% to 80% first doses", 
+    (dose1_uptake >= 600) & (dose1_uptake <= 700) ~ "60% to 70% first doses", 
+    (dose1_uptake < 600) ~ "Less than 60% first doses", 
+  )) |> 
+  mutate(dose1_uptake_category = factor(x = dose1_uptake_category, 
+                                        levels = c("More than 90% first doses", 
+                                                   "80% to 90% first doses", 
+                                                   "70% to 80% first doses", 
+                                                   "60% to 70% first doses", 
+                                                   "Less than 60% first doses"), 
+                                        ordered = TRUE))
+
+map_coastline <- st_crop(x = coastline, y = dat_vax_map_sa2)
+
+map_vax_sa2 <- dat_vax_map_sa2 |> 
+  ggplot() + 
+  geom_sf(data = map_coastline, 
+          size = 0, 
+          fill = grey(0.85)) + 
+  geom_sf(mapping = aes(fill = dose1_uptake_category), 
+          colour = grey(0.1), 
+          size = 0.25) + 
+  scale_fill_brewer(drop = FALSE, na.value = grey(0.75), 
+                    palette = "RdYlBu", 
+                    direction = -1, 
+                    name = NULL) + 
+  ggtitle("Proportion of Kaipara eligible population (age 12+)\nwho have received their first dose as at 6 October 2021") + 
+  theme_map(base_family = "Fira Sans") + 
+  theme(plot.title = element_text(face = "bold"), 
+        legend.text = element_text(size = rel(1)), 
+        plot.margin = margin(0, 8, 0, 8, "pt"))
+
+ggsave(filename = here("maps/kaipara-first-doses.png"), 
+       plot = map_vax_sa2, 
+       device = "png", 
+       width = 2000, 
+       height = 2000, 
+       units = "px", 
+       bg = "white")
+
+dat_unvax_map_sa2 <- dat_areas |> 
+  filter(ta2020_name == "Kaipara District") |> 
+  left_join(y = dat_vax, by = c("sa22020_code" = "sa2_code")) |> 
+  left_join(y = dat_sa2, by = c("sa22020_code" = "sa22020_v1")) |> 
+  st_as_sf() |> 
+  filter(!is.na(dose1_uptake)) |> 
+  mutate(dose1_uptake = as.integer(dose1_uptake)) |> 
+  mutate(unvax = 1000 - dose1_uptake) |> 
+  mutate(unvax_category = case_when(
+    unvax < 100 ~ "Less than 10% unvaccinated", 
+    (unvax >= 100) & (unvax < 200) ~ "10% to 20% unvaccinated", 
+    (unvax >= 200) & (unvax < 300) ~ "20% to 30% unvaccinated", 
+    (unvax >= 300) & (unvax < 400) ~ "30% to 40% unvaccinated", 
+    (unvax >= 400) & (unvax < 500) ~ "40% to 50% unvaccinated"
+  )) |> 
+  mutate(unvax_category = factor(x = unvax_category, 
+                                        levels = c("Less than 10% unvaccinated", 
+                                                   "10% to 20% unvaccinated", 
+                                                   "20% to 30% unvaccinated", 
+                                                   "30% to 40% unvaccinated", 
+                                                   "40% to 50% unvaccinated"), 
+                                        ordered = TRUE))
+
+map_coastline <- st_crop(x = coastline, y = dat_unvax_map_sa2)
+
+map_unvax_sa2 <- dat_unvax_map_sa2 |> 
+  ggplot() + 
+  geom_sf(data = map_coastline, 
+          size = 0, 
+          fill = grey(0.85)) + 
+  geom_sf(mapping = aes(fill = unvax_category), 
+          colour = grey(0.1), 
+          size = 0.25) + 
+  scale_fill_brewer(drop = FALSE, na.value = grey(0.75), 
+                    palette = "RdYlBu", 
+                    direction = -1, 
+                    name = NULL) + 
+  ggtitle("Proportion of Kaipara eligible population (age 12+)\nwho have not received at least their first dose as at 6 October 2021") + 
+  theme_map(base_family = "Fira Sans") + 
+  theme(plot.title = element_text(face = "bold"), 
+        legend.text = element_text(size = rel(1)), 
+        plot.margin = margin(0, 8, 0, 8, "pt"))
+
+ggsave(filename = here("maps/kaipara-unvaccinated.png"), 
+       plot = map_unvax_sa2, 
+       device = "png", 
+       width = 2000, 
+       height = 2000, 
+       units = "px", 
+       bg = "white")
+
 # *****************************************************************************

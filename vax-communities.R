@@ -4,6 +4,7 @@
 # - Use a single colour scale (all blue?). Avoid colours that might appear brown.
 # - Include a title or description to frame the intent of the charts. 
 # - Include vaccination % numbers in the boxes?
+# - Show as vulnerable % rather than vaccinated %?
 
 # *****************************************************************************
 # Setup ----
