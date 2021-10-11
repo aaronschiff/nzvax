@@ -1,10 +1,16 @@
 # NZ COVID vaccination rates visualised by 'community'
 
 # Feedback to consider: 
-# - Use a single colour scale (all blue?). Avoid colours that might appear brown.
+# - Use a single colour scale. Avoid colours that might appear brown. 
+#     [Done, changed light blue to pink and dark red/brown to bright red]
+
 # - Include a title or description to frame the intent of the charts. 
-# - Include vaccination % numbers in the boxes? [No they are not accurate enough]
-# - Show as vulnerable % rather than vaccinated %?
+
+# - Include vaccination % numbers in the boxes? 
+#     [No they are not accurate enough given denominator issues]
+
+# - Show as vulnerable % rather than vaccinated %? 
+#     [Good idea but don't want to fundamentally change the chart at this stage]
 
 # *****************************************************************************
 # Setup ----
@@ -159,12 +165,11 @@ chart_fully_vax_rate <- ggplot(dat_chart_vax_rate) +
   geom_hline(yintercept = 3.5, colour = "black") + 
   geom_hline(yintercept = 6.5, colour = "black") + 
   geom_hline(yintercept = 9.5, colour = "black") + 
-  scale_fill_manual(values = c("Greater than 90% fully vaccinated" = lighten(col = "pink", 
-                                                                             amount = 0.5), 
-                               "80% to 90% fully vaccinated" = "pink", 
-                               "70% to 80% fully vaccinated" = "firebrick", 
-                               "Less than 70% fully vaccinated" = "red"),
-                    name = NULL) + 
+  scale_fill_manual(values = c("Greater than 90% fully vaccinated" = lighten(col = "red", amount = 0.9),
+                               "80% to 90% fully vaccinated" = lighten(col = "red", amount = 0.5),
+                               "70% to 80% fully vaccinated" = lighten(col = "red", amount = 0.1),
+                               "Less than 70% fully vaccinated" = darken(col = "red", amount = 0.25)),
+                    name = NULL) +
   scale_x_discrete(position = "top") + 
   guides(fill = guide_legend(ncol = 1, 
                              override.aes = list(size = 0.5))) + 
@@ -178,7 +183,8 @@ chart_fully_vax_rate <- ggplot(dat_chart_vax_rate) +
            family = "Fira Sans", 
            size = 2.5) + 
   coord_cartesian(clip = "off") + 
-  ggtitle(glue("Fully vaccinated (two doses) to {latest_date_nice}")) + 
+  ggtitle(label = "NZ population groups that are not yet protected by COVID-19 vaccination", 
+          subtitle = glue("Fully vaccinated (two doses) to {latest_date_nice}")) + 
   theme_minimal(base_family = "Fira Sans") + 
   theme(axis.text.x.top = element_text(angle = 45, hjust = 0), 
         legend.justification = c(0, 0), 
@@ -186,8 +192,10 @@ chart_fully_vax_rate <- ggplot(dat_chart_vax_rate) +
         panel.grid = element_blank(), 
         plot.margin = margin(8, 32, 16, 8, "pt"), 
         plot.title = element_text(size = rel(1.1), 
-                                  face = "bold", 
-                                  margin = margin(0, 0, 24, 0, "pt")))
+                                  margin = margin(0, 0, 4, 0, "pt")), 
+        plot.subtitle = element_text(size = rel(0.9), 
+                                     face = "bold", 
+                                     margin = margin(0, 0, 24, 0, "pt")))
 
 ggsave(filename = here(glue("outputs/fully_vax_communities_{latest_date}.png")), 
        plot = chart_fully_vax_rate, 
@@ -206,12 +214,11 @@ chart_first_doses_rate <- ggplot(dat_chart_vax_rate) +
   geom_hline(yintercept = 3.5, colour = "black") + 
   geom_hline(yintercept = 6.5, colour = "black") + 
   geom_hline(yintercept = 9.5, colour = "black") + 
-  scale_fill_manual(values = c("Greater than 90% first doses" = lighten(col = "pink", 
-                                                                        amount = 0.5), 
-                               "80% to 90% first doses" = "pink", 
-                               "70% to 80% first doses" = "firebrick", 
-                               "Less than 70% first doses" = "red"), 
-                    name = NULL) + 
+  scale_fill_manual(values = c("Greater than 90% first doses" = lighten(col = "red", amount = 0.9),
+                               "80% to 90% first doses" = lighten(col = "red", amount = 0.5),
+                               "70% to 80% first doses" = lighten(col = "red", amount = 0.1),
+                               "Less than 70% first doses" = darken(col = "red", amount = 0.25)),
+                    name = NULL) +
   scale_x_discrete(position = "top") + 
   guides(fill = guide_legend(ncol = 1, 
                              override.aes = list(size = 0.5))) + 
@@ -225,7 +232,8 @@ chart_first_doses_rate <- ggplot(dat_chart_vax_rate) +
            family = "Fira Sans", 
            size = 2) + 
   coord_cartesian(clip = "off") + 
-  ggtitle(glue("First doses to {latest_date_nice}")) + 
+  ggtitle(label = "NZ population groups that are not yet protected by COVID-19 vaccination", 
+          subtitle = glue("First doses to {latest_date_nice}")) + 
   theme_minimal(base_family = "Fira Sans") + 
   theme(axis.text.x.top = element_text(angle = 45, hjust = 0), 
         legend.justification = c(0, 0), 
@@ -233,8 +241,10 @@ chart_first_doses_rate <- ggplot(dat_chart_vax_rate) +
         panel.grid = element_blank(), 
         plot.margin = margin(8, 32, 16, 8, "pt"), 
         plot.title = element_text(size = rel(1.1), 
-                                  face = "bold", 
-                                  margin = margin(0, 0, 24, 0, "pt")))
+                                  margin = margin(0, 0, 4, 0, "pt")), 
+        plot.subtitle = element_text(size = rel(0.9), 
+                                     face = "bold", 
+                                     margin = margin(0, 0, 24, 0, "pt")))
 
 ggsave(filename = here(glue("outputs/first_doses_communities_{latest_date}.png")), 
        plot = chart_first_doses_rate, 
