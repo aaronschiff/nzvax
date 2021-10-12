@@ -5,6 +5,7 @@
 #     [Done, changed light blue to pink and dark red/brown to bright red]
 
 # - Include a title or description to frame the intent of the charts. 
+#     [Done]
 
 # - Include vaccination % numbers in the boxes? 
 #     [No they are not accurate enough given denominator issues]
