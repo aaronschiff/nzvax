@@ -23,9 +23,9 @@ library(readxl)
 library(glue)
 library(colorspace)
 
-latest_date <- "05_10_2021"               # Date of most recent week's data
-prev_date <- "28_09_2021"                 # Date of previous week's data
-latest_date_nice <- "5 October 2021"      # For chart title
+latest_date <- "12_10_2021"               # Date of most recent week's data
+prev_date <- "05_10_2021"                 # Date of previous week's data
+latest_date_nice <- "12 October 2021"     # For chart title
 
 # *****************************************************************************
 
@@ -338,7 +338,6 @@ chart_fully_vax_change <- ggplot(dat_chart_vax_rate_change,
         panel.grid = element_blank(), 
         plot.margin = margin(8, 32, 16, 8, "pt"), 
         plot.title = element_text(size = rel(1.1), 
-                                  face = "bold", 
                                   margin = margin(0, 0, 24, 0, "pt")))
 
 ggsave(filename = here(glue("outputs/fully_vax_change_communities_{latest_date}.png")), 
@@ -384,7 +383,6 @@ chart_first_doses_change <- ggplot(dat_chart_vax_rate_change,
         panel.grid = element_blank(), 
         plot.margin = margin(8, 32, 16, 8, "pt"), 
         plot.title = element_text(size = rel(1.1), 
-                                  face = "bold", 
                                   margin = margin(0, 0, 24, 0, "pt")))
 
 ggsave(filename = here(glue("outputs/first_doses_change_communities_{latest_date}.png")), 
