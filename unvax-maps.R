@@ -10,8 +10,9 @@ library(janitor)
 library(glue)
 library(sf)
 library(ggrepel)
+library(ggthemes)
 
-latest_date <- "20211006"               # Date of most recent week's data
+latest_date <- "20211013"               # Date of most recent week's data
 
 # *****************************************************************************
 
@@ -20,12 +21,14 @@ latest_date <- "20211006"               # Date of most recent week's data
 # Load data ----
 
 # Vaccination uptake by SA2
-dat_vax_sa2 <- read_csv(file = here(glue("data/uptake_sa2_dhb_{latest_date_sa2}.csv"))) |> 
+dat_vax_sa2 <- read_csv(file = here(glue("data/uptake_sa2_dhb_{latest_date}.csv"))) |> 
   mutate(dose1_cnt = as.integer(dose1_cnt), 
          dose2_cnt = as.integer(dose2_cnt), 
          pop_cnt = as.integer(pop_cnt)) |> 
   mutate(dose1_uptake = ifelse(dose1_uptake == ">950", "950", dose1_uptake), 
-         dose2_uptake = ifelse(dose2_uptake == ">950", "950", dose2_uptake)) |> 
+         dose2_uptake = ifelse(dose2_uptake == ">950", "950", dose2_uptake), 
+         dose1_uptake = ifelse(dose1_uptake == "<50", "50", dose1_uptake),
+         dose2_uptake = ifelse(dose2_uptake == "<50", "50", dose2_uptake)) |> 
   mutate(dose1_uptake = as.integer(dose1_uptake), 
          dose2_uptake = as.integer(dose2_uptake)) |> 
   mutate(unvax_pop = pop_cnt - dose1_cnt) |> 
@@ -96,7 +99,7 @@ coastline <- st_union(dat_sa2)
 
 dat_vax_map_sa2 <- dat_areas |> 
   filter(ta2020_name == "Kaipara District") |> 
-  left_join(y = dat_vax, by = c("sa22020_code" = "sa2_code")) |> 
+  left_join(y = dat_vax_sa2, by = c("sa22020_code" = "sa2_code")) |> 
   left_join(y = dat_sa2, by = c("sa22020_code" = "sa22020_v1")) |> 
   st_as_sf() |> 
   filter(!is.na(dose1_uptake)) |> 
@@ -146,7 +149,7 @@ ggsave(filename = here("maps/kaipara-first-doses.png"),
 
 dat_unvax_map_sa2 <- dat_areas |> 
   filter(ta2020_name == "Kaipara District") |> 
-  left_join(y = dat_vax, by = c("sa22020_code" = "sa2_code")) |> 
+  left_join(y = dat_vax_sa2, by = c("sa22020_code" = "sa2_code")) |> 
   left_join(y = dat_sa2, by = c("sa22020_code" = "sa22020_v1")) |> 
   st_as_sf() |> 
   filter(!is.na(dose1_uptake)) |> 
@@ -187,7 +190,7 @@ map_unvax_sa2 <- dat_unvax_map_sa2 |>
         legend.text = element_text(size = rel(1)), 
         plot.margin = margin(0, 8, 0, 8, "pt"))
 
-ggsave(filename = here("maps/kaipara-unvaccinated.png"), 
+ggsave(filename = here(glue("maps/kaipara-unvaccinated-{latest_date}.png")), 
        plot = map_unvax_sa2, 
        device = "png", 
        width = 2000, 
