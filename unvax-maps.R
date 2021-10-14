@@ -1,4 +1,5 @@
 # Maps of absolute numbers of unvaccinated people for a specific area
+# And comparison of change in unvaccinated vs previous week
 
 
 # *****************************************************************************
@@ -11,8 +12,11 @@ library(glue)
 library(sf)
 library(ggrepel)
 library(ggthemes)
+library(scales)
+library(lemon)
 
 latest_date <- "20211013"               # Date of most recent week's data
+prev_date <- "20211006"
 
 # *****************************************************************************
 
@@ -20,8 +24,22 @@ latest_date <- "20211013"               # Date of most recent week's data
 # *****************************************************************************
 # Load data ----
 
-# Vaccination uptake by SA2
+# Vaccination uptake by SA2 (latest data)
 dat_vax_sa2 <- read_csv(file = here(glue("data/uptake_sa2_dhb_{latest_date}.csv"))) |> 
+  mutate(dose1_cnt = as.integer(dose1_cnt), 
+         dose2_cnt = as.integer(dose2_cnt), 
+         pop_cnt = as.integer(pop_cnt)) |> 
+  mutate(dose1_uptake = ifelse(dose1_uptake == ">950", "950", dose1_uptake), 
+         dose2_uptake = ifelse(dose2_uptake == ">950", "950", dose2_uptake), 
+         dose1_uptake = ifelse(dose1_uptake == "<50", "50", dose1_uptake),
+         dose2_uptake = ifelse(dose2_uptake == "<50", "50", dose2_uptake)) |> 
+  mutate(dose1_uptake = as.integer(dose1_uptake), 
+         dose2_uptake = as.integer(dose2_uptake)) |> 
+  mutate(unvax_pop = pop_cnt - dose1_cnt) |> 
+  mutate(unvax_pop = ifelse(unvax_pop < 0, 0, unvax_pop))
+
+# Vaccination uptake by SA2 (previous weeks data)
+dat_vax_sa2_prev <- read_csv(file = here(glue("data/uptake_sa2_dhb_{prev_date}.csv"))) |> 
   mutate(dose1_cnt = as.integer(dose1_cnt), 
          dose2_cnt = as.integer(dose2_cnt), 
          pop_cnt = as.integer(pop_cnt)) |> 
@@ -93,7 +111,7 @@ unvax_map <- ggplot() +
 
 
 # *****************************************************************************
-# Heat map of vaccination rate for an area ----
+# Heat map of vaccination or unvaccinated rate for an area ----
 
 coastline <- st_union(dat_sa2)
 
@@ -195,6 +213,81 @@ ggsave(filename = here(glue("maps/kaipara-unvaccinated-{latest_date}.png")),
        device = "png", 
        width = 2000, 
        height = 2000, 
+       units = "px", 
+       bg = "white")
+
+# *****************************************************************************
+
+
+# *****************************************************************************
+# Unvaccinated comparison vs previous week ----
+
+dat_comp <- bind_rows(
+  # Current week
+  dat_vax_sa2 |> 
+    left_join(y = dat_areas, 
+              by = c("sa2_code" = "sa22020_code")) |> 
+    filter(ta2020_name == "Kaipara District") |> 
+    mutate(week = "current") |> 
+    select(sa2_code, sa2_name, week, unvax_pop),
+  
+  # Previous week
+  dat_vax_sa2_prev |> 
+    left_join(y = dat_areas, 
+              by = c("sa2_code" = "sa22020_code")) |> 
+    filter(ta2020_name == "Kaipara District") |> 
+    mutate(week = "previous") |> 
+    select(sa2_code, sa2_name, week, unvax_pop)
+) |> 
+  mutate(week = factor(x = week, 
+                       levels = c("previous", "current"), 
+                       labels = c("6 Oct", "13 Oct"), 
+                       ordered = TRUE)) |> 
+  arrange(sa2_name, week) |> 
+  mutate(sa2_name = str_remove(string = sa2_name, 
+                               pattern = "\\(Kaipara District\\)")) |> 
+  mutate(sa2_name = ifelse(sa2_name == "Ruawai-Matakohe", 
+                           "Ruawai-\nMatakohe", 
+                           sa2_name))
+
+chart_comp <- dat_comp |> 
+  ggplot(mapping = aes(x = week, 
+                       y = unvax_pop, 
+                       label = comma(unvax_pop, accuracy = 1))) + 
+  geom_col(fill = "firebrick", 
+           size = 0) + 
+  geom_text(nudge_y = 70, 
+            colour = "firebrick", 
+            family = "Fira Sans", 
+            fontface = "bold", 
+            size = 2.5) + 
+  facet_rep_wrap(facets = vars(sa2_name), 
+                 repeat.tick.labels = TRUE, 
+                 ncol = 5, 
+                 labeller = label_wrap_gen(width = 10)) + 
+  scale_y_continuous(labels = comma_format(accuracy = 1), 
+                     breaks = seq(0, 1750, 250), 
+                     limits = c(0, 1750), 
+                     expand = expansion(0, 0)) + 
+  ggtitle("Number of unvaccinated people aged 12+ in Kaipara District", 
+          subtitle = "13 October vs 6 October") + 
+  theme_minimal(base_family = "Fira Sans") + 
+  theme(axis.title.y = element_blank(), 
+        axis.title.x = element_blank(), 
+        axis.ticks.x = element_blank(), 
+        panel.grid.minor = element_blank(), 
+        panel.grid.major.x = element_blank(), 
+        plot.margin = margin(4, 4, 4, 4, "pt"), 
+        plot.subtitle = element_text(face = "bold"), 
+        strip.text = element_text(face = "bold"), 
+        panel.spacing.x = unit(24, "pt"), 
+        panel.spacing.y = unit(12, "pt"))
+
+ggsave(filename = "maps/kaipara-unvaccinated-comparison.png", 
+       plot = chart_comp, 
+       device = "png", 
+       width = 2400, 
+       height = 1600, 
        units = "px", 
        bg = "white")
 
