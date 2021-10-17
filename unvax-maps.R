@@ -292,3 +292,74 @@ ggsave(filename = "maps/kaipara-unvaccinated-comparison.png",
        bg = "white")
 
 # *****************************************************************************
+
+
+# *****************************************************************************
+# Comparison of change in vaccination rate vs previous week ---- 
+
+dat_vax_rate_comp <- bind_rows(
+  # Current week
+  dat_vax_sa2 |> 
+    left_join(y = dat_areas, 
+              by = c("sa2_code" = "sa22020_code")) |> 
+    filter(ta2020_name == "Kaipara District") |> 
+    mutate(week = "current"), 
+  
+  # Previous week
+  dat_vax_sa2_prev |> 
+    left_join(y = dat_areas, 
+              by = c("sa2_code" = "sa22020_code")) |> 
+    filter(ta2020_name == "Kaipara District") |> 
+    mutate(week = "previous")
+) |> 
+  select(sa2_code, sa2_name, dose1_uptake, week) |> 
+  pivot_wider(names_from = week, values_from = dose1_uptake) |> 
+  mutate(change = (current - previous) / 1000) |> 
+  left_join(y = dat_sa2, by = c("sa2_code" = "sa22020_v1")) |> 
+  st_as_sf()
+
+dat_map_coastline <- coastline |> 
+  st_crop(y = dat_vax_rate_comp)
+
+dat_vax_rate_map_comp_centroids <- bind_cols(
+  dat_vax_rate_comp |> st_drop_geometry(), 
+  dat_vax_rate_comp |> 
+    st_centroid() |> 
+    st_coordinates() |> 
+    as_tibble()
+)
+
+map_vax_rate_comp <- ggplot() + 
+  geom_sf(data = dat_map_coastline, 
+          size = 0, 
+          fill = grey(0.85)) + 
+  geom_sf(data = dat_vax_rate_comp, 
+          size = 0.25, 
+          colour = grey(0.5), 
+          mapping = aes(fill = change)) + 
+  geom_text_repel(data = dat_vax_rate_map_comp_centroids, 
+                  fontface = "bold", 
+                  size = 4, 
+          mapping = aes(x = X, y = Y, 
+                        label = paste0("+", 
+                                       percent(x = change, 
+                                               accuracy = 0.1))), 
+          colour = "white") + 
+  scale_fill_viridis_c(direction = 1, 
+                       labels = percent_format(accuracy = 1), 
+                       name = "Weekly change") + 
+  ggtitle("Change in the proportion of people who have received one or more doses of a COVID-19 vaccine" ,
+          subtitle = "13 October vs 6 October") + 
+  theme_map() + 
+  theme(plot.margin = margin(4, 4, 4, 4, "pt"), 
+        plot.title = element_text(face = "bold"))
+
+ggsave(filename = here("outputs/vax_rate_comp_map.pdf"), 
+       plot = map_vax_rate_comp, 
+       width = 2400, 
+       height = 2400, 
+       units = "px", 
+       device = "pdf", 
+       bg = "white")
+
+# *****************************************************************************
