@@ -51,7 +51,9 @@ dat_combined <- bind_rows(dat, dat_prev) |>
   # Remove unknown categories
   filter(ethnic_group != "Unknown", 
          ethnic_group != "Various", 
-         dhb_of_residence != "Overseas / Unknown") |> 
+         dhb_of_residence != "Overseas / Unknown", 
+         dhb_of_residence != "Various", 
+         age_group != "Various") |> 
   # Create custom age groups
   mutate(age_group_2 = case_when(
     age_group == "12-15" ~ "12-29", 
