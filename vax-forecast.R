@@ -48,45 +48,89 @@ dat_combined <- dat_vax |>
            fill = list(number_doses_administered = 0L)) |> 
   # Join population
   left_join(dat_pop, by = c("ethnic_group", "age_group", "dhb_of_residence")) |> 
+  # Combine Auckland DHBs
+  mutate(dhb_grouped = case_when(
+    dhb_of_residence == "Auckland" ~ "Auckland Metro", 
+    dhb_of_residence == "Counties Manukau" ~ "Auckland Metro", 
+    dhb_of_residence == "Waitemata" ~ "Auckland Metro", 
+    TRUE ~ dhb_of_residence
+  )) |> 
+  # Summarise by age group and DHB
+  group_by(dhb_grouped, age_group, dose_number, week_ending_date) |> 
+  summarise(number_doses_administered = sum(number_doses_administered), 
+            number_people_hsu = sum(number_people_hsu)) |> 
+  ungroup() |> 
   # Calculate cumulative uptake
-  arrange(dhb_of_residence, ethnic_group, age_group, dose_number, week_ending_date) |> 
-  group_by(dhb_of_residence, ethnic_group, age_group, dose_number) |> 
+  arrange(dhb_grouped, age_group, dose_number, week_ending_date) |> 
+  group_by(dhb_grouped, age_group, dose_number) |> 
   mutate(cumu_doses = cumsum(number_doses_administered)) |> 
   ungroup() |> 
   mutate(unvax = number_people_hsu - cumu_doses) |> 
   mutate(uptake_pct = number_doses_administered / dplyr::lag(unvax)) |> 
   filter(number_people_hsu > 50)
-  
-# Models of uptake. Fit a log time trend to the most recent 8 weeks
+
+# Models of uptake. Fit a time trend to the most recent 8 weeks
 # of the uptake_pct variable (i.e. doses administered as a proportion of
 # the unvaccinated at the end of the previous week). Separate model for
 # each dhb x ethnic grouop x age group combination, for every 
 # combination with population of at least 50 people.
 uptake_models <- dat_combined |> 
-  group_by(dhb_of_residence, ethnic_group, age_group, dose_number) |> 
+  group_by(dhb_grouped, age_group, dose_number) |> 
   slice_max(order_by = week_ending_date, 
             n = 8) |> 
   mutate(t = row_number()) |> 
   nest() |> 
   ungroup() |> 
   rowwise() |> 
-  mutate(m = list(lm(formula = uptake_pct ~ 1/t, data = data))) 
+  mutate(m = list(lm(formula = uptake_pct ~ t, data = data))) |> 
+  mutate(ms = list(summary(m))) |> 
+  mutate(sigma = ms$sigma) 
 
 # Predictions from uptake models for the next 8 weeks
 uptake_predictions <- uptake_models |> 
   mutate(f = list(tibble(p = predict(object = m, 
                                      newdata = tibble(t = 9:20), 
                                      interval = "prediction", 
+                                     type = "response", 
                                      level = 0.8), 
                          t = 9:20))) |> 
   ungroup() |> 
-  select(dhb_of_residence, ethnic_group, age_group, dose_number, f) |> 
+  select(dhb_grouped, age_group, dose_number, sigma, f) |> 
   unnest(cols = f) %>%
   do.call(data.frame, .) |> 
   as_tibble() |> 
   rename(uptake_pct_fit = p.1, 
          uptake_pct_lwr = p.2, 
-         uptake_pct_upr = p.3) 
+         uptake_pct_upr = p.3) |> 
+  # mutate(uptake_pct_fit = exp(uptake_pct_fit) + (sigma^2) / 2, 
+  #        uptake_pct_lwr = exp(uptake_pct_lwr) + (sigma^2) / 2, 
+  #        uptake_pct_upr = exp(uptake_pct_upr) + (sigma^2) / 2) |> 
+  mutate(week_ending_date = max(dat_combined$week_ending_date) + dweeks(t - 8))
+
+# Chart to check the uptake predictions
+uptake_predictions_chart_dat <- bind_rows(
+  dat_combined |> 
+    group_by(dhb_grouped, age_group, dose_number) |> 
+    slice_max(order_by = week_ending_date, 
+              n = 16) |> 
+    ungroup(), 
+  uptake_predictions
+) |> 
+  mutate(category = ifelse(is.na(t), "actual", "predicted")) |> 
+  mutate(uptake_pct_chart = ifelse(!is.na(uptake_pct), uptake_pct, uptake_pct_fit))
+
+uptake_predictions_chart <- uptake_predictions_chart_dat |> 
+  filter(dose_number == 2L) |> 
+  ggplot(mapping = aes(x = week_ending_date, 
+                       y = uptake_pct_chart, 
+                       group = category, 
+                       fill = category, 
+                       colour = category)) + 
+  geom_line() + 
+  facet_grid(rows = vars(age_group), 
+             cols = vars(dhb_grouped))
+
+uptake_predictions_chart
 
 # Doses administered predictions
 doses_predictions <- dat_combined |> 
