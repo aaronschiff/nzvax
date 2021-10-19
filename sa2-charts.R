@@ -159,7 +159,9 @@ chart_first_doses <- dat_chart |>
                                "70% to 80% first doses" = lighten(col = "red", amount = 0.1),
                                "Less than 70% first doses" = darken(col = "red", amount = 0.25)),
                     name = NULL) + 
-  guides(fill = "none") + 
+  guides(fill = guide_legend(override.aes = list(size = 2, 
+                                                 stroke = 0.35), 
+                             reverse = TRUE)) + 
   xlab("") + 
   ylab("") + 
   labs(tag = "Chart by Aaron Schiff using data from the NZ Ministry of Health\ngithub.com/aaronschiff/nzvax") + 
@@ -171,6 +173,9 @@ chart_first_doses <- dat_chart |>
         panel.grid.major.x = element_line(size = 0.25), 
         panel.spacing.y = unit(16, "pt"), 
         panel.spacing.x = unit(16, "pt"), 
+        legend.position = "top", 
+        legend.box.margin = margin(0, 0, 0, 0, "pt"), 
+        legend.margin = margin(0, 0, 0, 0, "pt"), 
         axis.text.y = element_blank(), 
         axis.text.x = element_blank(), 
         axis.title.x = element_blank(),
@@ -188,7 +193,7 @@ chart_first_doses <- dat_chart |>
 ggsave(filename = here(glue("outputs/first_doses_SA2_{latest_date}.png")), 
        plot = chart_first_doses, 
        device = "png", 
-       width = 2400, 
+       width = 2600, 
        height = 1800, 
        units = "px", 
        bg = "white")
@@ -241,7 +246,9 @@ chart_fully_vax <- dat_chart |>
                                "70% to 80% fully vaccinated" = lighten(col = "red", amount = 0.1),
                                "Less than 70% fully vaccinated" = darken(col = "red", amount = 0.25)),
                     name = NULL) + 
-  guides(fill = "none") + 
+  guides(fill = guide_legend(override.aes = list(size = 2, 
+                                                 stroke = 0.35), 
+                             reverse = TRUE)) + 
   xlab("") + 
   ylab("") + 
   labs(tag = "Chart by Aaron Schiff using data from the NZ Ministry of Health\ngithub.com/aaronschiff/nzvax") + 
@@ -253,6 +260,9 @@ chart_fully_vax <- dat_chart |>
         panel.grid.major.x = element_line(size = 0.25), 
         panel.spacing.y = unit(16, "pt"), 
         panel.spacing.x = unit(16, "pt"), 
+        legend.position = "top", 
+        legend.box.margin = margin(0, 0, 0, 0, "pt"), 
+        legend.margin = margin(0, 0, 0, 0, "pt"), 
         axis.text.y = element_blank(), 
         axis.text.x = element_blank(), 
         axis.title.x = element_blank(),
@@ -270,7 +280,7 @@ chart_fully_vax <- dat_chart |>
 ggsave(filename = here(glue("outputs/fully_vax_SA2_{latest_date}.png")), 
        plot = chart_fully_vax, 
        device = "png", 
-       width = 2400, 
+       width = 2600, 
        height = 1800, 
        units = "px", 
        bg = "white")
