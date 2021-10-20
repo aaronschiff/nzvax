@@ -285,6 +285,170 @@ ggsave(filename = here(glue("outputs/fully_vax_SA2_{latest_date}.png")),
        units = "px", 
        bg = "white")
 
+# Mega beeswarm for all SA2 together
+chart_megaswarm_first_doses <- dat_chart |> 
+  ggplot(mapping = aes(x = dose1_uptake / 1000, 
+                       y = 0, 
+                       fill = first_dose_category)) + 
+  geom_vline(xintercept = c(0.7, 0.8, 0.9), 
+             colour = grey(0.5), 
+             size = 0.25) + 
+  geom_beeswarm(priority = "random", 
+                groupOnX = FALSE, 
+                size = 1, 
+                shape = 21, 
+                colour = grey(0.75), 
+                stroke = 0.2) + 
+  geom_text(x = 0.705,  
+            y = 0.66,
+            label = "70%",
+            hjust = 0, 
+            family = "Fira Sans", 
+            fontface = "bold", 
+            size = 3, 
+            colour = grey(0.5)) +   
+  geom_text(x = 0.805,  
+            y = 0.66,
+            label = "80%",
+            hjust = 0, 
+            family = "Fira Sans", 
+            fontface = "bold", 
+            size = 3, 
+            colour = grey(0.5)) +
+  geom_text(x = 0.905,  
+            y = 0.66,
+            label = "90%",
+            hjust = 0, 
+            family = "Fira Sans", 
+            fontface = "bold", 
+            size = 3, 
+            colour = grey(0.5)) +
+  scale_x_continuous(breaks = seq(0, 1, 0.1), 
+                     expand = expansion(0, 0), 
+                     limits = c(0.15, 0.99)) + 
+  scale_fill_manual(values = c("Greater than 90% first doses" = lighten(col = "red", amount = 0.9),
+                               "80% to 90% first doses" = lighten(col = "red", amount = 0.5),
+                               "70% to 80% first doses" = lighten(col = "red", amount = 0.1),
+                               "Less than 70% first doses" = darken(col = "red", amount = 0.25)),
+                    name = NULL) + 
+  guides(fill = guide_legend(override.aes = list(size = 2, 
+                                                 stroke = 0.35), 
+                             reverse = TRUE)) + 
+  xlab("") + 
+  ylab("") + 
+  labs(tag = "Chart by Aaron Schiff using data from the NZ Ministry of Health\ngithub.com/aaronschiff/nzvax") + 
+  ggtitle(label = "NZ COVID-19 vaccination rates for each suburb (SA2 area)", 
+          subtitle = glue("First doses to {latest_date_nice} (percent of age 12+ population)")) + 
+  theme_minimal(base_family = "Fira Sans") + 
+  theme(panel.grid.major.y = element_blank(), 
+        panel.grid.minor = element_blank(), 
+        panel.grid.major.x = element_line(size = 0.25), 
+        legend.position = "top", 
+        legend.box.margin = margin(0, 0, 0, 0, "pt"), 
+        legend.margin = margin(0, 0, 0, 0, "pt"), 
+        axis.text.y = element_blank(), 
+        axis.text.x = element_blank(), 
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        plot.margin = margin(4, 4, 4, 4, "pt"), 
+        plot.title = element_text(size = rel(1.1), 
+                                  margin = margin(0, 0, 4, 0, "pt")), 
+        plot.subtitle = element_text(size = rel(0.9), 
+                                     face = "bold", 
+                                     margin = margin(0, 0, 8, 0, "pt")), 
+        plot.tag.position = c(0.99, 0.985), 
+        plot.tag = element_text(hjust = 1, size = rel(0.6)))
+
+ggsave(filename = here(glue("outputs/first_doses_SA2_megaswarm_{latest_date}.png")), 
+       plot = chart_megaswarm_first_doses, 
+       device = "png", 
+       width = 2600, 
+       height = 1600, 
+       units = "px", 
+       bg = "white")
+
+chart_megaswarm_fully_vax <- dat_chart |> 
+  ggplot(mapping = aes(x = dose2_uptake / 1000, 
+                       y = 0, 
+                       fill = fully_vax_category)) + 
+  geom_vline(xintercept = c(0.7, 0.8, 0.9), 
+             colour = grey(0.5), 
+             size = 0.25) + 
+  geom_beeswarm(priority = "random", 
+                groupOnX = FALSE, 
+                size = 1, 
+                shape = 21, 
+                colour = grey(0.75), 
+                stroke = 0.2) + 
+  geom_text(x = 0.705,  
+            y = 0.48,
+            label = "70%",
+            hjust = 0, 
+            family = "Fira Sans", 
+            fontface = "bold", 
+            size = 3, 
+            colour = grey(0.5)) +   
+  geom_text(x = 0.805,  
+            y = 0.48,
+            label = "80%",
+            hjust = 0, 
+            family = "Fira Sans", 
+            fontface = "bold", 
+            size = 3, 
+            colour = grey(0.5)) +
+  geom_text(x = 0.905,  
+            y = 0.48,
+            label = "90%",
+            hjust = 0, 
+            family = "Fira Sans", 
+            fontface = "bold", 
+            size = 3, 
+            colour = grey(0.5)) +
+  # Used geom_text because annotate seems to interfere with geom_beeswarm
+  scale_x_continuous(breaks = seq(0, 1, 0.1), 
+                     expand = expansion(0, 0), 
+                     limits = c(0.15, 0.99)) + 
+  scale_fill_manual(values = c("Greater than 90% fully vaccinated" = lighten(col = "red", amount = 0.9),
+                               "80% to 90% fully vaccinated" = lighten(col = "red", amount = 0.5),
+                               "70% to 80% fully vaccinated" = lighten(col = "red", amount = 0.1),
+                               "Less than 70% fully vaccinated" = darken(col = "red", amount = 0.25)),
+                    name = NULL) + 
+  guides(fill = guide_legend(override.aes = list(size = 2, 
+                                                 stroke = 0.35), 
+                             reverse = TRUE)) + 
+  xlab("") + 
+  ylab("") + 
+  labs(tag = "Chart by Aaron Schiff using data from the NZ Ministry of Health\ngithub.com/aaronschiff/nzvax") + 
+  ggtitle(label = "NZ COVID-19 vaccination rates for each suburb (SA2 area)", 
+          subtitle = glue("Fully vaccinated (two doses) to {latest_date_nice} (percent of age 12+ population)")) + 
+  theme_minimal(base_family = "Fira Sans") + 
+  theme(panel.grid.major.y = element_blank(), 
+        panel.grid.minor = element_blank(), 
+        panel.grid.major.x = element_line(size = 0.25), 
+        legend.position = "top", 
+        legend.box.margin = margin(0, 0, 0, 0, "pt"), 
+        legend.margin = margin(0, 0, 0, 0, "pt"), 
+        axis.text.y = element_blank(), 
+        axis.text.x = element_blank(), 
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        plot.margin = margin(4, 4, 4, 4, "pt"), 
+        plot.title = element_text(size = rel(1.1), 
+                                  margin = margin(0, 0, 4, 0, "pt")), 
+        plot.subtitle = element_text(size = rel(0.9), 
+                                     face = "bold", 
+                                     margin = margin(0, 0, 8, 0, "pt")), 
+        plot.tag.position = c(0.99, 0.985), 
+        plot.tag = element_text(hjust = 1, size = rel(0.6)))
+
+ggsave(filename = here(glue("outputs/fully_vax_SA2_megaswarm_{latest_date}.png")), 
+       plot = chart_megaswarm_fully_vax, 
+       device = "png", 
+       width = 2600, 
+       height = 1600, 
+       units = "px", 
+       bg = "white")
+
 
 # *****************************************************************************
 
