@@ -23,9 +23,9 @@ library(readxl)
 library(glue)
 library(colorspace)
 
-latest_date <- "12_10_2021"               # Date of most recent week's data
-prev_date <- "05_10_2021"                 # Date of previous week's data
-latest_date_nice <- "12 October 2021"     # For chart title
+latest_date <- "19_10_2021"               # Date of most recent week's data
+prev_date <- "12_10_2021"                 # Date of previous week's data
+latest_date_nice <- "19 October 2021"     # For chart title
 
 # *****************************************************************************
 
