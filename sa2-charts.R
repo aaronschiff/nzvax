@@ -166,7 +166,7 @@ chart_first_doses <- dat_chart |>
   ylab("") + 
   labs(tag = "Chart by Aaron Schiff using data from the NZ Ministry of Health\ngithub.com/aaronschiff/nzvax") + 
   ggtitle(label = "NZ COVID-19 vaccination rates for each suburb (SA2 area)", 
-          subtitle = glue("First doses to {latest_date_nice}")) + 
+          subtitle = glue("First doses to {latest_date_nice} (percent of age 12+ population)")) + 
   theme_minimal(base_family = "Fira Sans") + 
   theme(panel.grid.major.y = element_blank(), 
         panel.grid.minor = element_blank(), 
@@ -253,7 +253,7 @@ chart_fully_vax <- dat_chart |>
   ylab("") + 
   labs(tag = "Chart by Aaron Schiff using data from the NZ Ministry of Health\ngithub.com/aaronschiff/nzvax") + 
   ggtitle(label = "NZ COVID-19 vaccination rates for each suburb (SA2 area)", 
-          subtitle = glue("Fully vaccinated (two doses) to {latest_date_nice}")) + 
+          subtitle = glue("Fully vaccinated (two doses) to {latest_date_nice} (percent of age 12+ population)")) + 
   theme_minimal(base_family = "Fira Sans") + 
   theme(panel.grid.major.y = element_blank(), 
         panel.grid.minor = element_blank(), 
