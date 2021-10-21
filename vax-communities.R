@@ -49,13 +49,7 @@ dat_prev <- read_excel(path = here(glue("data/covid_vaccinations_{prev_date}.xls
   mutate(week = "previous")
 
 # Combine data and manipulate 
-dat_combined <- bind_rows(dat, dat_prev) |> 
-  # Remove unknown categories
-  filter(ethnic_group != "Unknown", 
-         ethnic_group != "Various", 
-         dhb_of_residence != "Overseas / Unknown", 
-         dhb_of_residence != "Various", 
-         age_group != "Various") |> 
+dat_clean <- bind_rows(dat, dat_prev) |> 
   # Create custom age groups
   mutate(age_group_2 = case_when(
     age_group == "12-15" ~ "12-29", 
@@ -74,14 +68,35 @@ dat_combined <- bind_rows(dat, dat_prev) |>
     age_group == "75-79" ~ "60+", 
     age_group == "80-84" ~ "60+", 
     age_group == "85-89" ~ "60+",
-    age_group == "90+" ~ "60+"
-  )) |> 
+    age_group == "90+" ~ "60+",
+    age_group == "Various" ~ "Various"
+  )) |>
   # Summarise by week, dhb, ethnicity, age group
   group_by(week, dhb_of_residence, ethnic_group, age_group_2) |> 
   summarise(second_dose_administered = sum(second_dose_administered), 
             first_dose_administered = sum(first_dose_administered), 
             population = sum(population)) |> 
-  ungroup() |> 
+  ungroup()
+
+# Add total for each DHB and manipulate for charting
+dat_combined <- bind_rows(
+  # Clean data
+  dat_clean, 
+  # Add totals for each DHB
+  dat_clean |> 
+    group_by(week, dhb_of_residence) |> 
+    summarise(second_dose_administered = sum(second_dose_administered), 
+           first_dose_administered = sum(first_dose_administered), 
+           population = sum(population)) |> 
+    mutate(ethnic_group = "All", age_group_2 = "All") |> 
+    ungroup()
+) |> 
+  # Remove unknown categories
+  filter(ethnic_group != "Unknown", 
+         ethnic_group != "Various", 
+         dhb_of_residence != "Overseas / Unknown", 
+         dhb_of_residence != "Various", 
+         age_group_2 != "Various") |> 
   mutate(fully_vax_rate = second_dose_administered / population, 
          first_dose_rate = first_dose_administered / population) |> 
   # Create category factors for ordering
@@ -89,21 +104,29 @@ dat_combined <- bind_rows(dat, dat_prev) |>
                                levels = c("Maori", 
                                           "Pacific Peoples", 
                                           "Asian", 
-                                          "European or Other"), 
+                                          "European or Other", 
+                                          "All"), 
                                labels = c("Māori", 
                                           "Pacific Peoples", 
                                           "Asian", 
-                                          "Pākehā or other"), 
+                                          "Pākehā or other", 
+                                          "All"), 
                                ordered = TRUE)) |> 
   mutate(age_group_2 = factor(x = age_group_2, 
                               levels = c("12-29", 
                                          "30-59", 
-                                         "60+"), 
+                                         "60+", 
+                                         "All"), 
                               labels = c("12-29 years", 
                                          "30-59 years", 
-                                         "60+ years"), 
+                                         "60+ years", 
+                                         "All"), 
                               ordered = TRUE)) |> 
   mutate(ethnicity_age = fct_cross(age_group_2, ethnic_group, sep = " ")) |> 
+  mutate(ethnicity_age = fct_relabel(.f = ethnicity_age, 
+                                     .fun = function(x) {
+                                       ifelse(x == "All All", "All people aged 12+", x)
+                                     })) |> 
   mutate(dhb_of_residence = factor(x = dhb_of_residence, 
                                    levels = c("Northland", 
                                               "Auckland Metro", 
@@ -122,7 +145,8 @@ dat_combined <- bind_rows(dat, dat_prev) |>
                                               "Canterbury", 
                                               "South Canterbury", 
                                               "Southern"), 
-                                   ordered = TRUE)) 
+                                   ordered = TRUE)) |> 
+  arrange(week, dhb_of_residence, ethnicity_age)
 
 # *****************************************************************************
 
@@ -162,14 +186,18 @@ dat_chart_vax_rate <- dat_combined |>
   arrange(dhb_of_residence, ethnicity_age)
 
 # Current fully vaccinated rate chart
-chart_fully_vax_rate <- ggplot(dat_chart_vax_rate) + 
-  geom_tile(mapping = aes(y = fct_rev(ethnicity_age), 
-                          x = dhb_of_residence, 
-                          fill = fully_vax_category), 
+chart_fully_vax_rate <- ggplot(dat_chart_vax_rate, 
+                               mapping = aes(y = fct_rev(ethnicity_age), 
+                                             x = dhb_of_residence)) + 
+  geom_tile(mapping = aes(fill = fully_vax_category), 
             colour = grey(0.97),  size = 3) + 
-  geom_hline(yintercept = 3.5, colour = "black") + 
-  geom_hline(yintercept = 6.5, colour = "black") + 
-  geom_hline(yintercept = 9.5, colour = "black") + 
+  geom_text(mapping = aes(label = round(100 * fully_vax_rate)), 
+            data = dat_chart_vax_rate |> filter(age_group_2 == "All"), 
+            colour = "white", 
+            family = "Fira Sans", 
+            fontface = "bold", 
+            size = 2.5) + 
+  geom_hline(yintercept = c(1.5, 4.5, 7.5, 10.5), colour = "black") + 
   scale_fill_manual(values = c("Greater than 90% fully vaccinated" = lighten(col = "red", amount = 0.9),
                                "80% to 90% fully vaccinated" = lighten(col = "red", amount = 0.5),
                                "70% to 80% fully vaccinated" = lighten(col = "red", amount = 0.1),
@@ -193,7 +221,7 @@ chart_fully_vax_rate <- ggplot(dat_chart_vax_rate) +
   theme_minimal(base_family = "Fira Sans") + 
   theme(axis.text.x.top = element_text(angle = 45, hjust = 0), 
         legend.justification = c(0, 0), 
-        legend.position = c(-0.015, 1.17), 
+        legend.position = c(-0.015, 1.15), 
         panel.grid = element_blank(), 
         plot.margin = margin(8, 32, 16, 8, "pt"), 
         plot.title = element_text(size = rel(1.1), 
@@ -206,19 +234,23 @@ ggsave(filename = here(glue("outputs/fully_vax_communities_{latest_date}.png")),
        plot = chart_fully_vax_rate, 
        device = "png", 
        width = 2400, 
-       height = 2000, 
+       height = 2150, 
        units = "px", 
        bg = "white")
 
 # Current first doses rate chart
-chart_first_doses_rate <- ggplot(dat_chart_vax_rate) + 
-  geom_tile(mapping = aes(y = fct_rev(ethnicity_age), 
-                          x = dhb_of_residence, 
-                          fill = first_dose_category), 
+chart_first_doses_rate <- ggplot(dat_chart_vax_rate, 
+                                 mapping = aes(y = fct_rev(ethnicity_age), 
+                                               x = dhb_of_residence)) + 
+  geom_tile(mapping = aes(fill = first_dose_category), 
             colour = grey(0.97),  size = 3) + 
-  geom_hline(yintercept = 3.5, colour = "black") + 
-  geom_hline(yintercept = 6.5, colour = "black") + 
-  geom_hline(yintercept = 9.5, colour = "black") + 
+  geom_text(mapping = aes(label = round(100 * first_dose_rate)), 
+            data = dat_chart_vax_rate |> filter(age_group_2 == "All"), 
+            colour = "white", 
+            family = "Fira Sans", 
+            fontface = "bold", 
+            size = 2.5) + 
+  geom_hline(yintercept = c(1.5, 4.5, 7.5, 10.5), colour = "black") + 
   scale_fill_manual(values = c("Greater than 90% first doses" = lighten(col = "red", amount = 0.9),
                                "80% to 90% first doses" = lighten(col = "red", amount = 0.5),
                                "70% to 80% first doses" = lighten(col = "red", amount = 0.1),
@@ -242,7 +274,7 @@ chart_first_doses_rate <- ggplot(dat_chart_vax_rate) +
   theme_minimal(base_family = "Fira Sans") + 
   theme(axis.text.x.top = element_text(angle = 45, hjust = 0), 
         legend.justification = c(0, 0), 
-        legend.position = c(-0.015, 1.17), 
+        legend.position = c(-0.015, 1.15), 
         panel.grid = element_blank(), 
         plot.margin = margin(8, 32, 16, 8, "pt"), 
         plot.title = element_text(size = rel(1.1), 
@@ -255,7 +287,7 @@ ggsave(filename = here(glue("outputs/first_doses_communities_{latest_date}.png")
        plot = chart_first_doses_rate, 
        device = "png", 
        width = 2400, 
-       height = 2000, 
+       height = 2150, 
        units = "px", 
        bg = "white")
 
