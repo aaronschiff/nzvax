@@ -1,5 +1,7 @@
 # NZ COVID vaccination rates visualised by 'community'
 
+# TODO: Suppress cells in changes charts for small population groups
+
 # Feedback to consider: 
 # - Use a single colour scale. Avoid colours that might appear brown. 
 #     [Done, changed light blue to pink and dark red/brown to bright red]
