@@ -15,8 +15,8 @@ library(ggthemes)
 library(scales)
 library(lemon)
 
-latest_date <- "20211013"               # Date of most recent week's data
-prev_date <- "20211006"
+latest_date <- "20211020"               # Date of most recent week's data
+prev_date <- "20211013"
 
 # *****************************************************************************
 
@@ -157,7 +157,7 @@ map_vax_sa2 <- dat_vax_map_sa2 |>
         legend.text = element_text(size = rel(1)), 
         plot.margin = margin(0, 8, 0, 8, "pt"))
 
-ggsave(filename = here("maps/kaipara-first-doses.png"), 
+ggsave(filename = here(glue("maps/kaipara-first-doses-{latest_date}.png")), 
        plot = map_vax_sa2, 
        device = "png", 
        width = 2000, 
@@ -215,6 +215,8 @@ ggsave(filename = here(glue("maps/kaipara-unvaccinated-{latest_date}.png")),
        height = 2000, 
        units = "px", 
        bg = "white")
+
+# HERE 
 
 # *****************************************************************************
 

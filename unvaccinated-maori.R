@@ -10,7 +10,9 @@ library(janitor)
 library(scales)
 library(readxl)
 
-latest_date <- "12_10_2021"
+latest_date <- "19_10_2021"
+
+latest_date_nice <- "19 October 2021"
 
 # *****************************************************************************
 
@@ -91,38 +93,11 @@ dat_m <- dat |>
                                    ordered = TRUE)) |> 
   arrange(dhb_of_residence, age_group_2)
 
-# Create individual unvaccinated people data for dot plot
-dat_m_dot <- dat_m |> 
-  select(-population, -first_dose_administered) |> 
-  # Expand data into individual people
-  uncount(weights = unvax) |> 
-  # Assign coordinates within each DHB and age group combination
-  group_by(dhb_of_residence, age_group_2) |> 
-  mutate(group_i = row_number()) |> 
-  ungroup() |> 
-  mutate(y = 500 - as.integer(floor(group_i / 50))) |> 
-  group_by(dhb_of_residence, age_group_2, y) |> 
-  mutate(x = row_number()) |> 
-  ungroup()
-
 # *****************************************************************************
 
 
 # *****************************************************************************
 # Visualise ----
-
-# Dot chart of unvaccinated people
-chart_m_dot <- dat_m_dot |> ggplot() + 
-  geom_point(mapping = aes(x = x, y = y, fill = age_group_2), 
-             shape = 21,
-             stroke = 0,
-             size = 0.4) + 
-  facet_grid(cols = vars(dhb_of_residence), 
-             rows = vars(age_group_2)) + 
-  scale_fill_brewer(palette = "Set2", name = NULL) + 
-  guides(fill = guide_legend(override.aes = list(size = 2))) + 
-  theme_minimal() +
-  theme(panel.grid = element_blank())
 
 # Bar chart of numbers of unvaccinated people
 chart_m_bar <- dat_m |> 
@@ -148,7 +123,7 @@ chart_m_bar <- dat_m |>
                       aesthetics = c("colour", "fill")) + 
   xlab("") + 
   ylab("") + 
-  ggtitle(label = "Number of unvaccinated Māori people as at 12 October 2021") + 
+  ggtitle(label = glue("Number of unvaccinated Māori people as at {latest_date_nice}")) + 
   theme_minimal(base_family = "Fira Sans") + 
   theme(panel.grid.minor = element_blank(), 
         panel.grid.major.x = element_blank(), 
@@ -168,8 +143,13 @@ ggsave(filename = here(glue("outputs/unvax_maori_{latest_date}.png")),
        device = "png", 
        bg = "white")
 
+# *****************************************************************************
 
 
+# *****************************************************************************
+# Scratch ----
+
+# Other charts; unused at this stage
 
 mu <- dat |> 
   filter(dhb_of_residence != "Overseas / Unknown", 
@@ -285,3 +265,6 @@ chart_mu2 <- mu2 |>
         panel.grid.minor = element_blank())
 
 chart_mu2
+
+# *****************************************************************************
+
