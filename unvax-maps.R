@@ -18,6 +18,9 @@ library(lemon)
 latest_date <- "20211020"               # Date of most recent week's data
 prev_date <- "20211013"
 
+latest_date_nice <- "20 October 2021"
+prev_date_nice <- "13 October 2021"
+
 # *****************************************************************************
 
 
@@ -151,7 +154,7 @@ map_vax_sa2 <- dat_vax_map_sa2 |>
                     palette = "RdYlBu", 
                     direction = -1, 
                     name = NULL) + 
-  ggtitle("Proportion of Kaipara eligible population (age 12+)\nwho have received their first dose as at 6 October 2021") + 
+  ggtitle(glue("Proportion of Kaipara eligible population (age 12+)\nwho have received their first dose as at {latest_date_nice}")) + 
   theme_map(base_family = "Fira Sans") + 
   theme(plot.title = element_text(face = "bold"), 
         legend.text = element_text(size = rel(1)), 
@@ -181,12 +184,12 @@ dat_unvax_map_sa2 <- dat_areas |>
     (unvax >= 400) & (unvax < 500) ~ "40% to 50% unvaccinated"
   )) |> 
   mutate(unvax_category = factor(x = unvax_category, 
-                                        levels = c("Less than 10% unvaccinated", 
-                                                   "10% to 20% unvaccinated", 
-                                                   "20% to 30% unvaccinated", 
-                                                   "30% to 40% unvaccinated", 
-                                                   "40% to 50% unvaccinated"), 
-                                        ordered = TRUE))
+                                 levels = c("Less than 10% unvaccinated", 
+                                            "10% to 20% unvaccinated", 
+                                            "20% to 30% unvaccinated", 
+                                            "30% to 40% unvaccinated", 
+                                            "40% to 50% unvaccinated"), 
+                                 ordered = TRUE))
 
 map_coastline <- st_crop(x = coastline, y = dat_unvax_map_sa2)
 
@@ -202,7 +205,7 @@ map_unvax_sa2 <- dat_unvax_map_sa2 |>
                     palette = "RdYlBu", 
                     direction = -1, 
                     name = NULL) + 
-  ggtitle("Proportion of Kaipara eligible population (age 12+)\nwho have not received at least their first dose as at 6 October 2021") + 
+  ggtitle(glue("Proportion of Kaipara eligible population (age 12+)\nwho have not received at least their first dose as at {latest_date_nice}")) + 
   theme_map(base_family = "Fira Sans") + 
   theme(plot.title = element_text(face = "bold"), 
         legend.text = element_text(size = rel(1)), 
@@ -216,7 +219,6 @@ ggsave(filename = here(glue("maps/kaipara-unvaccinated-{latest_date}.png")),
        units = "px", 
        bg = "white")
 
-# HERE 
 
 # *****************************************************************************
 
@@ -272,7 +274,7 @@ chart_comp <- dat_comp |>
                      limits = c(0, 1750), 
                      expand = expansion(0, 0)) + 
   ggtitle("Number of unvaccinated people aged 12+ in Kaipara District", 
-          subtitle = "13 October vs 6 October") + 
+          subtitle = glue("{latest_date_nice} vs {prev_date_nice}")) + 
   theme_minimal(base_family = "Fira Sans") + 
   theme(axis.title.y = element_blank(), 
         axis.title.x = element_blank(), 
@@ -285,7 +287,7 @@ chart_comp <- dat_comp |>
         panel.spacing.x = unit(24, "pt"), 
         panel.spacing.y = unit(12, "pt"))
 
-ggsave(filename = "maps/kaipara-unvaccinated-comparison.png", 
+ggsave(filename = glue("maps/kaipara-unvaccinated-comparison-{latest_date}.png"), 
        plot = chart_comp, 
        device = "png", 
        width = 2400, 
@@ -339,24 +341,28 @@ map_vax_rate_comp <- ggplot() +
           size = 0.25, 
           colour = grey(0.5), 
           mapping = aes(fill = change)) + 
-  geom_text_repel(data = dat_vax_rate_map_comp_centroids, 
-                  fontface = "bold", 
-                  size = 4, 
-          mapping = aes(x = X, y = Y, 
-                        label = paste0("+", 
-                                       percent(x = change, 
-                                               accuracy = 0.1))), 
-          colour = "white") + 
+  geom_text(data = dat_vax_rate_map_comp_centroids, 
+            fontface = "bold", 
+            size = 4, 
+            mapping = aes(x = X, y = Y, 
+                          label = paste0("+", 
+                                         percent(x = change, 
+                                                 accuracy = 0.1), 
+                                         " (", 
+                                         percent(x = current / 1000, 
+                                                 accuracy = 1), 
+                                         ")")), 
+            colour = "white") + 
   scale_fill_viridis_c(direction = 1, 
                        labels = percent_format(accuracy = 1), 
                        name = "Weekly change") + 
   ggtitle("Change in the proportion of people who have received one or more doses of a COVID-19 vaccine" ,
-          subtitle = "13 October vs 6 October") + 
+          subtitle = glue("{latest_date_nice} vs {prev_date_nice}")) + 
   theme_map() + 
   theme(plot.margin = margin(4, 4, 4, 4, "pt"), 
         plot.title = element_text(face = "bold"))
 
-ggsave(filename = here("outputs/vax_rate_comp_map.pdf"), 
+ggsave(filename = here(glue("maps/vax_rate_comp_map_{latest_date}.pdf")), 
        plot = map_vax_rate_comp, 
        width = 2400, 
        height = 2400, 
