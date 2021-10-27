@@ -8,10 +8,11 @@ library(here)
 library(janitor)
 library(readxl)
 library(glue)
+library(ggstar)
 
-latest_date <- "19_10_2021"               # Date of most recent week's data
-prev_date <- "12_10_2021"                 # Date of previous week's data
-latest_date_nice <- "19 October 2021"     # For chart title
+latest_date <- "26_10_2021"               # Date of most recent week's data
+prev_date <- "19_10_2021"                 # Date of previous week's data
+latest_date_nice <- "26 October 2021"     # For chart title
 
 # *****************************************************************************
 
@@ -84,17 +85,36 @@ dat_chart <- dat_clean |>
   uncount(weights = first_doses_this_week) |> 
   group_by(age_group_2) |> 
   mutate(group_i = row_number()) |> 
-  mutate(y = as.integer(100L - ceiling(group_i / 500))) |> 
+  mutate(y = as.integer(100L - ceiling(group_i / 200))) |> 
   group_by(age_group_2, y) |> 
   mutate(x = row_number()) |> 
   ungroup() 
 
 chart <- dat_chart |> 
   ggplot(mapping = aes(x = x, y = y)) + 
-  geom_point(size = 0.25) + 
+  geom_point(size = 0.25, 
+             shape = 21, 
+             fill = "yellow", 
+             stroke = 0) + 
   facet_grid(rows = vars(age_group_2), scales = "free_y", space = "free_y") + 
-  theme_minimal() + 
-  theme(panel.grid = element_blank())
+  scale_x_continuous(expand = expansion(0.01, 0)) + 
+  scale_y_continuous(expand = expansion(0.01, 0)) + 
+  ggtitle(glue("People in NZ who received their first dose of a COVID-19 vaccine\nin the week to {latest_date_nice}. One dot = one person.")) + 
+  theme_minimal(base_family = "Fira Sans") + 
+  theme(panel.grid = element_blank(), 
+        axis.text = element_blank(), 
+        axis.title = element_blank(), 
+        plot.title = element_text(colour = "white", size = rel(1)), 
+        plot.subtitle = element_text(colour = "white"), 
+        strip.text.y = element_text(angle = 0, colour = "white"), 
+        strip.background = element_rect(fill = "black", colour = "black"), 
+        plot.background = element_rect(fill = "black", colour = "black"))
 
-chart
+ggsave(filename = here(glue("outputs/first_doses_stars_{latest_date}.png")), 
+       plot = chart, 
+       width = 1400, 
+       height = 2600, 
+       units = "px", 
+       device = "png", 
+       bg = "black")
 # *****************************************************************************
