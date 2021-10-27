@@ -10,9 +10,9 @@ library(janitor)
 library(scales)
 library(readxl)
 
-latest_date <- "19_10_2021"
+latest_date <- "26_10_2021"
 
-latest_date_nice <- "19 October 2021"
+latest_date_nice <- "26 October 2021"
 
 # *****************************************************************************
 

@@ -2,8 +2,6 @@
 
 # TODO: Suppress cells in changes charts for small population groups
 
-# TODO: Calculate age-standardised vax rates for ethnic groups
-
 # *****************************************************************************
 # Setup ----
 
@@ -15,9 +13,9 @@ library(glue)
 library(colorspace)
 library(scales)
 
-latest_date <- "19_10_2021"               # Date of most recent week's data
-prev_date <- "12_10_2021"                 # Date of previous week's data
-latest_date_nice <- "19 October 2021"     # For chart title
+latest_date <- "26_10_2021"               # Date of most recent week's data
+prev_date <- "19_10_2021"                 # Date of previous week's data
+latest_date_nice <- "26 October 2021"     # For chart title
 
 # *****************************************************************************
 
@@ -76,8 +74,8 @@ dat_combined <- bind_rows(
   dat_clean |> 
     group_by(week, dhb_of_residence) |> 
     summarise(second_dose_administered = sum(second_dose_administered), 
-           first_dose_administered = sum(first_dose_administered), 
-           population = sum(population)) |> 
+              first_dose_administered = sum(first_dose_administered), 
+              population = sum(population)) |> 
     mutate(ethnic_group = "All", age_group_2 = "All") |> 
     ungroup()
 ) |> 
@@ -181,9 +179,9 @@ chart_fully_vax_rate <- ggplot(dat_chart_vax_rate,
                                              x = dhb_of_residence)) + 
   geom_tile(mapping = aes(fill = fully_vax_category), 
             colour = grey(0.97),  size = 3) + 
-  geom_text(mapping = aes(label = round(100 * fully_vax_rate)), 
+  geom_text(mapping = aes(label = round(100 * fully_vax_rate), 
+                          colour = ifelse(fully_vax_rate > 0.9, "90+", "under-90")), 
             data = dat_chart_vax_rate |> filter(age_group_2 == "All"), 
-            colour = "white", 
             family = "Fira Sans", 
             fontface = "bold", 
             size = 2.5) + 
@@ -193,6 +191,9 @@ chart_fully_vax_rate <- ggplot(dat_chart_vax_rate,
                                "70% to 80% fully vaccinated" = lighten(col = "red", amount = 0.1),
                                "Less than 70% fully vaccinated" = darken(col = "red", amount = 0.25)),
                     name = NULL) +
+  scale_colour_manual(values = c("90+" = grey(0.75),
+                                 "under-90" = "white"), 
+                      guide = "none") + 
   scale_x_discrete(position = "top") + 
   guides(fill = guide_legend(ncol = 1, 
                              override.aes = list(size = 0.5))) + 
@@ -234,9 +235,9 @@ chart_first_doses_rate <- ggplot(dat_chart_vax_rate,
                                                x = dhb_of_residence)) + 
   geom_tile(mapping = aes(fill = first_dose_category), 
             colour = grey(0.97),  size = 3) + 
-  geom_text(mapping = aes(label = round(100 * first_dose_rate)), 
+  geom_text(mapping = aes(label = round(100 * first_dose_rate), 
+                          colour = ifelse(first_dose_rate > 0.9, "90+", "under-90")), 
             data = dat_chart_vax_rate |> filter(age_group_2 == "All"), 
-            colour = "white", 
             family = "Fira Sans", 
             fontface = "bold", 
             size = 2.5) + 
@@ -246,6 +247,9 @@ chart_first_doses_rate <- ggplot(dat_chart_vax_rate,
                                "70% to 80% first doses" = lighten(col = "red", amount = 0.1),
                                "Less than 70% first doses" = darken(col = "red", amount = 0.25)),
                     name = NULL) +
+  scale_colour_manual(values = c("90+" = grey(0.75),
+                                 "under-90" = "white"), 
+                      guide = "none") + 
   scale_x_discrete(position = "top") + 
   guides(fill = guide_legend(ncol = 1, 
                              override.aes = list(size = 0.5))) + 
@@ -289,13 +293,13 @@ ggsave(filename = here(glue("outputs/first_doses_communities_{latest_date}.png")
 
 dat_chart_vax_rate_change <- dat_combined |> 
   select(-second_dose_administered, 
-         -first_dose_administered, 
-         -population) |> 
+         -first_dose_administered) |> 
   # Calculate weekly change in vax rates
-  pivot_wider(names_from = week, values_from = c("fully_vax_rate", "first_dose_rate")) |> 
+  pivot_wider(names_from = week, values_from = c("fully_vax_rate", "first_dose_rate", "population")) |> 
   mutate(fully_vax_rate_change = fully_vax_rate_current - fully_vax_rate_previous, 
          first_dose_rate_change = first_dose_rate_current - first_dose_rate_previous) |> 
   mutate(fully_vax_rate_change_category = case_when(
+    population_current < 100 ~ "Suppressed (fewer than 100 people)", 
     (fully_vax_rate_change < 0.02) ~ "Less than 2% increase", 
     (fully_vax_rate_change >= 0.02) & (fully_vax_rate_change < 0.04) ~ "2% to 4% increase", 
     (fully_vax_rate_change >= 0.04) & (fully_vax_rate_change < 0.06) ~ "4% to 6% increase", 
@@ -304,6 +308,7 @@ dat_chart_vax_rate_change <- dat_combined |>
     (fully_vax_rate_change >= 0.1) ~ "Greater than 10% increase"
   )) |> 
   mutate(first_dose_rate_change_category = case_when(
+    population_current < 100 ~ "Suppressed (fewer than 100 people)", 
     (first_dose_rate_change < 0.02) ~ "Less than 2% increase", 
     (first_dose_rate_change >= 0.02) & (first_dose_rate_change < 0.04) ~ "2% to 4% increase", 
     (first_dose_rate_change >= 0.04) & (first_dose_rate_change < 0.06) ~ "4% to 6% increase", 
@@ -312,21 +317,23 @@ dat_chart_vax_rate_change <- dat_combined |>
     (first_dose_rate_change >= 0.1) ~ "Greater than 10% increase"
   )) |> 
   # Create factors for ordering
-  mutate(fully_vax_rate_change_category = factor(x= fully_vax_rate_change_category, 
+  mutate(fully_vax_rate_change_category = factor(x = fully_vax_rate_change_category, 
                                                  levels = c("Less than 2% increase", 
                                                             "2% to 4% increase", 
                                                             "4% to 6% increase", 
                                                             "6% to 8% increase", 
                                                             "8% to 10% increase", 
-                                                            "Greater than 10% increase"), 
+                                                            "Greater than 10% increase", 
+                                                            "Suppressed (fewer than 100 people)"), 
                                                  ordered = TRUE)) |> 
-  mutate(first_dose_rate_change_category = factor(x= first_dose_rate_change_category, 
+  mutate(first_dose_rate_change_category = factor(x = first_dose_rate_change_category, 
                                                   levels = c("Less than 2% increase", 
                                                              "2% to 4% increase", 
                                                              "4% to 6% increase", 
                                                              "6% to 8% increase", 
                                                              "8% to 10% increase", 
-                                                             "Greater than 10% increase"),
+                                                             "Greater than 10% increase", 
+                                                             "Suppressed (fewer than 100 people)"),
                                                   ordered = TRUE))
 
 # Change in fully vaccinated rate chart
@@ -338,11 +345,18 @@ chart_fully_vax_change <- ggplot(dat_chart_vax_rate_change,
   geom_text(mapping = aes(angle = 90 * (fully_vax_rate_change / 0.25)), 
             colour = "white", label = "—", 
             family = "Fira Sans", 
-            size = 4) + 
-  geom_hline(yintercept = 3.5, colour = "black") + 
-  geom_hline(yintercept = 6.5, colour = "black") + 
-  geom_hline(yintercept = 9.5, colour = "black") + 
-  scale_fill_viridis_d(drop = FALSE, name = NULL) + 
+            size = 4, 
+            data = dat_chart_vax_rate_change |> 
+              filter(population_current > 99)) + 
+  geom_hline(yintercept = c(1.5, 4.5, 7.5, 10.5), colour = "black") + 
+  scale_fill_manual(drop = FALSE, name = NULL,
+                    values = c("Less than 2% increase" = "#440154FF",
+                               "2% to 4% increase" = "#414487FF",
+                               "4% to 6% increase" = "#2A788EFF",
+                               "6% to 8% increase" = "#22A884FF",
+                               "8% to 10% increase" = "#7AD151FF",
+                               "Greater than 10% increase" = "#FDE725FF",
+                               "Suppressed (fewer than 100 people)" = grey(0.8))) +
   scale_x_discrete(position = "top") + 
   guides(fill = guide_legend(ncol = 2, 
                              override.aes = list(size = 0.5))) + 
@@ -360,7 +374,7 @@ chart_fully_vax_change <- ggplot(dat_chart_vax_rate_change,
   theme_minimal(base_family = "Fira Sans") + 
   theme(axis.text.x.top = element_text(angle = 45, hjust = 0), 
         legend.justification = c(0, 0), 
-        legend.position = c(-0.015, 1.2), 
+        legend.position = c(-0.015, 1.15), 
         panel.grid = element_blank(), 
         plot.margin = margin(8, 32, 16, 8, "pt"), 
         plot.title = element_text(size = rel(1.1), 
@@ -370,7 +384,7 @@ ggsave(filename = here(glue("outputs/fully_vax_change_communities_{latest_date}.
        plot = chart_fully_vax_change, 
        device = "png", 
        width = 2400, 
-       height = 2000, 
+       height = 2150, 
        units = "px", 
        bg = "white")
 
@@ -383,11 +397,18 @@ chart_first_doses_change <- ggplot(dat_chart_vax_rate_change,
   geom_text(mapping = aes(angle = 90 * (first_dose_rate_change / 0.25)), 
             colour = "white", label = "—", 
             family = "Fira Sans", 
-            size = 4) + 
-  geom_hline(yintercept = 3.5, colour = "black") + 
-  geom_hline(yintercept = 6.5, colour = "black") + 
-  geom_hline(yintercept = 9.5, colour = "black") + 
-  scale_fill_viridis_d(drop = FALSE, name = NULL) + 
+            size = 4, 
+            data = dat_chart_vax_rate_change |> 
+              filter(population_current > 99)) + 
+  geom_hline(yintercept = c(1.5, 4.5, 7.5, 10.5), colour = "black") + 
+  scale_fill_manual(drop = FALSE, name = NULL,
+                    values = c("Less than 2% increase" = "#440154FF",
+                               "2% to 4% increase" = "#414487FF",
+                               "4% to 6% increase" = "#2A788EFF",
+                               "6% to 8% increase" = "#22A884FF",
+                               "8% to 10% increase" = "#7AD151FF",
+                               "Greater than 10% increase" = "#FDE725FF",
+                               "Suppressed (fewer than 100 people)" = grey(0.8))) +
   scale_x_discrete(position = "top") + 
   guides(fill = guide_legend(ncol = 2, 
                              override.aes = list(size = 0.5))) + 
@@ -405,7 +426,7 @@ chart_first_doses_change <- ggplot(dat_chart_vax_rate_change,
   theme_minimal(base_family = "Fira Sans") + 
   theme(axis.text.x.top = element_text(angle = 45, hjust = 0), 
         legend.justification = c(0, 0), 
-        legend.position = c(-0.015, 1.2), 
+        legend.position = c(-0.015, 1.15), 
         panel.grid = element_blank(), 
         plot.margin = margin(8, 32, 16, 8, "pt"), 
         plot.title = element_text(size = rel(1.1), 
@@ -415,7 +436,7 @@ ggsave(filename = here(glue("outputs/first_doses_change_communities_{latest_date
        plot = chart_first_doses_change, 
        device = "png", 
        width = 2400, 
-       height = 2000, 
+       height = 2150, 
        units = "px", 
        bg = "white")
 
