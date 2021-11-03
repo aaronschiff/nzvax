@@ -1,7 +1,5 @@
 # NZ COVID vaccination rates visualised by 'community'
 
-# TODO: Suppress cells in changes charts for small population groups
-
 # *****************************************************************************
 # Setup ----
 
@@ -13,9 +11,9 @@ library(glue)
 library(colorspace)
 library(scales)
 
-latest_date <- "26_10_2021"               # Date of most recent week's data
-prev_date <- "19_10_2021"                 # Date of previous week's data
-latest_date_nice <- "26 October 2021"     # For chart title
+latest_date <- "02_11_2021"               # Date of most recent week's data
+prev_date <- "26_10_2021"                 # Date of previous week's data
+latest_date_nice <- "2 November 2021"     # For chart title
 
 # *****************************************************************************
 
@@ -118,6 +116,9 @@ dat_combined <- bind_rows(
   mutate(dhb_of_residence = factor(x = dhb_of_residence, 
                                    levels = c("Northland", 
                                               "Auckland Metro", 
+                                              "Auckland", 
+                                              "Waitemata", 
+                                              "Counties Manukau", 
                                               "Waikato", 
                                               "Bay of Plenty", 
                                               "Taranaki", 
@@ -127,6 +128,8 @@ dat_combined <- bind_rows(
                                               "MidCentral", 
                                               "Hawkes Bay", 
                                               "Capital & Coast and Hutt Valley", 
+                                              "Capital and Coast", 
+                                              "Hutt Valley", 
                                               "Wairarapa", 
                                               "Nelson Marlborough", 
                                               "West Coast", 
@@ -195,7 +198,7 @@ chart_fully_vax_rate <- ggplot(dat_chart_vax_rate,
                                  "under-90" = "white"), 
                       guide = "none") + 
   scale_x_discrete(position = "top") + 
-  guides(fill = guide_legend(ncol = 1, 
+  guides(fill = guide_legend(ncol = 2, 
                              override.aes = list(size = 0.5))) + 
   xlab("") + 
   ylab("") + 
@@ -224,7 +227,7 @@ chart_fully_vax_rate <- ggplot(dat_chart_vax_rate,
 ggsave(filename = here(glue("outputs/fully_vax_communities_{latest_date}.png")), 
        plot = chart_fully_vax_rate, 
        device = "png", 
-       width = 2400, 
+       width = 2800, 
        height = 2150, 
        units = "px", 
        bg = "white")
@@ -251,7 +254,7 @@ chart_first_doses_rate <- ggplot(dat_chart_vax_rate,
                                  "under-90" = "white"), 
                       guide = "none") + 
   scale_x_discrete(position = "top") + 
-  guides(fill = guide_legend(ncol = 1, 
+  guides(fill = guide_legend(ncol = 2, 
                              override.aes = list(size = 0.5))) + 
   xlab("") + 
   ylab("") + 
@@ -261,7 +264,7 @@ chart_first_doses_rate <- ggplot(dat_chart_vax_rate,
            label = "Chart by Aaron Schiff using data from the NZ Ministry of Health\ngithub.com/aaronschiff/nzvax", 
            hjust = 0, 
            family = "Fira Sans", 
-           size = 2) + 
+           size = 2.5) + 
   coord_cartesian(clip = "off") + 
   ggtitle(label = "NZ population groups that are not yet protected by COVID-19 vaccination", 
           subtitle = glue("First doses to {latest_date_nice}")) + 
@@ -280,7 +283,7 @@ chart_first_doses_rate <- ggplot(dat_chart_vax_rate,
 ggsave(filename = here(glue("outputs/first_doses_communities_{latest_date}.png")), 
        plot = chart_first_doses_rate, 
        device = "png", 
-       width = 2400, 
+       width = 2800, 
        height = 2150, 
        units = "px", 
        bg = "white")

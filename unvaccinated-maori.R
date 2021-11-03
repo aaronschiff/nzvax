@@ -10,9 +10,9 @@ library(janitor)
 library(scales)
 library(readxl)
 
-latest_date <- "26_10_2021"
+latest_date <- "02_11_2021"
 
-latest_date_nice <- "26 October 2021"
+latest_date_nice <- "2 November 2021"
 
 # *****************************************************************************
 
@@ -75,6 +75,9 @@ dat_m <- dat |>
   mutate(dhb_of_residence = factor(x = dhb_of_residence, 
                                    levels = c("Northland", 
                                               "Auckland Metro", 
+                                              "Auckland", 
+                                              "Waitemata", 
+                                              "Counties Manukau", 
                                               "Waikato", 
                                               "Bay of Plenty", 
                                               "Taranaki", 
@@ -84,6 +87,8 @@ dat_m <- dat |>
                                               "MidCentral", 
                                               "Hawkes Bay", 
                                               "Capital & Coast and Hutt Valley", 
+                                              "Capital and Coast", 
+                                              "Hutt Valley", 
                                               "Wairarapa", 
                                               "Nelson Marlborough", 
                                               "West Coast", 
@@ -137,7 +142,7 @@ chart_m_bar <- dat_m |>
 
 ggsave(filename = here(glue("outputs/unvax_maori_{latest_date}.png")), 
        plot = chart_m_bar, 
-       width = 2400, 
+       width = 2800, 
        height = 2000, 
        units = "px", 
        device = "png", 
