@@ -11,9 +11,9 @@ library(glue)
 library(colorspace)
 library(scales)
 
-latest_date <- "02_11_2021"               # Date of most recent week's data
-prev_date <- "26_10_2021"                 # Date of previous week's data
-latest_date_nice <- "2 November 2021"     # For chart title
+latest_date <- "09_11_2021"               # Date of most recent week's data
+prev_date <- "02_11_2021"                 # Date of previous week's data
+latest_date_nice <- "9 November 2021"     # For chart title
 
 # *****************************************************************************
 
@@ -361,7 +361,7 @@ chart_fully_vax_change <- ggplot(dat_chart_vax_rate_change,
                                "Greater than 10% increase" = "#FDE725FF",
                                "Suppressed (fewer than 100 people)" = grey(0.8))) +
   scale_x_discrete(position = "top") + 
-  guides(fill = guide_legend(ncol = 2, 
+  guides(fill = guide_legend(ncol = 3, 
                              override.aes = list(size = 0.5))) + 
   xlab("") + 
   ylab("") + 
@@ -377,16 +377,16 @@ chart_fully_vax_change <- ggplot(dat_chart_vax_rate_change,
   theme_minimal(base_family = "Fira Sans") + 
   theme(axis.text.x.top = element_text(angle = 45, hjust = 0), 
         legend.justification = c(0, 0), 
-        legend.position = c(-0.015, 1.15), 
+        legend.position = c(-0.015, 1.16), 
         panel.grid = element_blank(), 
         plot.margin = margin(8, 32, 16, 8, "pt"), 
         plot.title = element_text(size = rel(1.1), 
-                                  margin = margin(0, 0, 24, 0, "pt")))
+                                  margin = margin(0, 0, 42, 0, "pt")))
 
 ggsave(filename = here(glue("outputs/fully_vax_change_communities_{latest_date}.png")), 
        plot = chart_fully_vax_change, 
        device = "png", 
-       width = 2400, 
+       width = 2800, 
        height = 2150, 
        units = "px", 
        bg = "white")
@@ -413,7 +413,7 @@ chart_first_doses_change <- ggplot(dat_chart_vax_rate_change,
                                "Greater than 10% increase" = "#FDE725FF",
                                "Suppressed (fewer than 100 people)" = grey(0.8))) +
   scale_x_discrete(position = "top") + 
-  guides(fill = guide_legend(ncol = 2, 
+  guides(fill = guide_legend(ncol = 3, 
                              override.aes = list(size = 0.5))) + 
   xlab("") + 
   ylab("") + 
@@ -429,16 +429,16 @@ chart_first_doses_change <- ggplot(dat_chart_vax_rate_change,
   theme_minimal(base_family = "Fira Sans") + 
   theme(axis.text.x.top = element_text(angle = 45, hjust = 0), 
         legend.justification = c(0, 0), 
-        legend.position = c(-0.015, 1.15), 
+        legend.position = c(-0.015, 1.16), 
         panel.grid = element_blank(), 
         plot.margin = margin(8, 32, 16, 8, "pt"), 
         plot.title = element_text(size = rel(1.1), 
-                                  margin = margin(0, 0, 24, 0, "pt")))
+                                  margin = margin(0, 0, 42, 0, "pt")))
 
 ggsave(filename = here(glue("outputs/first_doses_change_communities_{latest_date}.png")), 
        plot = chart_first_doses_change, 
        device = "png", 
-       width = 2400, 
+       width = 2800, 
        height = 2150, 
        units = "px", 
        bg = "white")
