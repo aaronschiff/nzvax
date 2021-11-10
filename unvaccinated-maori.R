@@ -10,9 +10,9 @@ library(janitor)
 library(scales)
 library(readxl)
 
-latest_date <- "02_11_2021"
+latest_date <- "09_11_2021"
 
-latest_date_nice <- "2 November 2021"
+latest_date_nice <- "9 November 2021"
 
 # *****************************************************************************
 
@@ -113,13 +113,13 @@ chart_m_bar <- dat_m |>
                        label = comma(x = unvax, accuracy = 1))) + 
   geom_hline(yintercept = 0, size = 0.25, colour = grey(0.5)) +
   geom_col(size = 0) + 
-  geom_text(nudge_y = 1500, 
+  geom_text(nudge_y = 800, 
             family = "Fira Sans", 
             size = 3) + 
   facet_wrap(facets = vars(age_group_2), ncol = 1) + 
   scale_y_continuous(labels = comma_format(accuracy = 1), 
-                     limits = c(0, 26000), 
-                     breaks = seq(0, 25000, 5000)) + 
+                     limits = c(0, 12000), 
+                     breaks = seq(0, 24000, 2000)) + 
   scale_x_discrete(position = "top") + 
   scale_colour_manual(values = c("12-29 years old" = "#6929c4", 
                                  "30-59 years old" = "#1192e8", 
