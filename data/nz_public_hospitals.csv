@@ -1,0 +1,86 @@
+include, DHB Name,Premises Name,Service Types,Total Beds
+yes,Auckland District Health Board,Auckland City Hospital,"Childrens health, Maternity, Surgical, Medical",1165
+no,Auckland District Health Board,Auckland DHB X 3 Units - Mental Health,Mental health,96
+no,Auckland District Health Board,Buchanan Rehabilitation Centre,Mental health,40
+yes,Auckland District Health Board,Greenlane Clinical Centre,"Surgical, Medical",31
+yes,Bay of Plenty District Health Board,Tauranga Hospital,"Psychogeriatric, Geriatric, Mental health, Childrens health, Maternity, Surgical, Medical",360
+yes,Bay of Plenty District Health Board,Whakatane Hospital,"Maternity, Surgical, Medical, Mental health, Childrens health",96
+yes,Canterbury District Health Board,Ashburton Hospital,"Medical, Maternity",56
+yes,Canterbury District Health Board,Burwood Hospital,"Geriatric, Psychogeriatric, Medical, Surgical",266
+yes,Canterbury District Health Board,Chatham Island Health Centre,Medical,3
+yes,Canterbury District Health Board,Christchurch Hospital,"Medical, Surgical, Maternity, Childrens health",808
+yes,Canterbury District Health Board,Darfield Hospital,"Medical, Geriatric",9
+yes,Canterbury District Health Board,Ellesmere Hospital,"Geriatric, Medical",10
+no,Canterbury District Health Board,Hillmorton Hospital,Mental health,142
+yes,Canterbury District Health Board,Kaikoura Hospital,"Maternity, Geriatric, Medical",21
+no,Canterbury District Health Board,Lincoln Maternity Hospital,Maternity,6
+yes,Canterbury District Health Board,Oxford Hospital,"Medical, Geriatric",15
+yes,Canterbury District Health Board,Rangiora Hospital,"Medical, Maternity",14
+no,Canterbury District Health Board,The Princess Margaret Hospital,Mental health,53
+yes,Canterbury District Health Board,Tuarangi Home,"Geriatric, Dementia care, Medical",37
+yes,Canterbury District Health Board,Waikari Hospital,"Medical, Geriatric",10
+no,Capital and Coast District Health Board,Kapiti Health Centre,Maternity,2
+yes,Capital and Coast District Health Board,Kenepuru Hospital,"Medical, Mental health, Surgical, Psychogeriatric, Maternity",131
+no,Capital and Coast District Health Board,Porirua Hospital Campus (Mental Health Services),Mental health,118
+yes,Capital and Coast District Health Board,Wellington Hospital,"Surgical, Maternity, Medical, Childrens health",484
+no,Capital and Coast District Health Board,Wellington Hospital (Mental Health Services),Mental health,29
+no,Counties Manukau District Health Board,Auckland Spinal Rehabilitation ,Medical,20
+no,Counties Manukau District Health Board,Botany Downs Hospital,Maternity,20
+yes,Counties Manukau District Health Board,Franklin Memorial Hospital,Geriatric,18
+yes,Counties Manukau District Health Board,Manukau Surgery Centre,Surgical,78
+yes,Counties Manukau District Health Board,Middlemore Hospital,"Mental health, Surgical, Medical, Geriatric, Childrens health, Maternity, Psychogeriatric",905
+no,Counties Manukau District Health Board,Papakura Obstetric Hospital,Maternity,13
+no,Counties Manukau District Health Board,Pukekohe Hospital,"Maternity, Geriatric",32
+no,Counties Manukau District Health Board,Tamaki Oranga,Mental health,20
+yes,Hawke's Bay District Health Board,Central Hawkes Bay Health Centre,Medical,8
+yes,Hawke's Bay District Health Board,Hawke's Bay Hospital,"Medical, Mental health, Childrens health, Maternity, Surgical",364
+yes,Hawke's Bay District Health Board,Wairoa Hospital & Health Centre,"Maternity, Medical",12
+yes,Hutt Valley District Health Board,Hutt Valley Hospital,"Psychogeriatric, Geriatric, Mental health, Childrens health, Maternity, Surgical, Medical",322
+yes,Lakes District Health Board,Rotorua Hospital,"Childrens health, Maternity, Surgical, Medical, Geriatric, Mental health",233
+yes,Lakes District Health Board,Taupo Hospital,"Surgical, Medical, Maternity",36
+yes,MidCentral District Health Board,Horowhenua Health Centre,"Geriatric, Maternity, Medical",28
+yes,MidCentral District Health Board,Palmerston North Hospital,"Psychogeriatric, Geriatric, Mental health, Childrens health, Maternity, Surgical, Medical",354
+no,MidCentral District Health Board,Te Papaioea Birthing Centre,Maternity,8
+no,Nelson Marlborough District Health Board,Alexandra Hospital,Psychogeriatric,12
+no,Nelson Marlborough District Health Board,Mental Health Admissions Unit,Mental health,26
+yes,Nelson Marlborough District Health Board,Murchison Hospital and Health Centre,"Medical, Rest home care",8
+no,Nelson Marlborough District Health Board,Nelson Bays Maternity Unit (Te Whare Whanau),Maternity,5
+yes,Nelson Marlborough District Health Board,Nelson Hospital,"Mental health, Medical, Surgical, Maternity, Childrens health",191
+no,Nelson Marlborough District Health Board,Tipahi Street Mental Health,Mental health,13
+yes,Nelson Marlborough District Health Board,Wairau Hospital,"Surgical, Maternity, Childrens health, Medical",100
+yes,Northland District Health Board,Bay of Islands Hospital,"Maternity, Surgical, Medical, Childrens health",20
+yes,Northland District Health Board,Dargaville Hospital,"Mental health, Childrens health, Maternity, Surgical, Medical",19
+yes,Northland District Health Board,Kaitaia Hospital,"Mental health, Childrens health, Maternity, Surgical, Medical",32
+no,Northland District Health Board,Timatanga Hou - Detox Unit,Mental health,8
+yes,South Canterbury District Health Board,Timaru Hospital,"Childrens health, Maternity, Surgical, Medical, Mental health",132
+yes,Southern District Health Board,Dunedin Hospital,"Geriatric, Maternity, Surgical, Medical, Psychogeriatric, Childrens health",361
+yes,Southern District Health Board,Lakes District Hospital,"Medical, Maternity",15
+yes,Southern District Health Board,Southland Hospital,"Surgical, Geriatric, Maternity, Medical, Mental health, Childrens health",168
+no,Southern District Health Board,Wakari Hospital,"Intellectual, Medical, Mental health",90
+yes,Tairawhiti District Health Board,Gisborne Hospital,"Mental health, Childrens health, Maternity, Surgical, Medical",115
+yes,Taranaki District Health Board,Hawera Hospital,"Maternity, Medical",14
+yes,Taranaki District Health Board,Taranaki Base Hospital,"Childrens health, Maternity, Surgical, Medical, Mental health",194
+no,Waikato District Health Board,Henry Rongomau Bennett Centre,Mental health,125
+yes,Waikato District Health Board,Matariki Hospital,"Geriatric, Medical",32
+no,Waikato District Health Board,Puna Whiti,Mental health,5
+yes,Waikato District Health Board,Rhoda Read Hospital,"Geriatric, Medical",32
+yes,Waikato District Health Board,Taumarunui Hospital and Family Health Team,"Maternity, Medical",14
+yes,Waikato District Health Board,Te Kuiti Hospital,"Maternity, Medical",16
+yes,Waikato District Health Board,Thames Hospital,"Maternity, Surgical, Medical",52
+yes,Waikato District Health Board,Tokoroa Hospital,"Maternity, Medical",21
+yes,Waikato District Health Board,Waikato Hospital,"Geriatric, Childrens health, Maternity, Surgical, Medical",673
+no,Waikato District Health Board,Ward OPR1,Mental health,15
+yes,Wairarapa District Health Board,Wairarapa Hospital,"Psychiatric, Childrens health, Maternity, Surgical, Medical",89
+yes,Waitemata District Health Board,Elective Surgery Centre,Surgical,30
+no,Waitemata District Health Board,He Puna Waiora,Mental health,35
+no,Auckland District Health Board,Inpatient Detoxification Unit,"Mental health, Psychogeriatric, Surgical, Childrens health, Medical, Geriatric, Maternity",1138
+no,Auckland District Health Board,Mason Clinic,Mental health,126
+yes,Waitemata District Health Board,North Shore Hospital,"Surgical, Psychogeriatric, Mental health, Maternity, Medical, Geriatric, Childrens health",663
+no,Auckland District Health Board,Pitman House,Mental health,10
+no,Waitemata District Health Board,Waiatarau Inpatient Mental Health Unit,Mental health,32
+yes,Waitemata District Health Board,Waitakere Hospital,"Mental health, Maternity, Medical, Geriatric, Childrens health, Surgical",283
+no,Waitemata District Health Board,Wilson Centre,"Childrens health, Physical",26
+yes,West Coast District Health Board,Buller Health,"Maternity, Medical",8
+yes,West Coast District Health Board,Grey Base Hospital,"Dementia care, Medical, Geriatric, Mental health, Childrens health, Maternity, Surgical",120
+yes,Whanganui District Health Board,Whanganui Hospital,"Mental health, Childrens health, Maternity, Surgical, Medical, Geriatric",172
+yes,Northland District Health Board,Whangarei Hospital,"Maternity, Surgical, Medical, Psychiatric, Mental health, Childrens health",249

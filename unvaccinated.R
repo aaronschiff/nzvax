@@ -10,9 +10,9 @@ library(janitor)
 library(scales)
 library(readxl)
 
-latest_date <- "09_11_2021"
+latest_date <- "16_11_2021"
 
-latest_date_nice <- "9 November 2021"
+latest_date_nice <- "16 November 2021"
 
 # *****************************************************************************
 
@@ -25,6 +25,18 @@ dat <- read_excel(path = here(glue("data/covid_vaccinations_{latest_date}.xlsx")
                   sheet = "DHBofResidence by ethnicity") |>
   clean_names() |> 
   select(-x10, -notes) 
+
+# Public hospitals
+dat_hosp <- read_csv(file = here("data/nz_public_hospitals.csv"), 
+                     col_types = "cccci") |> 
+  clean_names() |> 
+  mutate(dhb_name = str_remove(string = dhb_name, 
+                               pattern = "District Health Board")) |> 
+  mutate(dhb_name = str_trim(dhb_name)) |> 
+  mutate(dhb_name = ifelse(dhb_name == "Hawke's Bay", 
+                           "Hawkes Bay", 
+                           dhb_name))
+
 # *****************************************************************************
 
 
@@ -191,7 +203,7 @@ chart_m_bar <- dat_m |>
             size = 3) + 
   facet_wrap(facets = vars(age_group_2), ncol = 1) + 
   scale_y_continuous(labels = comma_format(accuracy = 1), 
-                     limits = c(0, 12000), 
+                     limits = c(0, 10000), 
                      breaks = seq(0, 24000, 2000)) + 
   scale_x_discrete(position = "top") + 
   scale_colour_manual(values = c("12-29 years old" = "#6929c4", 
@@ -221,7 +233,7 @@ ggsave(filename = here(glue("outputs/unvax_maori_{latest_date}.png")),
        device = "png", 
        bg = "white")
 
-# Bar chart of numbers of unvaccinated Māori people
+# Bar chart of numbers of unvaccinated people aged 60+
 chart_60plus_bar <- dat_60plus |> 
   ggplot(mapping = aes(y = unvax, 
                        x = dhb_of_residence, 
@@ -266,6 +278,8 @@ ggsave(filename = here(glue("outputs/unvax_60plus_{latest_date}.png")),
        units = "px", 
        device = "png", 
        bg = "white")
+
+
 
 # *****************************************************************************
 

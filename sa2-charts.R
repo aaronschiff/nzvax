@@ -11,8 +11,8 @@ library(ggbeeswarm)
 library(colorspace)
 library(scales)
 
-latest_date <- "20211110"
-latest_date_nice <- "9 November 2021"
+latest_date <- "20211117"
+latest_date_nice <- "16 November 2021"
 
 # *****************************************************************************
 
@@ -125,7 +125,7 @@ chart_first_doses <- dat_chart |>
                 colour = grey(0.75), 
                 stroke = 0.2) + 
   geom_text(x = 0.705,  
-            y = 0.7,
+            y = 0.9,
             label = "70%",
             hjust = 0, 
             family = "Fira Sans", 
@@ -133,7 +133,7 @@ chart_first_doses <- dat_chart |>
             size = 2, 
             colour = grey(0.5)) +   
   geom_text(x = 0.805,  
-            y = 0.7,
+            y = 0.9,
             label = "80%",
             hjust = 0, 
             family = "Fira Sans", 
@@ -141,7 +141,7 @@ chart_first_doses <- dat_chart |>
             size = 2, 
             colour = grey(0.5)) +
   geom_text(x = 0.905,  
-            y = 0.7,
+            y = 0.9,
             label = "90%",
             hjust = 0, 
             family = "Fira Sans", 
@@ -153,7 +153,7 @@ chart_first_doses <- dat_chart |>
              ncol = 4) + 
   scale_x_continuous(breaks = seq(0, 1, 0.1), 
                      expand = expansion(0, 0), 
-                     limits = c(0.4, 0.99)) + 
+                     limits = c(0.5, 0.99)) + 
   scale_fill_manual(values = c("Greater than 90% first doses" = lighten(col = "red", amount = 0.9),
                                "80% to 90% first doses" = lighten(col = "red", amount = 0.5),
                                "70% to 80% first doses" = lighten(col = "red", amount = 0.1),
@@ -300,7 +300,7 @@ chart_megaswarm_first_doses <- dat_chart |>
                 colour = grey(0.75), 
                 stroke = 0.2) + 
   geom_text(x = 0.705,  
-            y = 1.9,
+            y = 2.4,
             label = "70%",
             hjust = 0, 
             family = "Fira Sans", 
@@ -308,7 +308,7 @@ chart_megaswarm_first_doses <- dat_chart |>
             size = 3, 
             colour = grey(0.5)) +   
   geom_text(x = 0.805,  
-            y = 1.9,
+            y = 2.4,
             label = "80%",
             hjust = 0, 
             family = "Fira Sans", 
@@ -316,7 +316,7 @@ chart_megaswarm_first_doses <- dat_chart |>
             size = 3, 
             colour = grey(0.5)) +
   geom_text(x = 0.905,  
-            y = 1.9,
+            y = 2.4,
             label = "90%",
             hjust = 0, 
             family = "Fira Sans", 
@@ -325,7 +325,7 @@ chart_megaswarm_first_doses <- dat_chart |>
             colour = grey(0.5)) +
   scale_x_continuous(breaks = seq(0, 1, 0.1), 
                      expand = expansion(0, 0), 
-                     limits = c(0.4, 0.99)) + 
+                     limits = c(0.5, 0.99)) + 
   scale_fill_manual(values = c("Greater than 90% first doses" = lighten(col = "red", amount = 0.9),
                                "80% to 90% first doses" = lighten(col = "red", amount = 0.5),
                                "70% to 80% first doses" = lighten(col = "red", amount = 0.1),
@@ -381,7 +381,7 @@ chart_megaswarm_fully_vax <- dat_chart |>
                 colour = grey(0.75), 
                 stroke = 0.2) + 
   geom_text(x = 0.705,  
-            y = 0.44,
+            y = 0.46,
             label = "70%",
             hjust = 0, 
             family = "Fira Sans", 
@@ -389,7 +389,7 @@ chart_megaswarm_fully_vax <- dat_chart |>
             size = 3, 
             colour = grey(0.5)) +   
   geom_text(x = 0.805,  
-            y = 0.44,
+            y = 0.46,
             label = "80%",
             hjust = 0, 
             family = "Fira Sans", 
@@ -397,7 +397,7 @@ chart_megaswarm_fully_vax <- dat_chart |>
             size = 3, 
             colour = grey(0.5)) +
   geom_text(x = 0.905,  
-            y = 0.44,
+            y = 0.46,
             label = "90%",
             hjust = 0, 
             family = "Fira Sans", 

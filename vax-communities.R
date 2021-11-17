@@ -11,9 +11,9 @@ library(glue)
 library(colorspace)
 library(scales)
 
-latest_date <- "09_11_2021"               # Date of most recent week's data
-prev_date <- "02_11_2021"                 # Date of previous week's data
-latest_date_nice <- "9 November 2021"     # For chart title
+latest_date <- "16_11_2021"               # Date of most recent week's data
+prev_date <- "09_11_2021"                 # Date of previous week's data
+latest_date_nice <- "16 November 2021"     # For chart title
 
 # *****************************************************************************
 
