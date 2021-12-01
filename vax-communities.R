@@ -11,9 +11,9 @@ library(glue)
 library(colorspace)
 library(scales)
 
-latest_date <- "23_11_2021"               # Date of most recent week's data
-prev_date <- "16_11_2021"                 # Date of previous week's data
-latest_date_nice <- "23 November 2021"     # For chart title
+latest_date <- "30_11_2021"               # Date of most recent week's data
+prev_date <- "23_11_2021"                 # Date of previous week's data
+latest_date_nice <- "30 November 2021"     # For chart title
 
 # *****************************************************************************
 
@@ -26,7 +26,9 @@ dat <- read_excel(path = here(glue("data/covid_vaccinations_{latest_date}.xlsx")
                   sheet = "DHBofResidence by ethnicity") |>
   clean_names() |> 
   select(-x10, -notes) |> 
-  mutate(week = "current")
+  mutate(week = "current") |> 
+  rename(first_dose_administered = at_least_partially_vaccinated, 
+         second_dose_administered = fully_vaccinated)
 
 dat_prev <- read_excel(path = here(glue("data/covid_vaccinations_{prev_date}.xlsx")), 
                        sheet = "DHBofResidence by ethnicity") |>

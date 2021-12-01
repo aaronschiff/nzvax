@@ -10,9 +10,9 @@ library(janitor)
 library(scales)
 library(readxl)
 
-latest_date <- "23_11_2021"
+latest_date <- "30_11_2021"
 
-latest_date_nice <- "23 November 2021"
+latest_date_nice <- "30 November 2021"
 
 # *****************************************************************************
 
@@ -24,7 +24,9 @@ latest_date_nice <- "23 November 2021"
 dat <- read_excel(path = here(glue("data/covid_vaccinations_{latest_date}.xlsx")), 
                   sheet = "DHBofResidence by ethnicity") |>
   clean_names() |> 
-  select(-x10, -notes) 
+  select(-x10, -notes) |> 
+  rename(first_dose_administered = at_least_partially_vaccinated, 
+         second_dose_administered = fully_vaccinated)
 
 # Public hospitals
 dat_hosp <- read_csv(file = here("data/nz_public_hospitals.csv"), 
@@ -279,8 +281,4 @@ ggsave(filename = here(glue("outputs/unvax_60plus_{latest_date}.png")),
        device = "png", 
        bg = "white")
 
-
-
 # *****************************************************************************
-
-
