@@ -11,9 +11,9 @@ library(glue)
 library(colorspace)
 library(scales)
 
-latest_date <- "30_11_2021"               # Date of most recent week's data
-prev_date <- "23_11_2021"                 # Date of previous week's data
-latest_date_nice <- "30 November 2021"     # For chart title
+latest_date <- "07_12_2021"               # Date of most recent week's data
+prev_date <- "30_11_2021"                 # Date of previous week's data
+latest_date_nice <- "7 December 2021"     # For chart title
 
 # *****************************************************************************
 
@@ -34,7 +34,9 @@ dat_prev <- read_excel(path = here(glue("data/covid_vaccinations_{prev_date}.xls
                        sheet = "DHBofResidence by ethnicity") |>
   clean_names() |> 
   select(-x10, -notes) |> 
-  mutate(week = "previous")
+  mutate(week = "previous") |> 
+  rename(first_dose_administered = at_least_partially_vaccinated, 
+         second_dose_administered = fully_vaccinated)
 
 # Combine data and manipulate 
 dat_clean <- bind_rows(dat, dat_prev) |> 
@@ -605,5 +607,5 @@ ggsave(filename = glue(here("outputs/vax_rates_by_ethnicity_standardised_{latest
        device = "png", 
        bg = "white")
 
-
 # *****************************************************************************
+
