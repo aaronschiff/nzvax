@@ -35,6 +35,7 @@ dat_vax_rate_by_week_ethnic_group <-
   group_by(ethnic_group) |> 
   mutate(total_people_partially_vaccinated = cumsum(number_people_partially_vaccinated), 
          total_people_fully_vaccinated = cumsum(number_people_fully_vaccinated)) |> 
+  ungroup() |> 
   left_join(y = dat_pop |> 
               filter(age_group != "< 12") |> 
               group_by(ethnic_group) |> 
@@ -114,17 +115,19 @@ chart_vax_rate_by_week_ethnic_group <- dat_vax_rate_by_week_ethnic_group |>
                       name = NULL, 
                       aesthetics = c("colour", "fill")) + 
   xlab("Week ending") + 
-  ylab("Proportion of\neligible population\n(age 12+)") + 
+  ylab("") + 
+  ggtitle(label = "", 
+          subtitle = "Proportion of eligible population (age 12+)") + 
   theme_minimal(base_family = "Fira Sans", 
                 base_size = 8) + 
   theme(panel.grid.minor.y = element_blank(), 
         panel.grid.major = element_line(size = 0.25, colour = grey(0.85)), 
         panel.grid.minor.x = element_line(size = 0.25, colour = grey(0.85)), 
-        axis.title.y = element_text(angle = 0, hjust = 0, 
-                                    margin = margin(0, 8, 0, 0, "pt")), 
+        axis.title.y = element_blank(), 
+        plot.title = element_blank(), 
+        plot.subtitle = element_text(face = "bold"), 
         axis.title.x = element_text(margin = margin(8, 0, 0, 0, "pt")), 
-        strip.text = element_text(size = rel(1.1), 
-                                  face = "bold"), 
+        strip.text = element_text(face = "bold"), 
         panel.spacing.y = unit(24, "pt"), 
         legend.position = "top", 
         legend.box.margin = margin(0, 0, 0, 0), 
