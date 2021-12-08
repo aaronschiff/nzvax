@@ -11,8 +11,8 @@ library(ggbeeswarm)
 library(colorspace)
 library(scales)
 
-latest_date <- "20211201"
-latest_date_nice <- "30 November 2021"
+latest_date <- "07_12_2021"
+latest_date_nice <- "7 December 2021"
 
 # *****************************************************************************
 
@@ -21,10 +21,17 @@ latest_date_nice <- "30 November 2021"
 # Load data ----
 
 # Load raw vaccination data and manipulate
-dat_sa2 <- read_csv(file = here(glue("data/uptake_sa2_dhb_{latest_date}.csv"))) |> 
+dat_sa2 <-  read_excel(path = here(glue("data/covid_vaccinations_{latest_date}.xlsx")), 
+                       sheet = "SA2 All Ethnicities") |> 
   clean_names() |> 
+  select(-x9, -notes) |> 
+  rename(dose1_uptake = partially_vaccinated_uptake, 
+         dose2_uptake = fully_vaccinated_uptake, 
+         pop_cnt = population) |> 
   # Exclude unknown SA2
-  filter(sa2_code != "Unknown") |> 
+  filter(sa2_code_2018 != "Unknown") |> 
+  # Clean up population
+  mutate(pop_cnt = str_remove(string = pop_cnt, pattern = ",")) |> 
   # Replace >950 and <50 with numeric values
   mutate(dose1_uptake = ifelse(dose1_uptake == ">950", "950", dose1_uptake), 
          dose2_uptake = ifelse(dose2_uptake == ">950", "950", dose2_uptake), 
@@ -62,7 +69,7 @@ dat_areas <- read_csv(file = here("data/statsnzgeographic-areas-file-2018-CSV/ge
 # Combine data for chart ----
 
 dat_chart <- dat_sa2 |> 
-  left_join(y = dat_areas, by = c("sa2_code" = "sa22018_code")) |> 
+  left_join(y = dat_areas, by = c("sa2_code_2018" = "sa22018_code")) |> 
   filter(regc2018_name != "Area Outside Region") |> 
   filter(pop_cnt != "masked") |> 
   mutate(pop_cnt = as.integer(pop_cnt)) |> 
@@ -153,7 +160,7 @@ chart_first_doses <- dat_chart |>
              ncol = 4) + 
   scale_x_continuous(breaks = seq(0, 1, 0.1), 
                      expand = expansion(0, 0), 
-                     limits = c(0.5, 0.99)) + 
+                     limits = c(0.6, 0.99)) + 
   scale_fill_manual(values = c("Greater than 90% first doses" = lighten(col = "red", amount = 0.9),
                                "80% to 90% first doses" = lighten(col = "red", amount = 0.5),
                                "70% to 80% first doses" = lighten(col = "red", amount = 0.1),
@@ -212,7 +219,7 @@ chart_fully_vax <- dat_chart |>
                 colour = grey(0.75), 
                 stroke = 0.2) + 
   geom_text(x = 0.705,  
-            y = 0.35,
+            y = 0.5,
             label = "70%",
             hjust = 0, 
             family = "Fira Sans", 
@@ -220,7 +227,7 @@ chart_fully_vax <- dat_chart |>
             size = 2, 
             colour = grey(0.5)) +   
   geom_text(x = 0.805,  
-            y = 0.35,
+            y = 0.5,
             label = "80%",
             hjust = 0, 
             family = "Fira Sans", 
@@ -228,7 +235,7 @@ chart_fully_vax <- dat_chart |>
             size = 2, 
             colour = grey(0.5)) +
   geom_text(x = 0.905,  
-            y = 0.35,
+            y = 0.5,
             label = "90%",
             hjust = 0, 
             family = "Fira Sans", 
@@ -240,7 +247,7 @@ chart_fully_vax <- dat_chart |>
              ncol = 4) + 
   scale_x_continuous(breaks = seq(0, 1, 0.1), 
                      expand = expansion(0, 0), 
-                     limits = c(0.3, 0.99)) + 
+                     limits = c(0.4, 0.99)) + 
   scale_fill_manual(values = c("Greater than 90% fully vaccinated" = lighten(col = "red", amount = 0.9),
                                "80% to 90% fully vaccinated" = lighten(col = "red", amount = 0.5),
                                "70% to 80% fully vaccinated" = lighten(col = "red", amount = 0.1),
@@ -300,7 +307,7 @@ chart_megaswarm_first_doses <- dat_chart |>
                 colour = grey(0.75), 
                 stroke = 0.2) + 
   geom_text(x = 0.705,  
-            y = 3.5,
+            y = 4,
             label = "70%",
             hjust = 0, 
             family = "Fira Sans", 
@@ -308,7 +315,7 @@ chart_megaswarm_first_doses <- dat_chart |>
             size = 3, 
             colour = grey(0.5)) +   
   geom_text(x = 0.805,  
-            y = 3.5,
+            y = 4,
             label = "80%",
             hjust = 0, 
             family = "Fira Sans", 
@@ -316,7 +323,7 @@ chart_megaswarm_first_doses <- dat_chart |>
             size = 3, 
             colour = grey(0.5)) +
   geom_text(x = 0.905,  
-            y = 3.5,
+            y = 4,
             label = "90%",
             hjust = 0, 
             family = "Fira Sans", 
@@ -325,7 +332,7 @@ chart_megaswarm_first_doses <- dat_chart |>
             colour = grey(0.5)) +
   scale_x_continuous(breaks = seq(0, 1, 0.1), 
                      expand = expansion(0, 0), 
-                     limits = c(0.5, 0.99)) + 
+                     limits = c(0.6, 0.99)) + 
   scale_fill_manual(values = c("Greater than 90% first doses" = lighten(col = "red", amount = 0.9),
                                "80% to 90% first doses" = lighten(col = "red", amount = 0.5),
                                "70% to 80% first doses" = lighten(col = "red", amount = 0.1),
@@ -381,7 +388,7 @@ chart_megaswarm_fully_vax <- dat_chart |>
                 colour = grey(0.75), 
                 stroke = 0.2) + 
   geom_text(x = 0.705,  
-            y = 0.75,
+            y = 1.4,
             label = "70%",
             hjust = 0, 
             family = "Fira Sans", 
@@ -389,7 +396,7 @@ chart_megaswarm_fully_vax <- dat_chart |>
             size = 3, 
             colour = grey(0.5)) +   
   geom_text(x = 0.805,  
-            y = 0.75,
+            y = 1.4,
             label = "80%",
             hjust = 0, 
             family = "Fira Sans", 
@@ -397,7 +404,7 @@ chart_megaswarm_fully_vax <- dat_chart |>
             size = 3, 
             colour = grey(0.5)) +
   geom_text(x = 0.905,  
-            y = 0.75,
+            y = 1.4,
             label = "90%",
             hjust = 0, 
             family = "Fira Sans", 
@@ -407,7 +414,7 @@ chart_megaswarm_fully_vax <- dat_chart |>
   # Used geom_text because annotate seems to interfere with geom_beeswarm
   scale_x_continuous(breaks = seq(0, 1, 0.1), 
                      expand = expansion(0, 0), 
-                     limits = c(0.3, 0.99)) + 
+                     limits = c(0.4, 0.99)) + 
   scale_fill_manual(values = c("Greater than 90% fully vaccinated" = lighten(col = "red", amount = 0.9),
                                "80% to 90% fully vaccinated" = lighten(col = "red", amount = 0.5),
                                "70% to 80% fully vaccinated" = lighten(col = "red", amount = 0.1),
