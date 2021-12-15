@@ -9,10 +9,30 @@ library(glue)
 library(janitor)
 library(scales)
 library(readxl)
+library(systemfonts)
+library(ragg)
 
-latest_date <- "07_12_2021"
+latest_date <- "14_12_2021"
 
-latest_date_nice <- "7 December 2021"
+latest_date_nice <- "14 December 2021"
+
+# *****************************************************************************
+
+
+# *****************************************************************************
+# Custom font setup ----
+
+register_font(
+  name = "Fira Sans Custom", 
+  plain = system_fonts() |> filter(family == "Fira Sans", style == "Regular") |> pull(path), 
+  bold = system_fonts() |> filter(family == "Fira Sans", style == "ExtraBold") |> pull(path), 
+  italic = system_fonts() |> filter(family == "Fira Sans", style == "Italic") |> pull(path), 
+  bolditalic = system_fonts() |> filter(family == "Fira Sans", style == "ExtraBold Italic") |> pull(path), 
+  features = font_feature(ligatures = c("discretionary", 
+                                        "standard", 
+                                        "contextual"), 
+                          numbers = c("lining", "proportional"))
+)
 
 # *****************************************************************************
 
@@ -200,13 +220,13 @@ chart_m_bar <- dat_m |>
                        label = comma(x = unvax, accuracy = 1))) + 
   geom_hline(yintercept = 0, size = 0.25, colour = grey(0.5)) +
   geom_col(size = 0) + 
-  geom_text(nudge_y = 500, 
-            family = "Fira Sans", 
+  geom_text(nudge_y = 350, 
+            family = "Fira Sans Custom", 
             size = 3) + 
   facet_wrap(facets = vars(age_group_2), ncol = 1) + 
   scale_y_continuous(labels = comma_format(accuracy = 1), 
-                     limits = c(0, 8000), 
-                     breaks = seq(0, 24000, 2000)) + 
+                     limits = c(0, 6000), 
+                     breaks = seq(0, 10000, 1000)) + 
   scale_x_discrete(position = "top") + 
   scale_colour_manual(values = c("12-29 years old" = "#6929c4", 
                                  "30-59 years old" = "#1192e8", 
@@ -216,7 +236,7 @@ chart_m_bar <- dat_m |>
   xlab("") + 
   ylab("") + 
   ggtitle(label = glue("Number of unvaccinated Māori people as at {latest_date_nice}")) + 
-  theme_minimal(base_family = "Fira Sans") + 
+  theme_minimal(base_family = "Fira Sans Custom") + 
   theme(panel.grid.minor = element_blank(), 
         panel.grid.major.x = element_blank(), 
         panel.grid.major.y = element_line(size = 0.25, colour = grey(0.9)), 
@@ -232,7 +252,7 @@ ggsave(filename = here(glue("outputs/unvax_maori_{latest_date}.png")),
        width = 2800, 
        height = 2000, 
        units = "px", 
-       device = "png", 
+       device = agg_png, 
        bg = "white")
 
 # Bar chart of numbers of unvaccinated people aged 60+
@@ -244,7 +264,7 @@ chart_60plus_bar <- dat_60plus |>
                        label = comma(x = unvax, accuracy = 1))) + 
   geom_hline(yintercept = 0, size = 0.25, colour = grey(0.5)) +
   geom_col(size = 0) + 
-  geom_text(family = "Fira Sans", 
+  geom_text(family = "Fira Sans Custom", 
             size = 3, 
             nudge_y = 500) + 
   facet_wrap(facets = vars(ethnic_group), ncol = 1) + 
@@ -262,7 +282,7 @@ chart_60plus_bar <- dat_60plus |>
   xlab("") + 
   ylab("") + 
   ggtitle(label = glue("Number of unvaccinated people aged 60+ as at {latest_date_nice}")) + 
-  theme_minimal(base_family = "Fira Sans") + 
+  theme_minimal(base_family = "Fira Sans Custom") + 
   theme(panel.grid.minor = element_blank(), 
         panel.grid.major.x = element_blank(), 
         panel.grid.major.y = element_line(size = 0.25, colour = grey(0.9)), 
@@ -278,7 +298,7 @@ ggsave(filename = here(glue("outputs/unvax_60plus_{latest_date}.png")),
        width = 2800, 
        height = 2000, 
        units = "px", 
-       device = "png", 
+       device = agg_png, 
        bg = "white")
 
 # *****************************************************************************

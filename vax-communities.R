@@ -10,10 +10,30 @@ library(readxl)
 library(glue)
 library(colorspace)
 library(scales)
+library(systemfonts)
+library(ragg)
 
-latest_date <- "07_12_2021"               # Date of most recent week's data
-prev_date <- "30_11_2021"                 # Date of previous week's data
-latest_date_nice <- "7 December 2021"     # For chart title
+latest_date <- "14_12_2021"               # Date of most recent week's data
+prev_date <- "07_12_2021"                 # Date of previous week's data
+latest_date_nice <- "14 December 2021"     # For chart title
+
+# *****************************************************************************
+
+
+# *****************************************************************************
+# Custom font setup ----
+
+register_font(
+  name = "Fira Sans Custom", 
+  plain = system_fonts() |> filter(family == "Fira Sans", style == "Regular") |> pull(path), 
+  bold = system_fonts() |> filter(family == "Fira Sans", style == "ExtraBold") |> pull(path), 
+  italic = system_fonts() |> filter(family == "Fira Sans", style == "Italic") |> pull(path), 
+  bolditalic = system_fonts() |> filter(family == "Fira Sans", style == "ExtraBold Italic") |> pull(path), 
+  features = font_feature(ligatures = c("discretionary", 
+                                        "standard", 
+                                        "contextual"), 
+                          numbers = c("lining", "proportional"))
+)
 
 # *****************************************************************************
 
@@ -189,7 +209,7 @@ chart_fully_vax_rate <- ggplot(dat_chart_vax_rate,
   geom_text(mapping = aes(label = round(100 * fully_vax_rate), 
                           colour = ifelse(fully_vax_rate > 0.9, "90+", "under-90")), 
             data = dat_chart_vax_rate |> filter(age_group_2 == "All"), 
-            family = "Fira Sans", 
+            family = "Fira Sans Custom", 
             fontface = "bold", 
             size = 2.5) + 
   geom_hline(yintercept = c(1.5, 4.5, 7.5, 10.5), colour = "black") + 
@@ -209,14 +229,14 @@ chart_fully_vax_rate <- ggplot(dat_chart_vax_rate,
   annotate(geom = "text", 
            x = 0.4, 
            y = -0.5, 
-           label = "Chart by Aaron Schiff using data from the NZ Ministry of Health\ngithub.com/aaronschiff/nzvax", 
+           label = "Chart by Aaron Schiff using data from the NZ Ministry of Health\nCC-BY 4.0. schiff.nz/covid/nz-vax/", 
            hjust = 0, 
-           family = "Fira Sans", 
+           family = "Fira Sans Custom", 
            size = 2.5) + 
   coord_cartesian(clip = "off") + 
   ggtitle(label = "NZ population groups that are not yet protected by COVID-19 vaccination", 
           subtitle = glue("Fully vaccinated (two doses) to {latest_date_nice}")) + 
-  theme_minimal(base_family = "Fira Sans") + 
+  theme_minimal(base_family = "Fira Sans Custom") + 
   theme(axis.text.x.top = element_text(angle = 45, hjust = 0), 
         legend.justification = c(0, 0), 
         legend.position = c(-0.015, 1.15), 
@@ -230,7 +250,7 @@ chart_fully_vax_rate <- ggplot(dat_chart_vax_rate,
 
 ggsave(filename = here(glue("outputs/fully_vax_communities_{latest_date}.png")), 
        plot = chart_fully_vax_rate, 
-       device = "png", 
+       device = agg_png, 
        width = 2800, 
        height = 2150, 
        units = "px", 
@@ -245,7 +265,7 @@ chart_first_doses_rate <- ggplot(dat_chart_vax_rate,
   geom_text(mapping = aes(label = round(100 * first_dose_rate), 
                           colour = ifelse(first_dose_rate > 0.9, "90+", "under-90")), 
             data = dat_chart_vax_rate |> filter(age_group_2 == "All"), 
-            family = "Fira Sans", 
+            family = "Fira Sans Custom", 
             fontface = "bold", 
             size = 2.5) + 
   geom_hline(yintercept = c(1.5, 4.5, 7.5, 10.5), colour = "black") + 
@@ -265,14 +285,14 @@ chart_first_doses_rate <- ggplot(dat_chart_vax_rate,
   annotate(geom = "text", 
            x = 0.4, 
            y = -0.5, 
-           label = "Chart by Aaron Schiff using data from the NZ Ministry of Health\ngithub.com/aaronschiff/nzvax", 
+           label = "Chart by Aaron Schiff using data from the NZ Ministry of Health\nCC-BY 4.0. schiff.nz/covid/nz-vax/", 
            hjust = 0, 
-           family = "Fira Sans", 
+           family = "Fira Sans Custom", 
            size = 2.5) + 
   coord_cartesian(clip = "off") + 
   ggtitle(label = "NZ population groups that are not yet protected by COVID-19 vaccination", 
           subtitle = glue("First doses to {latest_date_nice}")) + 
-  theme_minimal(base_family = "Fira Sans") + 
+  theme_minimal(base_family = "Fira Sans Custom") + 
   theme(axis.text.x.top = element_text(angle = 45, hjust = 0), 
         legend.justification = c(0, 0), 
         legend.position = c(-0.015, 1.15), 
@@ -286,7 +306,7 @@ chart_first_doses_rate <- ggplot(dat_chart_vax_rate,
 
 ggsave(filename = here(glue("outputs/first_doses_communities_{latest_date}.png")), 
        plot = chart_first_doses_rate, 
-       device = "png", 
+       device = agg_png, 
        width = 2800, 
        height = 2150, 
        units = "px", 
@@ -351,7 +371,7 @@ chart_fully_vax_change <- ggplot(dat_chart_vax_rate_change,
             colour = grey(0.97), size = 3) + 
   geom_text(mapping = aes(angle = 90 * (fully_vax_rate_change / 0.25)), 
             colour = "white", label = "—", 
-            family = "Fira Sans", 
+            family = "Fira Sans Custom", 
             size = 4, 
             data = dat_chart_vax_rate_change |> 
               filter(population_current > 99)) + 
@@ -372,13 +392,13 @@ chart_fully_vax_change <- ggplot(dat_chart_vax_rate_change,
   annotate(geom = "text", 
            x = 0.4, 
            y = -0.5, 
-           label = "Chart by Aaron Schiff using data from the NZ Ministry of Health\ngithub.com/aaronschiff/nzvax", 
+           label = "Chart by Aaron Schiff using data from the NZ Ministry of Health\nCC-BY 4.0. schiff.nz/covid/nz-vax/", 
            hjust = 0, 
-           family = "Fira Sans", 
+           family = "Fira Sans Custom", 
            size = 2) + 
   coord_cartesian(clip = "off") + 
   ggtitle(glue("Change in the fully vaccinated rate in the week to {latest_date_nice}")) + 
-  theme_minimal(base_family = "Fira Sans") + 
+  theme_minimal(base_family = "Fira Sans Custom") + 
   theme(axis.text.x.top = element_text(angle = 45, hjust = 0), 
         legend.justification = c(0, 0), 
         legend.position = c(-0.015, 1.16), 
@@ -389,7 +409,7 @@ chart_fully_vax_change <- ggplot(dat_chart_vax_rate_change,
 
 ggsave(filename = here(glue("outputs/fully_vax_change_communities_{latest_date}.png")), 
        plot = chart_fully_vax_change, 
-       device = "png", 
+       device = agg_png, 
        width = 2800, 
        height = 2150, 
        units = "px", 
@@ -403,7 +423,7 @@ chart_first_doses_change <- ggplot(dat_chart_vax_rate_change,
             colour = grey(0.97), size = 3) + 
   geom_text(mapping = aes(angle = 90 * (first_dose_rate_change / 0.25)), 
             colour = "white", label = "—", 
-            family = "Fira Sans", 
+            family = "Fira Sans Custom", 
             size = 4, 
             data = dat_chart_vax_rate_change |> 
               filter(population_current > 99)) + 
@@ -424,13 +444,13 @@ chart_first_doses_change <- ggplot(dat_chart_vax_rate_change,
   annotate(geom = "text", 
            x = 0.4, 
            y = -0.5, 
-           label = "Chart by Aaron Schiff using data from the NZ Ministry of Health\ngithub.com/aaronschiff/nzvax", 
+           label = "Chart by Aaron Schiff using data from the NZ Ministry of Health\nCC-BY 4.0. schiff.nz/covid/nz-vax/", 
            hjust = 0, 
-           family = "Fira Sans", 
+           family = "Fira Sans Custom", 
            size = 2) + 
   coord_cartesian(clip = "off") + 
   ggtitle(glue("Change in the first doses rate in the week to {latest_date_nice}")) + 
-  theme_minimal(base_family = "Fira Sans") + 
+  theme_minimal(base_family = "Fira Sans Custom") + 
   theme(axis.text.x.top = element_text(angle = 45, hjust = 0), 
         legend.justification = c(0, 0), 
         legend.position = c(-0.015, 1.16), 
@@ -441,7 +461,7 @@ chart_first_doses_change <- ggplot(dat_chart_vax_rate_change,
 
 ggsave(filename = here(glue("outputs/first_doses_change_communities_{latest_date}.png")), 
        plot = chart_first_doses_change, 
-       device = "png", 
+       device = agg_png, 
        width = 2800, 
        height = 2150, 
        units = "px", 
@@ -568,7 +588,7 @@ chart_vax_rates_by_ethnic_group_std <-
   geom_col(position = "dodge", size = 0) + 
   geom_text(position = position_dodge(width = 0.9), 
             vjust = -0.3, 
-            family = "Fira Sans", 
+            family = "Fira Sans Custom", 
             size = 2.5) + 
   scale_y_continuous(breaks = seq(0, 1, 0.1), 
                      labels = percent_format(accuracy = 1)) + 
@@ -582,7 +602,7 @@ chart_vax_rates_by_ethnic_group_std <-
   xlab("") + 
   ggtitle(label = "COVID-19 vaccination rates by ethnic group", 
           subtitle = glue("As at {latest_date_nice}")) + 
-  theme_minimal(base_family = "Fira Sans") + 
+  theme_minimal(base_family = "Fira Sans Custom") + 
   theme(panel.grid.minor = element_blank(), 
         panel.grid.major.x = element_blank(), 
         panel.grid.major.y = element_line(size = 0.25), 

@@ -10,9 +10,30 @@ library(glue)
 library(ggbeeswarm)
 library(colorspace)
 library(scales)
+library(systemfonts)
+library(ragg)
+library(readxl)
 
-latest_date <- "07_12_2021"
-latest_date_nice <- "7 December 2021"
+latest_date <- "14_12_2021"
+latest_date_nice <- "14 December 2021"
+
+# *****************************************************************************
+
+
+# *****************************************************************************
+# Custom font setup ----
+
+register_font(
+  name = "Fira Sans Custom", 
+  plain = system_fonts() |> filter(family == "Fira Sans", style == "Regular") |> pull(path), 
+  bold = system_fonts() |> filter(family == "Fira Sans", style == "ExtraBold") |> pull(path), 
+  italic = system_fonts() |> filter(family == "Fira Sans", style == "Italic") |> pull(path), 
+  bolditalic = system_fonts() |> filter(family == "Fira Sans", style == "ExtraBold Italic") |> pull(path), 
+  features = font_feature(ligatures = c("discretionary", 
+                                        "standard", 
+                                        "contextual"), 
+                          numbers = c("lining", "proportional"))
+)
 
 # *****************************************************************************
 
@@ -132,26 +153,26 @@ chart_first_doses <- dat_chart |>
                 colour = grey(0.75), 
                 stroke = 0.2) + 
   geom_text(x = 0.705,  
-            y = 1.05,
+            y = 1.2,
             label = "70%",
             hjust = 0, 
-            family = "Fira Sans", 
+            family = "Fira Sans Custom", 
             fontface = "bold", 
             size = 2, 
             colour = grey(0.5)) +   
   geom_text(x = 0.805,  
-            y = 1.05,
+            y = 1.2,
             label = "80%",
             hjust = 0, 
-            family = "Fira Sans", 
+            family = "Fira Sans Custom", 
             fontface = "bold", 
             size = 2, 
             colour = grey(0.5)) +
   geom_text(x = 0.905,  
-            y = 1.05,
+            y = 1.2,
             label = "90%",
             hjust = 0, 
-            family = "Fira Sans", 
+            family = "Fira Sans Custom", 
             fontface = "bold", 
             size = 2, 
             colour = grey(0.5)) +
@@ -171,10 +192,10 @@ chart_first_doses <- dat_chart |>
                              reverse = TRUE)) + 
   xlab("") + 
   ylab("") + 
-  labs(tag = "Chart by Aaron Schiff using data from the NZ Ministry of Health\ngithub.com/aaronschiff/nzvax") + 
+  labs(tag = "Chart by Aaron Schiff using data from the NZ Ministry of Health\nCC-BY 4.0. schiff.nz/covid/nz-vax/") + 
   ggtitle(label = "NZ COVID-19 vaccination rates for each suburb (SA2 area)", 
           subtitle = glue("First doses to {latest_date_nice} (percent of age 12+ population)")) + 
-  theme_minimal(base_family = "Fira Sans") + 
+  theme_minimal(base_family = "Fira Sans Custom") + 
   theme(panel.grid.major.y = element_blank(), 
         panel.grid.minor = element_blank(), 
         panel.grid.major.x = element_line(size = 0.25), 
@@ -199,7 +220,7 @@ chart_first_doses <- dat_chart |>
 
 ggsave(filename = here(glue("outputs/first_doses_SA2_{latest_date}.png")), 
        plot = chart_first_doses, 
-       device = "png", 
+       device = agg_png, 
        width = 2600, 
        height = 1800, 
        units = "px", 
@@ -219,26 +240,26 @@ chart_fully_vax <- dat_chart |>
                 colour = grey(0.75), 
                 stroke = 0.2) + 
   geom_text(x = 0.705,  
-            y = 0.5,
+            y = 0.6,
             label = "70%",
             hjust = 0, 
-            family = "Fira Sans", 
+            family = "Fira Sans Custom", 
             fontface = "bold", 
             size = 2, 
             colour = grey(0.5)) +   
   geom_text(x = 0.805,  
-            y = 0.5,
+            y = 0.6,
             label = "80%",
             hjust = 0, 
-            family = "Fira Sans", 
+            family = "Fira Sans Custom", 
             fontface = "bold", 
             size = 2, 
             colour = grey(0.5)) +
   geom_text(x = 0.905,  
-            y = 0.5,
+            y = 0.6,
             label = "90%",
             hjust = 0, 
-            family = "Fira Sans", 
+            family = "Fira Sans Custom", 
             fontface = "bold", 
             size = 2, 
             colour = grey(0.5)) +
@@ -247,7 +268,7 @@ chart_fully_vax <- dat_chart |>
              ncol = 4) + 
   scale_x_continuous(breaks = seq(0, 1, 0.1), 
                      expand = expansion(0, 0), 
-                     limits = c(0.4, 0.99)) + 
+                     limits = c(0.5, 0.99)) + 
   scale_fill_manual(values = c("Greater than 90% fully vaccinated" = lighten(col = "red", amount = 0.9),
                                "80% to 90% fully vaccinated" = lighten(col = "red", amount = 0.5),
                                "70% to 80% fully vaccinated" = lighten(col = "red", amount = 0.1),
@@ -258,10 +279,10 @@ chart_fully_vax <- dat_chart |>
                              reverse = TRUE)) + 
   xlab("") + 
   ylab("") + 
-  labs(tag = "Chart by Aaron Schiff using data from the NZ Ministry of Health\ngithub.com/aaronschiff/nzvax") + 
+  labs(tag = "Chart by Aaron Schiff using data from the NZ Ministry of Health\nCC-BY 4.0. schiff.nz/covid/nz-vax/") + 
   ggtitle(label = "NZ COVID-19 vaccination rates for each suburb (SA2 area)", 
           subtitle = glue("Fully vaccinated (two doses) to {latest_date_nice} (percent of age 12+ population)")) + 
-  theme_minimal(base_family = "Fira Sans") + 
+  theme_minimal(base_family = "Fira Sans Custom") + 
   theme(panel.grid.major.y = element_blank(), 
         panel.grid.minor = element_blank(), 
         panel.grid.major.x = element_line(size = 0.25), 
@@ -286,7 +307,7 @@ chart_fully_vax <- dat_chart |>
 
 ggsave(filename = here(glue("outputs/fully_vax_SA2_{latest_date}.png")), 
        plot = chart_fully_vax, 
-       device = "png", 
+       device = agg_png, 
        width = 2600, 
        height = 1800, 
        units = "px", 
@@ -307,26 +328,26 @@ chart_megaswarm_first_doses <- dat_chart |>
                 colour = grey(0.75), 
                 stroke = 0.2) + 
   geom_text(x = 0.705,  
-            y = 4,
+            y = 4.5,
             label = "70%",
             hjust = 0, 
-            family = "Fira Sans", 
+            family = "Fira Sans Custom", 
             fontface = "bold", 
             size = 3, 
             colour = grey(0.5)) +   
   geom_text(x = 0.805,  
-            y = 4,
+            y = 4.5,
             label = "80%",
             hjust = 0, 
-            family = "Fira Sans", 
+            family = "Fira Sans Custom", 
             fontface = "bold", 
             size = 3, 
             colour = grey(0.5)) +
   geom_text(x = 0.905,  
-            y = 4,
+            y = 4.5,
             label = "90%",
             hjust = 0, 
-            family = "Fira Sans", 
+            family = "Fira Sans Custom", 
             fontface = "bold", 
             size = 3, 
             colour = grey(0.5)) +
@@ -343,10 +364,10 @@ chart_megaswarm_first_doses <- dat_chart |>
                              reverse = TRUE)) + 
   xlab("") + 
   ylab("") + 
-  labs(tag = "Chart by Aaron Schiff using data from the NZ Ministry of Health\ngithub.com/aaronschiff/nzvax") + 
+  labs(tag = "Chart by Aaron Schiff using data from the NZ Ministry of Health\nCC-BY 4.0. schiff.nz/covid/nz-vax/") + 
   ggtitle(label = "NZ COVID-19 vaccination rates for each suburb (SA2 area)", 
           subtitle = glue("First doses to {latest_date_nice} (percent of age 12+ population)")) + 
-  theme_minimal(base_family = "Fira Sans") + 
+  theme_minimal(base_family = "Fira Sans Custom") + 
   theme(panel.grid.major.y = element_blank(), 
         panel.grid.minor = element_blank(), 
         panel.grid.major.x = element_line(size = 0.25), 
@@ -368,7 +389,7 @@ chart_megaswarm_first_doses <- dat_chart |>
 
 ggsave(filename = here(glue("outputs/first_doses_SA2_megaswarm_{latest_date}.png")), 
        plot = chart_megaswarm_first_doses, 
-       device = "png", 
+       device = agg_png, 
        width = 2600, 
        height = 1600, 
        units = "px", 
@@ -388,33 +409,33 @@ chart_megaswarm_fully_vax <- dat_chart |>
                 colour = grey(0.75), 
                 stroke = 0.2) + 
   geom_text(x = 0.705,  
-            y = 1.4,
+            y = 2,
             label = "70%",
             hjust = 0, 
-            family = "Fira Sans", 
+            family = "Fira Sans Custom", 
             fontface = "bold", 
             size = 3, 
             colour = grey(0.5)) +   
   geom_text(x = 0.805,  
-            y = 1.4,
+            y = 2,
             label = "80%",
             hjust = 0, 
-            family = "Fira Sans", 
+            family = "Fira Sans Custom", 
             fontface = "bold", 
             size = 3, 
             colour = grey(0.5)) +
   geom_text(x = 0.905,  
-            y = 1.4,
+            y = 2,
             label = "90%",
             hjust = 0, 
-            family = "Fira Sans", 
+            family = "Fira Sans Custom", 
             fontface = "bold", 
             size = 3, 
             colour = grey(0.5)) +
   # Used geom_text because annotate seems to interfere with geom_beeswarm
   scale_x_continuous(breaks = seq(0, 1, 0.1), 
                      expand = expansion(0, 0), 
-                     limits = c(0.4, 0.99)) + 
+                     limits = c(0.5, 0.99)) + 
   scale_fill_manual(values = c("Greater than 90% fully vaccinated" = lighten(col = "red", amount = 0.9),
                                "80% to 90% fully vaccinated" = lighten(col = "red", amount = 0.5),
                                "70% to 80% fully vaccinated" = lighten(col = "red", amount = 0.1),
@@ -425,10 +446,10 @@ chart_megaswarm_fully_vax <- dat_chart |>
                              reverse = TRUE)) + 
   xlab("") + 
   ylab("") + 
-  labs(tag = "Chart by Aaron Schiff using data from the NZ Ministry of Health\ngithub.com/aaronschiff/nzvax") + 
+  labs(tag = "Chart by Aaron Schiff using data from the NZ Ministry of Health\nCC-BY 4.0. schiff.nz/covid/nz-vax/") + 
   ggtitle(label = "NZ COVID-19 vaccination rates for each suburb (SA2 area)", 
           subtitle = glue("Fully vaccinated (two doses) to {latest_date_nice} (percent of age 12+ population)")) + 
-  theme_minimal(base_family = "Fira Sans") + 
+  theme_minimal(base_family = "Fira Sans Custom") + 
   theme(panel.grid.major.y = element_blank(), 
         panel.grid.minor = element_blank(), 
         panel.grid.major.x = element_line(size = 0.25), 
@@ -450,7 +471,7 @@ chart_megaswarm_fully_vax <- dat_chart |>
 
 ggsave(filename = here(glue("outputs/fully_vax_SA2_megaswarm_{latest_date}.png")), 
        plot = chart_megaswarm_fully_vax, 
-       device = "png", 
+       device = agg_png, 
        width = 2600, 
        height = 1600, 
        units = "px", 
