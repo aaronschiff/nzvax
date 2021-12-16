@@ -8,15 +8,15 @@ library(lubridate)
 library(scales)
 library(lemon)
 
-dat_vax <- read_excel(path = here("data/20211205_-_cvip_equity_-_rate_ratios_and_uptake_over_time.xlsx"), 
+# https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-data-and-statistics/covid-19-vaccine-data
+dat_vax <- read_excel(path = here("data/20211212_-_cvip_equity_-_rate_ratios_and_uptake_over_time.xlsx"), 
                       sheet = "Vaccination Query") |> 
   clean_names() |> 
   mutate(week_ending_date = as_date(week_ending_date)) |> 
   mutate(number_people_partially_vaccinated = as.integer(number_people_partially_vaccinated), 
-         number_people_fully_vaccinated = as.integer(number_people_fully_vaccinated)) |> 
-  print()
+         number_people_fully_vaccinated = as.integer(number_people_fully_vaccinated))
 
-dat_pop <- read_excel(path = here("data/20211205_-_cvip_equity_-_rate_ratios_and_uptake_over_time.xlsx"), 
+dat_pop <- read_excel(path = here("data/20211212_-_cvip_equity_-_rate_ratios_and_uptake_over_time.xlsx"), 
                       sheet = "HSU Table") |> 
   clean_names() |> 
   mutate(number_people_hsu = as.integer(number_people_hsu))
@@ -61,6 +61,7 @@ dat_vax_rate_by_week_ethnic_group <-
                           ordered = TRUE))
 
 chart_vax_rate_by_week_ethnic_group <- dat_vax_rate_by_week_ethnic_group |> 
+  filter(week_ending_date != max(dat_vax_rate_by_week_ethnic_group$week_ending_date)) |> 
   ggplot(mapping = aes(x = week_ending_date, 
                        y = value, 
                        fill = ethnic_group, 
@@ -69,13 +70,15 @@ chart_vax_rate_by_week_ethnic_group <- dat_vax_rate_by_week_ethnic_group |>
                             ymd("2021-09-22"), 
                             ymd("2021-12-03")), 
              linetype = "dashed", 
-             size = 0.25) + 
+             size = 0.25, 
+             colour = grey(0.3)) + 
   geom_point(size = 0.75) + 
   geom_line(size = 0.5) + 
   annotate(geom = "text", 
            size = 2.5, 
            family = "Fira Sans", 
            fontface = "bold", 
+           colour = grey(0.25),
            x = ymd("2021-08-20"), 
            y = 1, 
            label = "AL4", 
@@ -84,6 +87,7 @@ chart_vax_rate_by_week_ethnic_group <- dat_vax_rate_by_week_ethnic_group |>
            size = 2.5, 
            family = "Fira Sans", 
            fontface = "bold", 
+           colour = grey(0.25),
            x = ymd("2021-09-24"), 
            y = 1, 
            label = "Auckland AL3", 
@@ -92,6 +96,7 @@ chart_vax_rate_by_week_ethnic_group <- dat_vax_rate_by_week_ethnic_group |>
            size = 2.5, 
            family = "Fira Sans", 
            fontface = "bold", 
+           colour = grey(0.25),
            x = ymd("2021-12-05"), 
            y = 1, 
            label = "CPF", 
@@ -106,7 +111,7 @@ chart_vax_rate_by_week_ethnic_group <- dat_vax_rate_by_week_ethnic_group |>
                             to = max(dat_vax_rate_by_week_ethnic_group$week_ending_date), 
                             by = "14 days"), 
                limits = c(min(dat_vax_rate_by_week_ethnic_group$week_ending_date) - ddays(7), 
-                          max(dat_vax_rate_by_week_ethnic_group$week_ending_date) + ddays(10)), 
+                          max(dat_vax_rate_by_week_ethnic_group$week_ending_date) - ddays(3)), 
                expand = expansion(0, 0), 
                labels = date_format("%d\n%b")) + 
   scale_colour_manual(values = c("Māori" = "cornflowerblue", 
@@ -117,18 +122,18 @@ chart_vax_rate_by_week_ethnic_group <- dat_vax_rate_by_week_ethnic_group |>
   xlab("Week ending") + 
   ylab("") + 
   ggtitle(label = "", 
-          subtitle = "Proportion of eligible population (age 12+)") + 
+          subtitle = "Proportion of eligible population vaccinated (age 12+)") + 
   theme_minimal(base_family = "Fira Sans", 
-                base_size = 8) + 
+                base_size = 10) + 
   theme(panel.grid.minor.y = element_blank(), 
         panel.grid.major = element_line(size = 0.25, colour = grey(0.85)), 
         panel.grid.minor.x = element_line(size = 0.25, colour = grey(0.85)), 
         axis.title.y = element_blank(), 
         plot.title = element_blank(), 
-        plot.subtitle = element_text(face = "bold"), 
+        plot.subtitle = element_text(face = "bold", size = rel(0.9)), 
         axis.title.x = element_text(margin = margin(8, 0, 0, 0, "pt")), 
         strip.text = element_text(face = "bold"), 
-        panel.spacing.y = unit(24, "pt"), 
+        panel.spacing.y = unit(16, "pt"), 
         legend.position = "top", 
         legend.box.margin = margin(0, 0, 0, 0), 
         legend.margin = margin(0, 0, 0, 0)) 
@@ -136,7 +141,7 @@ chart_vax_rate_by_week_ethnic_group <- dat_vax_rate_by_week_ethnic_group |>
 ggsave(filename = here("outputs/vax_rate_by_week_ethnic_group.png"), 
        plot = chart_vax_rate_by_week_ethnic_group, 
        width = 2400, 
-       height = 1800, 
+       height = 2000, 
        units = "px", 
        device = "png", 
        bg = "white")
