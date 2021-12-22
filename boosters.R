@@ -13,9 +13,9 @@ library(systemfonts)
 library(ragg)
 library(lubridate)
 
-latest_date <- "14_12_2021"
+latest_date <- "21_12_2021"
 
-latest_date_nice <- "14 December 2021"
+latest_date_nice <- "21 December 2021"
 
 boost_interval <- dmonths(6)
 

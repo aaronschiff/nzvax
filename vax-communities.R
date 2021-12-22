@@ -13,9 +13,9 @@ library(scales)
 library(systemfonts)
 library(ragg)
 
-latest_date <- "14_12_2021"               # Date of most recent week's data
-prev_date <- "07_12_2021"                 # Date of previous week's data
-latest_date_nice <- "14 December 2021"     # For chart title
+latest_date <- "21_12_2021"               # Date of most recent week's data
+prev_date <- "14_12_2021"                 # Date of previous week's data
+latest_date_nice <- "21 December 2021"     # For chart title
 
 # *****************************************************************************
 

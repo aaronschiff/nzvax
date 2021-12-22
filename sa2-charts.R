@@ -14,8 +14,8 @@ library(systemfonts)
 library(ragg)
 library(readxl)
 
-latest_date <- "14_12_2021"
-latest_date_nice <- "14 December 2021"
+latest_date <- "21_12_2021"
+latest_date_nice <- "21 December 2021"
 
 # *****************************************************************************
 
@@ -240,7 +240,7 @@ chart_fully_vax <- dat_chart |>
                 colour = grey(0.75), 
                 stroke = 0.2) + 
   geom_text(x = 0.705,  
-            y = 0.6,
+            y = 0.75,
             label = "70%",
             hjust = 0, 
             family = "Fira Sans Custom", 
@@ -248,7 +248,7 @@ chart_fully_vax <- dat_chart |>
             size = 2, 
             colour = grey(0.5)) +   
   geom_text(x = 0.805,  
-            y = 0.6,
+            y = 0.75,
             label = "80%",
             hjust = 0, 
             family = "Fira Sans Custom", 
@@ -256,7 +256,7 @@ chart_fully_vax <- dat_chart |>
             size = 2, 
             colour = grey(0.5)) +
   geom_text(x = 0.905,  
-            y = 0.6,
+            y = 0.75,
             label = "90%",
             hjust = 0, 
             family = "Fira Sans Custom", 
@@ -409,7 +409,7 @@ chart_megaswarm_fully_vax <- dat_chart |>
                 colour = grey(0.75), 
                 stroke = 0.2) + 
   geom_text(x = 0.705,  
-            y = 2,
+            y = 2.5,
             label = "70%",
             hjust = 0, 
             family = "Fira Sans Custom", 
@@ -417,7 +417,7 @@ chart_megaswarm_fully_vax <- dat_chart |>
             size = 3, 
             colour = grey(0.5)) +   
   geom_text(x = 0.805,  
-            y = 2,
+            y = 2.5,
             label = "80%",
             hjust = 0, 
             family = "Fira Sans Custom", 
@@ -425,7 +425,7 @@ chart_megaswarm_fully_vax <- dat_chart |>
             size = 3, 
             colour = grey(0.5)) +
   geom_text(x = 0.905,  
-            y = 2,
+            y = 2.5,
             label = "90%",
             hjust = 0, 
             family = "Fira Sans Custom", 
