@@ -12,9 +12,9 @@ library(readxl)
 library(systemfonts)
 library(ragg)
 
-latest_date <- "25_01_2022"
+latest_date <- "01_02_2022"
 
-latest_date_nice <- "25 January 2022"
+latest_date_nice <- "1 February 2022"
 
 # *****************************************************************************
 
@@ -96,8 +96,8 @@ dat_m <- bind_rows(dat, dat_511) |>
   # Assign custom age groups
   mutate(age_group_2 = case_when(
     age_group == "5-11" ~ "5-11", 
-    age_group == "12-18" ~ "12-29", 
-    age_group == "19-24" ~ "12-29", 
+    age_group == "12-17" ~ "12-29", 
+    age_group == "18-24" ~ "12-29", 
     age_group == "25-29" ~ "12-29", 
     age_group == "30-34" ~ "30-59", 
     age_group == "35-39" ~ "30-59", 
@@ -167,8 +167,8 @@ dat_60plus <- dat |>
   # Assign custom age groups
   mutate(age_group_2 = case_when(
     age_group == "5-11" ~ "5-11", 
-    age_group == "12-18" ~ "12-29", 
-    age_group == "19-24" ~ "12-29", 
+    age_group == "12-17" ~ "12-29", 
+    age_group == "18-24" ~ "12-29", 
     age_group == "25-29" ~ "12-29", 
     age_group == "30-34" ~ "30-59", 
     age_group == "35-39" ~ "30-59", 

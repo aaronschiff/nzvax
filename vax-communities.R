@@ -13,9 +13,9 @@ library(scales)
 library(systemfonts)
 library(ragg)
 
-latest_date <- "25_01_2022"               # Date of most recent week's data
+latest_date <- "01_02_2022"               # Date of most recent week's data
 #prev_date <- "14_12_2021"                 # Date of previous week's data (not used any more)
-latest_date_nice <- "25 January 2022"     # For chart title
+latest_date_nice <- "1 February 2022"     # For chart title
 
 # *****************************************************************************
 
@@ -87,8 +87,8 @@ dat_clean <- bind_rows(dat, dat_511) |>
   # Create custom age groups
   mutate(age_group_2 = case_when(
     age_group == "5-11" ~ "5-11", 
-    age_group == "12-18" ~ "12-29", 
-    age_group == "19-24" ~ "12-29", 
+    age_group == "12-17" ~ "12-29", 
+    age_group == "18-24" ~ "12-29", 
     age_group == "25-29" ~ "12-29", 
     age_group == "30-34" ~ "30-59", 
     age_group == "35-39" ~ "30-59", 
@@ -238,6 +238,12 @@ chart_fully_vax_rate <- ggplot(dat_chart_vax_rate,
             colour = grey(0.97),  size = 3) + 
   geom_text(mapping = aes(label = round(100 * fully_vax_rate), 
                           colour = ifelse(fully_vax_rate > 0.9, "90+", "under-90")), 
+            data = dat_chart_vax_rate |> filter(age_group_2 == "5-11 years"), 
+            family = "Fira Sans Custom", 
+            fontface = "bold", 
+            size = 2.5) + 
+  geom_text(mapping = aes(label = round(100 * fully_vax_rate), 
+                          colour = ifelse(fully_vax_rate > 0.9, "90+", "under-90")), 
             data = dat_chart_vax_rate |> filter(age_group_2 == "All"), 
             family = "Fira Sans Custom", 
             fontface = "bold", 
@@ -292,6 +298,12 @@ chart_first_doses_rate <- ggplot(dat_chart_vax_rate,
                                                x = dhb_of_residence)) + 
   geom_tile(mapping = aes(fill = first_dose_category), 
             colour = grey(0.97),  size = 3) + 
+  geom_text(mapping = aes(label = round(100 * first_dose_rate), 
+                          colour = ifelse(first_dose_rate > 0.9, "90+", "under-90")), 
+            data = dat_chart_vax_rate |> filter(age_group_2 == "5-11 years"), 
+            family = "Fira Sans Custom", 
+            fontface = "bold", 
+            size = 2.5) + 
   geom_text(mapping = aes(label = round(100 * first_dose_rate), 
                           colour = ifelse(first_dose_rate > 0.9, "90+", "under-90")), 
             data = dat_chart_vax_rate |> filter(age_group_2 == "All"), 
