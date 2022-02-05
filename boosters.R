@@ -1,4 +1,4 @@
-# Looking at booster shots
+# Looking at booster shots for population groups
 
 # *****************************************************************************
 # Setup ----
@@ -12,12 +12,11 @@ library(readxl)
 library(systemfonts)
 library(ragg)
 library(lubridate)
+library(colorspace)
 
-latest_date <- "21_12_2021"
+latest_date <- "01_02_2022"
 
-latest_date_nice <- "21 December 2021"
-
-boost_interval <- dmonths(6)
+latest_date_nice <- "1 February 2022"
 
 # *****************************************************************************
 
@@ -43,36 +42,111 @@ register_font(
 # *****************************************************************************
 # Load data ----
 
-# Latest vaccination data from MoH
-dat <- read_excel(path = here(glue("data/covid_vaccinations_{latest_date}.xlsx")), 
-                  sheet = "Date") |>
+# Latest booster data from MoH
+dat_boost <- read_excel(path = here(glue("data/covid_vaccinations_{latest_date}.xlsx")), 
+                        sheet = "Boosters") |>
   clean_names() |> 
-  select(-x6, -note) |> 
-  mutate(date = as_date(date))
+  select(-x5, -x6, -x7)
 
-# Boosted vs eligible for boost
-dat_boost <- dat |> 
-  mutate(boost_eligible_date = as_date(date + boost_interval)) |> 
-  mutate(cumu_second_doses = cumsum(second_doses), 
-         cumu_third_primary_doses = cumsum(third_primary_doses)) |> 
-  mutate(boost_eligible = cumu_second_doses - cumu_third_primary_doses) |> 
-  filter(boost_eligible_date >= ymd("2021-11-21")) |> 
-  select(boost_eligible_date, boost_eligible) |> 
-  left_join(y = dat |> 
-              select(date, boosters) |> 
-              mutate(cumu_boosters = cumsum(boosters)) |> 
-              select(date, cumu_boosters), 
-            by = c("boost_eligible_date" = "date")) |> 
-  mutate(unboosted = boost_eligible - cumu_boosters) |> 
-  select(-boost_eligible) |> 
-  pivot_longer(cols = -boost_eligible_date, 
-               names_to = "measure", values_to = "value") |> 
-  mutate(measure = factor(x = measure, 
-                          levels = c("cumu_boosters", 
-                                     "unboosted"), 
-                          labels = c("Boosted", 
-                                     "Eligible but unboosted"), 
-                          ordered = TRUE))
+# HSU population data
+dat_pop <- read_excel(path = here(glue("data/covid_vaccinations_{latest_date}.xlsx")), 
+                      sheet = "HSU Population") |>
+  clean_names() |> 
+  select(-x6, -x7, -notes)
+
+# Combine boost and 18+ population 
+dat_boosted_pop <- dat_boost |> 
+  full_join(y = dat_pop |> 
+              filter(age_group != "0-4", 
+                     age_group != "12-17", 
+                     age_group != "12+", 
+                     age_group != "5-11") |> 
+              group_by(dhb_of_residence, ethnic_group) |> 
+              summarise(population = sum(population)) |> 
+              ungroup() |> 
+              mutate(ethnic_group = case_when(
+                ethnic_group == "European or Other" ~ "European/Other", 
+                ethnic_group == "Various" ~ "Unknown", 
+                TRUE ~ ethnic_group
+              )) |> 
+              mutate(dhb_of_residence = case_when(
+                dhb_of_residence == "Overseas / Unknown" ~ "Overseas/Unknown", 
+                TRUE ~ dhb_of_residence
+              )), 
+            by = c("dhb_of_residence", "ethnic_group"))
+
+# Add total for each DHB and manipulate for charting
+dat_combined <- bind_rows(
+  # Clean data
+  dat_boosted_pop, 
+  # Add totals for each DHB
+  dat_boosted_pop |> 
+    group_by(dhb_of_residence) |> 
+    summarise(eligible_for_booster = sum(eligible_for_booster), 
+              booster_received = sum(booster_received), 
+              population = sum(population)) |> 
+    mutate(ethnic_group = "All") |> 
+    ungroup() 
+) |> 
+  # Remove unknown categories
+  filter(ethnic_group != "Unknown", 
+         ethnic_group != "Various", 
+         dhb_of_residence != "Overseas/Unknown", 
+         dhb_of_residence != "Various") |> 
+  mutate(booster_rate = booster_received / population) |> 
+  # Create category factors for ordering
+  mutate(ethnic_group = factor(x = ethnic_group, 
+                               levels = c("Maori", 
+                                          "Pacific Peoples", 
+                                          "Asian", 
+                                          "European/Other", 
+                                          "All"), 
+                               labels = c("Māori", 
+                                          "Pacific Peoples", 
+                                          "Asian", 
+                                          "Pākehā or other", 
+                                          "All"), 
+                               ordered = TRUE)) |> 
+  mutate(dhb_of_residence = factor(x = dhb_of_residence, 
+                                   levels = c("Northland", 
+                                              "Auckland Metro", 
+                                              "Auckland", 
+                                              "Waitemata", 
+                                              "Counties Manukau", 
+                                              "Waikato", 
+                                              "Bay of Plenty", 
+                                              "Taranaki", 
+                                              "Lakes", 
+                                              "Tairawhiti", 
+                                              "Whanganui", 
+                                              "MidCentral", 
+                                              "Hawkes Bay", 
+                                              "Capital & Coast and Hutt Valley", 
+                                              "Capital and Coast", 
+                                              "Hutt Valley", 
+                                              "Wairarapa", 
+                                              "Nelson Marlborough", 
+                                              "West Coast", 
+                                              "Canterbury", 
+                                              "South Canterbury", 
+                                              "Southern"), 
+                                   ordered = TRUE)) |> 
+  mutate(booster_rate_rounded = round(100 * booster_rate)) |> 
+  mutate(boost_rate_category = case_when(
+    booster_rate_rounded < 20 ~ "Less than 20%", 
+    (booster_rate_rounded >= 20) & (booster_rate_rounded <= 40) ~ "20% to 40%", 
+    (booster_rate_rounded > 40) & (booster_rate_rounded <= 60) ~ "40% to 60%", 
+    (booster_rate_rounded > 60) & (booster_rate_rounded <= 80) ~ "60% to 80%", 
+    (booster_rate_rounded > 80) ~ "Greater than 80%"
+  )) |> 
+  mutate(boost_rate_category = factor(x = boost_rate_category, 
+                                      levels = c("Less than 20%", 
+                                                 "20% to 40%", 
+                                                 "40% to 60%", 
+                                                 "60% to 80%", 
+                                                 "Greater than 80%"), 
+                                      ordered = TRUE)) |> 
+  arrange(dhb_of_residence, ethnic_group)
 
 # *****************************************************************************
 
@@ -80,12 +154,60 @@ dat_boost <- dat |>
 # *****************************************************************************
 # Visualise ----
 
-chart_boost <- dat_boost |>
-  filter(measure != "boost_eligible") |> 
-  ggplot(mapping = aes(x = boost_eligible_date, 
-                       y = value, 
-                       fill = fct_rev(measure))) + 
-  geom_col()
+chart_boost_rate <- ggplot(dat_combined, 
+                           mapping = aes(y = fct_rev(ethnic_group), 
+                                         x = dhb_of_residence)) + 
+  geom_tile(mapping = aes(fill = boost_rate_category), 
+            colour = grey(0.97),  size = 3) + 
+  geom_text(mapping = aes(label = round(100 * booster_rate), 
+                          colour = ifelse(booster_rate > 0.8, "80+", "under-80")), 
+            family = "Fira Sans Custom", 
+            fontface = "bold", 
+            size = 2.5) + 
+  scale_x_discrete(position = "top") + 
+  guides(fill = guide_legend(nrow = 1, 
+                             override.aes = list(size = 0.5), 
+                             reverse = TRUE)) + 
+  xlab("") + 
+  ylab("") + 
+  scale_fill_manual(values = c("Greater than 80%" = lighten(col = "red", amount = 0.9),
+                               "60% to 80%" = lighten(col = "red", amount = 0.6), 
+                               "40% to 60%" = lighten(col = "red", amount = 0.25),
+                               "20% to 40%" = darken(col = "red", amount = 0.1),
+                               "Less than 20%" = darken(col = "red", amount = 0.5)),
+                    name = NULL) +
+  scale_colour_manual(values = c("80+" = grey(0.75),
+                                 "under-80" = "white"), 
+                      guide = "none") + 
+  annotate(geom = "text", 
+           x = 0.4, 
+           y = -0.5, 
+           label = "Chart by Aaron Schiff using data from the NZ Ministry of Health\nCC-BY 4.0. schiff.nz/covid/nz-vax/", 
+           hjust = 0, 
+           family = "Fira Sans Custom", 
+           size = 2.5) + 
+  coord_cartesian(clip = "off") + 
+  ggtitle(label = "COVID-19 boosters for NZ population groups", 
+          subtitle = glue("Proportion of people aged 18+ who have received a booster dose to {latest_date_nice}")) + 
+  theme_minimal(base_family = "Fira Sans Custom") + 
+  theme(axis.text.x.top = element_text(angle = 45, hjust = 0), 
+        legend.justification = c(0, 0), 
+        legend.position = c(-0.015, 1.35), 
+        panel.grid = element_blank(), 
+        plot.margin = margin(8, 32, 16, 8, "pt"), 
+        plot.title = element_text(size = rel(1.1), 
+                                  margin = margin(0, 0, 4, 0, "pt")), 
+        plot.subtitle = element_text(size = rel(0.9), 
+                                     face = "bold", 
+                                     margin = margin(0, 0, 8, 0, "pt")))
+
+ggsave(filename = here(glue("outputs/boost_communities_{latest_date}.png")), 
+       plot = chart_boost_rate, 
+       device = agg_png, 
+       width = 2800, 
+       height = 1250, 
+       units = "px", 
+       bg = "white")
 
 # *****************************************************************************
 
