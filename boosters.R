@@ -13,10 +13,11 @@ library(systemfonts)
 library(ragg)
 library(lubridate)
 library(colorspace)
+library(shadowtext)
 
-latest_date <- "01_02_2022"
+latest_date <- "08_02_2022"
 
-latest_date_nice <- "1 February 2022"
+latest_date_nice <- "8 February 2022"
 
 # *****************************************************************************
 
@@ -46,17 +47,23 @@ register_font(
 dat_boost <- read_excel(path = here(glue("data/covid_vaccinations_{latest_date}.xlsx")), 
                         sheet = "Boosters") |>
   clean_names() |> 
-  select(-x5, -x6, -x7)
+  select(-x5, -x6, -x7) |> 
+  mutate(ethnic_group = ifelse(ethnic_group == "Other", 
+                               "European/Other", 
+                               ethnic_group))
 
 # HSU population data
 dat_pop <- read_excel(path = here(glue("data/covid_vaccinations_{latest_date}.xlsx")), 
                       sheet = "HSU Population") |>
   clean_names() |> 
-  select(-x6, -x7, -notes)
+  select(-x6, -x7, -notes) |> 
+  mutate(dhb_of_residence = ifelse(dhb_of_residence == "Hawkes Bay", 
+                                   "Hawke's Bay", 
+                                   dhb_of_residence))
 
 # Combine boost and 18+ population 
 dat_boosted_pop <- dat_boost |> 
-  full_join(y = dat_pop |> 
+  left_join(y = dat_pop |> 
               filter(age_group != "0-4", 
                      age_group != "12-17", 
                      age_group != "12+", 
@@ -92,6 +99,7 @@ dat_combined <- bind_rows(
   filter(ethnic_group != "Unknown", 
          ethnic_group != "Various", 
          dhb_of_residence != "Overseas/Unknown", 
+         dhb_of_residence != "Unknown", 
          dhb_of_residence != "Various") |> 
   mutate(booster_rate = booster_received / population) |> 
   # Create category factors for ordering
@@ -120,7 +128,7 @@ dat_combined <- bind_rows(
                                               "Tairawhiti", 
                                               "Whanganui", 
                                               "MidCentral", 
-                                              "Hawkes Bay", 
+                                              "Hawke's Bay", 
                                               "Capital & Coast and Hutt Valley", 
                                               "Capital and Coast", 
                                               "Hutt Valley", 
@@ -134,17 +142,25 @@ dat_combined <- bind_rows(
   mutate(booster_rate_rounded = round(100 * booster_rate)) |> 
   mutate(boost_rate_category = case_when(
     booster_rate_rounded < 20 ~ "Less than 20%", 
-    (booster_rate_rounded >= 20) & (booster_rate_rounded <= 40) ~ "20% to 40%", 
-    (booster_rate_rounded > 40) & (booster_rate_rounded <= 60) ~ "40% to 60%", 
-    (booster_rate_rounded > 60) & (booster_rate_rounded <= 80) ~ "60% to 80%", 
-    (booster_rate_rounded > 80) ~ "Greater than 80%"
+    (booster_rate_rounded >= 20) & (booster_rate_rounded <= 30) ~ "20% to 30%", 
+    (booster_rate_rounded > 30) & (booster_rate_rounded <= 40) ~ "30% to 40%", 
+    (booster_rate_rounded > 40) & (booster_rate_rounded <= 50) ~ "40% to 50%", 
+    (booster_rate_rounded > 50) & (booster_rate_rounded <= 60) ~ "50% to 60%", 
+    (booster_rate_rounded > 60) & (booster_rate_rounded <= 70) ~ "60% to 70%", 
+    (booster_rate_rounded > 70) & (booster_rate_rounded <= 80) ~ "70% to 80%", 
+    (booster_rate_rounded > 80) & (booster_rate_rounded <= 90) ~ "80% to 90%", 
+    (booster_rate_rounded > 90) ~ "Greater than 90%"
   )) |> 
   mutate(boost_rate_category = factor(x = boost_rate_category, 
                                       levels = c("Less than 20%", 
-                                                 "20% to 40%", 
-                                                 "40% to 60%", 
-                                                 "60% to 80%", 
-                                                 "Greater than 80%"), 
+                                                 "20% to 30%", 
+                                                 "30% to 40%", 
+                                                 "40% to 50%", 
+                                                 "50% to 60%", 
+                                                 "60% to 70%", 
+                                                 "70% to 80%", 
+                                                 "80% to 90%", 
+                                                 "Greater than 90%"), 
                                       ordered = TRUE)) |> 
   arrange(dhb_of_residence, ethnic_group)
 
@@ -159,23 +175,19 @@ chart_boost_rate <- ggplot(dat_combined,
                                          x = dhb_of_residence)) + 
   geom_tile(mapping = aes(fill = boost_rate_category), 
             colour = grey(0.97),  size = 3) + 
-  geom_text(mapping = aes(label = round(100 * booster_rate), 
-                          colour = ifelse(booster_rate > 0.8, "80+", "under-80")), 
-            family = "Fira Sans Custom", 
-            fontface = "bold", 
-            size = 2.5) + 
+  geom_shadowtext(mapping = aes(label = round(100 * booster_rate)), 
+                  colour = "white", 
+                  bg.colour = "black", 
+                  bg.r = 0.05, 
+                  family = "Fira Sans Custom", 
+                  fontface = "bold", 
+                  size = 2.5) + 
   scale_x_discrete(position = "top") + 
-  guides(fill = guide_legend(nrow = 1, 
-                             override.aes = list(size = 0.5), 
-                             reverse = TRUE)) + 
   xlab("") + 
   ylab("") + 
-  scale_fill_manual(values = c("Greater than 80%" = lighten(col = "red", amount = 0.9),
-                               "60% to 80%" = lighten(col = "red", amount = 0.6), 
-                               "40% to 60%" = lighten(col = "red", amount = 0.25),
-                               "20% to 40%" = darken(col = "red", amount = 0.1),
-                               "Less than 20%" = darken(col = "red", amount = 0.5)),
-                    name = NULL) +
+  scale_fill_brewer(palette = "RdYlBu", 
+                    drop = FALSE, 
+                    guide = "none") + 
   scale_colour_manual(values = c("80+" = grey(0.75),
                                  "under-80" = "white"), 
                       guide = "none") + 
@@ -199,7 +211,7 @@ chart_boost_rate <- ggplot(dat_combined,
                                   margin = margin(0, 0, 4, 0, "pt")), 
         plot.subtitle = element_text(size = rel(0.9), 
                                      face = "bold", 
-                                     margin = margin(0, 0, 8, 0, "pt")))
+                                     margin = margin(0, 0, 0, 0, "pt")))
 
 ggsave(filename = here(glue("outputs/boost_communities_{latest_date}.png")), 
        plot = chart_boost_rate, 
