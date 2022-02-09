@@ -14,7 +14,7 @@ library(systemfonts)
 library(ragg)
 
 latest_date <- "08_02_2022"               # Date of most recent week's data
-#prev_date <- "14_12_2021"                 # Date of previous week's data (not used any more)
+prev_date <- "01_02_2022"                 # Date of previous week's data 
 latest_date_nice <- "8 February 2022"     # For chart title
 
 # *****************************************************************************
@@ -73,13 +73,13 @@ dat_511 <- read_excel(path = here(glue("data/covid_vaccinations_5_11_yo_{latest_
   mutate(age_group = "5-11", 
          week = "current")
 
-# dat_prev <- read_excel(path = here(glue("data/covid_vaccinations_{prev_date}.xlsx")), 
-#                        sheet = "DHBofResidence by ethnicity") |>
-#   clean_names() |> 
-#   select(-x10, -notes) |> 
-#   mutate(week = "previous") |> 
-#   rename(first_dose_administered = at_least_partially_vaccinated, 
-#          second_dose_administered = fully_vaccinated)
+dat_prev <- read_excel(path = here(glue("data/covid_vaccinations_{prev_date}.xlsx")),
+                       sheet = "DHBofResidence by ethnicity") |>
+  clean_names() |>
+  select(-x10, -notes) |>
+  mutate(week = "previous") |>
+  rename(first_dose_administered = at_least_partially_vaccinated,
+         second_dose_administered = fully_vaccinated)
 
 # Combine data and manipulate 
 dat_clean <- bind_rows(dat, dat_511) |> 
@@ -198,6 +198,18 @@ dat_combined <- bind_rows(
 
 # *****************************************************************************
 # Current week vaccination rate charts ----
+
+# Count how many first doses in age 12+ this week
+new_first_doses <- dat |> 
+  group_by(ethnic_group, age_group) |> 
+  summarise(first_doses_this_week = sum(first_dose_administered)) |> 
+  ungroup() |> 
+  left_join(y = dat_prev |> 
+              group_by(ethnic_group, age_group) |> 
+              summarise(first_doses_last_week = sum(first_dose_administered)) |> 
+              ungroup(), 
+            by = c("ethnic_group", "age_group")) |> 
+  mutate(new_doses = first_doses_this_week - first_doses_last_week) 
 
 # Create chart data
 dat_chart_vax_rate <- dat_combined |> 
