@@ -82,7 +82,7 @@ dat_boosted_pop <- dat_boost |>
               )), 
             by = c("dhb_of_residence", "ethnic_group"))
 
-# Add total for each DHB and manipulate for charting
+# Add total for each DHB and total for each ethnicity,  and manipulate for charting
 dat_combined <- bind_rows(
   # Clean data
   dat_boosted_pop, 
@@ -93,7 +93,24 @@ dat_combined <- bind_rows(
               booster_received = sum(booster_received), 
               population = sum(population)) |> 
     mutate(ethnic_group = "All") |> 
-    ungroup() 
+    ungroup(), 
+  # Add totals for each ethnicity
+  dat_boosted_pop |> 
+    filter(dhb_of_residence != "Unknown") |> 
+    group_by(ethnic_group) |> 
+    summarise(eligible_for_booster = sum(eligible_for_booster), 
+              booster_received = sum(booster_received), 
+              population = sum(population)) |> 
+    mutate(dhb_of_residence = "All") |> 
+    ungroup() , 
+  # Add overall total
+  dat_boosted_pop |> 
+    filter(dhb_of_residence != "Unknown") |> 
+    summarise(eligible_for_booster = sum(eligible_for_booster), 
+              booster_received = sum(booster_received), 
+              population = sum(population)) |> 
+    mutate(ethnic_group = "All", 
+           dhb_of_residence = "All")
 ) |> 
   # Remove unknown categories
   filter(ethnic_group != "Unknown", 
@@ -137,7 +154,8 @@ dat_combined <- bind_rows(
                                               "West Coast", 
                                               "Canterbury", 
                                               "South Canterbury", 
-                                              "Southern"), 
+                                              "Southern", 
+                                              "All"), 
                                    ordered = TRUE)) |> 
   mutate(booster_rate_rounded = round(100 * booster_rate)) |> 
   mutate(boost_rate_category = case_when(
@@ -176,9 +194,9 @@ chart_boost_rate <- ggplot(dat_combined,
   geom_tile(mapping = aes(fill = boost_rate_category), 
             colour = grey(0.97),  size = 3) + 
   geom_shadowtext(mapping = aes(label = round(100 * booster_rate)), 
-                  colour = "white", 
-                  bg.colour = "black", 
-                  bg.r = 0.05, 
+                  colour = grey(0.35), 
+                  bg.colour = "white", 
+                  bg.r = 0.1, 
                   family = "Fira Sans Custom", 
                   fontface = "bold", 
                   size = 2.5) + 
