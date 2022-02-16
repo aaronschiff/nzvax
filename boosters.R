@@ -15,9 +15,9 @@ library(lubridate)
 library(colorspace)
 library(shadowtext)
 
-latest_date <- "08_02_2022"
+latest_date <- "15_02_2022"
 
-latest_date_nice <- "8 February 2022"
+latest_date_nice <- "15 February 2022"
 
 # *****************************************************************************
 
@@ -50,16 +50,16 @@ dat_boost <- read_excel(path = here(glue("data/covid_vaccinations_{latest_date}.
   select(-x5, -x6, -x7) |> 
   mutate(ethnic_group = ifelse(ethnic_group == "Other", 
                                "European/Other", 
-                               ethnic_group))
+                               ethnic_group)) |> 
+  mutate(dhb_of_residence = ifelse(dhb_of_residence == "Overseas and undefined", 
+                                   "Overseas / Unknown", 
+                                   dhb_of_residence))
 
 # HSU population data
 dat_pop <- read_excel(path = here(glue("data/covid_vaccinations_{latest_date}.xlsx")), 
                       sheet = "HSU Population") |>
   clean_names() |> 
-  select(-x6, -x7, -notes) |> 
-  mutate(dhb_of_residence = ifelse(dhb_of_residence == "Hawkes Bay", 
-                                   "Hawke's Bay", 
-                                   dhb_of_residence))
+  select(-x6, -x7, -notes)
 
 # Combine boost and 18+ population 
 dat_boosted_pop <- dat_boost |> 
@@ -96,7 +96,7 @@ dat_combined <- bind_rows(
     ungroup(), 
   # Add totals for each ethnicity
   dat_boosted_pop |> 
-    filter(dhb_of_residence != "Unknown") |> 
+    filter(dhb_of_residence != "Overseas / Unknown") |> 
     group_by(ethnic_group) |> 
     summarise(eligible_for_booster = sum(eligible_for_booster), 
               booster_received = sum(booster_received), 
@@ -105,7 +105,7 @@ dat_combined <- bind_rows(
     ungroup() , 
   # Add overall total
   dat_boosted_pop |> 
-    filter(dhb_of_residence != "Unknown") |> 
+    filter(dhb_of_residence != "Overseas / Unknown") |> 
     summarise(eligible_for_booster = sum(eligible_for_booster), 
               booster_received = sum(booster_received), 
               population = sum(population)) |> 
@@ -115,7 +115,7 @@ dat_combined <- bind_rows(
   # Remove unknown categories
   filter(ethnic_group != "Unknown", 
          ethnic_group != "Various", 
-         dhb_of_residence != "Overseas/Unknown", 
+         dhb_of_residence != "Overseas / Unknown", 
          dhb_of_residence != "Unknown", 
          dhb_of_residence != "Various") |> 
   mutate(booster_rate = booster_received / population) |> 
@@ -145,7 +145,7 @@ dat_combined <- bind_rows(
                                               "Tairawhiti", 
                                               "Whanganui", 
                                               "MidCentral", 
-                                              "Hawke's Bay", 
+                                              "Hawkes Bay", 
                                               "Capital & Coast and Hutt Valley", 
                                               "Capital and Coast", 
                                               "Hutt Valley", 
@@ -203,12 +203,12 @@ chart_boost_rate <- ggplot(dat_combined,
   scale_x_discrete(position = "top") + 
   xlab("") + 
   ylab("") + 
-  scale_fill_brewer(palette = "RdYlBu", 
+  scale_fill_brewer(palette = "RdYlBu",
                     drop = FALSE, 
-                    guide = "none") + 
-  scale_colour_manual(values = c("80+" = grey(0.75),
-                                 "under-80" = "white"), 
-                      guide = "none") + 
+                    name = NULL, 
+                    guide = guide_legend(direction = "horizontal", 
+                                         ncol = 4, 
+                                         override.aes = list(size = 1))) +
   annotate(geom = "text", 
            x = 0.4, 
            y = -0.5, 
@@ -229,13 +229,13 @@ chart_boost_rate <- ggplot(dat_combined,
                                   margin = margin(0, 0, 4, 0, "pt")), 
         plot.subtitle = element_text(size = rel(0.9), 
                                      face = "bold", 
-                                     margin = margin(0, 0, 0, 0, "pt")))
+                                     margin = margin(0, 0, 36, 0, "pt")))
 
 ggsave(filename = here(glue("outputs/boost_communities_{latest_date}.png")), 
        plot = chart_boost_rate, 
        device = agg_png, 
        width = 2800, 
-       height = 1250, 
+       height = 1350, 
        units = "px", 
        bg = "white")
 

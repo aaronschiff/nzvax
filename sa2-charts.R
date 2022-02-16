@@ -14,8 +14,8 @@ library(systemfonts)
 library(ragg)
 library(readxl)
 
-latest_date <- "08_02_2022"
-latest_date_nice <- "8 February 2022"
+latest_date <- "15_02_2022"
+latest_date_nice <- "15 February 2022"
 
 # *****************************************************************************
 

@@ -12,9 +12,9 @@ library(readxl)
 library(systemfonts)
 library(ragg)
 
-latest_date <- "08_02_2022"
+latest_date <- "15_02_2022"
 
-latest_date_nice <- "8 February 2022"
+latest_date_nice <- "15 February 2022"
 
 # *****************************************************************************
 
@@ -252,7 +252,7 @@ chart_m_bar <- dat_m |>
             size = 3) + 
   facet_wrap(facets = vars(age_group_2), ncol = 1) + 
   scale_y_continuous(labels = comma_format(accuracy = 1), 
-                     limits = c(0, 14000), 
+                     limits = c(0, 12000), 
                      breaks = seq(0, 14000, 2000)) + 
   scale_x_discrete(position = "top") + 
   scale_colour_manual(values = c("5-11 years old" = grey(0.5), 
@@ -294,12 +294,12 @@ chart_60plus_bar <- dat_60plus |>
   geom_col(size = 0) + 
   geom_text(family = "Fira Sans Custom", 
             size = 3, 
-            nudge_y = 500) + 
+            nudge_y = 200) + 
   facet_wrap(facets = vars(ethnic_group), ncol = 1) + 
   scale_x_discrete(position = "top") + 
   scale_y_continuous(labels = comma_format(accuracy = 1),
-                     limits = c(0, 4800),
-                     breaks = seq(0, 4000, 1000), 
+                     limits = c(0, 2000),
+                     breaks = seq(0, 2000, 500), 
                      expand = expansion(0, 0)) +
   scale_colour_manual(values = c("Māori" = "#6929c4", 
                                  "Pacific Peoples" = "#1192e8", 
