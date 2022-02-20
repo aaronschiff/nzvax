@@ -15,10 +15,6 @@ library(lubridate)
 library(colorspace)
 library(shadowtext)
 
-latest_date <- "15_02_2022"
-
-latest_date_nice <- "15 February 2022"
-
 # *****************************************************************************
 
 
@@ -231,7 +227,7 @@ chart_boost_rate <- ggplot(dat_combined,
                                      face = "bold", 
                                      margin = margin(0, 0, 36, 0, "pt")))
 
-ggsave(filename = here(glue("outputs/boost_communities_{latest_date}.png")), 
+ggsave(filename = here(glue("outputs/latest/boost_communities_{latest_date}.png")), 
        plot = chart_boost_rate, 
        device = agg_png, 
        width = 2800, 

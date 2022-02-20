@@ -12,10 +12,6 @@ library(readxl)
 library(systemfonts)
 library(ragg)
 
-latest_date <- "15_02_2022"
-
-latest_date_nice <- "15 February 2022"
-
 # *****************************************************************************
 
 
@@ -275,7 +271,7 @@ chart_m_bar <- dat_m |>
         plot.margin = margin(4, 16, 4, 4, "pt"), 
         strip.text = element_text(face = "bold"))
 
-ggsave(filename = here(glue("outputs/unvax_maori_{latest_date}.png")), 
+ggsave(filename = here(glue("outputs/latest/unvax_maori_{latest_date}.png")), 
        plot = chart_m_bar, 
        width = 2800, 
        height = 2400, 
@@ -321,7 +317,7 @@ chart_60plus_bar <- dat_60plus |>
         plot.margin = margin(4, 16, 8, 4, "pt"), 
         strip.text = element_text(face = "bold"))
 
-ggsave(filename = here(glue("outputs/unvax_60plus_{latest_date}.png")), 
+ggsave(filename = here(glue("outputs/latest/unvax_60plus_{latest_date}.png")), 
        plot = chart_60plus_bar, 
        width = 2800, 
        height = 2000, 

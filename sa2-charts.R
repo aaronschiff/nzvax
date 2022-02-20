@@ -14,9 +14,6 @@ library(systemfonts)
 library(ragg)
 library(readxl)
 
-latest_date <- "15_02_2022"
-latest_date_nice <- "15 February 2022"
-
 # *****************************************************************************
 
 
@@ -227,7 +224,7 @@ chart_first_doses <- dat_chart |>
         plot.tag.position = c(0.99, 0.985), 
         plot.tag = element_text(hjust = 1, size = rel(0.6)))
 
-ggsave(filename = here(glue("outputs/first_doses_SA2_{latest_date}.png")), 
+ggsave(filename = here(glue("outputs/latest/first_doses_SA2_{latest_date}.png")), 
        plot = chart_first_doses, 
        device = agg_png, 
        width = 2600, 
@@ -315,7 +312,7 @@ chart_fully_vax <- dat_chart |>
         plot.tag.position = c(0.99, 0.985), 
         plot.tag = element_text(hjust = 1, size = rel(0.6)))
 
-ggsave(filename = here(glue("outputs/fully_vax_SA2_{latest_date}.png")), 
+ggsave(filename = here(glue("outputs/latest/fully_vax_SA2_{latest_date}.png")), 
        plot = chart_fully_vax, 
        device = agg_png, 
        width = 2600, 
@@ -403,7 +400,7 @@ chart_booster <- dat_chart |>
         plot.tag.position = c(0.99, 0.985), 
         plot.tag = element_text(hjust = 1, size = rel(0.6)))
 
-ggsave(filename = here(glue("outputs/booster_SA2_{latest_date}.png")), 
+ggsave(filename = here(glue("outputs/latest/booster_SA2_{latest_date}.png")), 
        plot = chart_booster, 
        device = agg_png, 
        width = 2600, 

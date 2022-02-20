@@ -13,10 +13,6 @@ library(scales)
 library(systemfonts)
 library(ragg)
 
-latest_date <- "15_02_2022"               # Date of most recent week's data
-prev_date <- "08_02_2022"                 # Date of previous week's data 
-latest_date_nice <- "15 February 2022"     # For chart title
-
 # *****************************************************************************
 
 
@@ -50,9 +46,11 @@ dat <- read_excel(path = here(glue("data/covid_vaccinations_{latest_date}.xlsx")
   rename(first_dose_administered = at_least_partially_vaccinated, 
          second_dose_administered = fully_vaccinated)
 
-dat_511 <- read_excel(path = here(glue("data/covid_vaccinations_5_11_yo_{latest_date}.xlsx"))) |> 
+dat_511 <- read_csv(file = here(glue("data/covid_vaccinations_5_11_yo_{latest_date}.csv")), 
+                    col_types = "ciic") |> 
   clean_names() |> 
-  rename(first_dose_administered = at_least_partially_vaccinated) |> 
+  filter(dhb_of_residence != "Total") |> 
+  rename(first_dose_administered = at_least_partially_vacc) |> 
   pivot_wider(names_from = ethnicity, values_from = c(first_dose_administered, 
                                                       population), 
               names_sep = ".") |> 
@@ -296,7 +294,7 @@ chart_fully_vax_rate <- ggplot(dat_chart_vax_rate,
                                      face = "bold", 
                                      margin = margin(0, 0, 8, 0, "pt")))
 
-ggsave(filename = here(glue("outputs/fully_vax_communities_{latest_date}.png")), 
+ggsave(filename = here(glue("outputs/latest/fully_vax_communities_{latest_date}.png")), 
        plot = chart_fully_vax_rate, 
        device = agg_png, 
        width = 2800, 
@@ -358,7 +356,7 @@ chart_first_doses_rate <- ggplot(dat_chart_vax_rate,
                                      face = "bold", 
                                      margin = margin(0, 0, 8, 0, "pt")))
 
-ggsave(filename = here(glue("outputs/first_doses_communities_{latest_date}.png")), 
+ggsave(filename = here(glue("outputs/latest/first_doses_communities_{latest_date}.png")), 
        plot = chart_first_doses_rate, 
        device = agg_png, 
        width = 2800, 
@@ -675,7 +673,7 @@ chart_vax_rates_by_ethnic_group_std <-
                                      face = "bold", 
                                      margin = margin(0, 0, 8, 0, "pt")))
 
-ggsave(filename = glue(here("outputs/vax_rates_by_ethnicity_standardised_{latest_date}.png")), 
+ggsave(filename = glue(here("outputs/latest/vax_rates_by_ethnicity_standardised_{latest_date}.png")), 
        plot = chart_vax_rates_by_ethnic_group_std, 
        width = 2400, 
        height = 1600, 
