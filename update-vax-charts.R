@@ -5,6 +5,7 @@
 
 library(tidyverse)
 library(devtools)
+library(gert)
 library(httr)
 library(rvest)
 library(glue)
@@ -22,6 +23,7 @@ latest_date_nice <- "15 February 2022"     # For chart title
 # Update data ----
 
 # Download latest age 12+ vaccination data
+cat("* Updating data\n")
 dl_vax_data <- download.file(url = glue("https://www.health.govt.nz/system/files/documents/pages/covid_vaccinations_{latest_date}.xlsx"), 
                              destfile = here(glue("data/covid_vaccinations_{latest_date}.xlsx")))
 
@@ -93,15 +95,19 @@ file.copy(from = prev_output_files,
 file.remove(prev_output_files)
 
 # Update vaccination rates by communities
+cat("* Creating charts of vax rates by community\n")
 source("vax-communities.R")
 
 # Update SA2 charts
+cat("* Creating SA2 charts\n")
 source("sa2-charts.R")
 
 # Update unvaccinated charts
+cat("* Creating unvaccinated charts\n")
 source("unvaccinated.R")
 
 # Update boosters charts
+cat("* Creating boosters charts\n")
 source("boosters.R")
 
 # Check all charts are ok before proceeding
@@ -116,6 +122,30 @@ if (str_to_lower(confirm) != "y") {
 # *****************************************************************************
 # Update github and website ----
 
+# Update github for this project
+cat("* Updating github repository\n")
+git_add(files = ".")
+git_commit_all(message = glue("Updated vaccination charts to {latest_date_nice}"))
 
+# Copy latest charts to website
+cat("* Updating website\n")
+old_website_files <- list.files(path = "/Users/aaron/Library/Mobile Documents/com~apple~CloudDocs/Work - iCloud/Website/website-current/content/covid/nz-vax/images", 
+                                full.names = TRUE)
+file.remove(old_website_files)
+latest_output_files <- list.files(path = here("outputs/latest"), 
+                                  full.names = TRUE)
+file.copy(from = latest_output_files, 
+          to = "/Users/aaron/Library/Mobile Documents/com~apple~CloudDocs/Work - iCloud/Website/website-current/content/covid/nz-vax/images", 
+          overwrite = TRUE)
+latest_website_files <- list.files(path = "/Users/aaron/Library/Mobile Documents/com~apple~CloudDocs/Work - iCloud/Website/website-current/content/covid/nz-vax/images", 
+                                   full.names = TRUE)
+latest_output_newnames <- str_remove(string = latest_website_files, 
+                                     pattern = glue("_{latest_date}"))
+file.rename(from = latest_website_files, 
+            to = latest_output_newnames)
+
+cat("- Done! Please commit and push website repo now.")
 
 # *****************************************************************************
+
+
