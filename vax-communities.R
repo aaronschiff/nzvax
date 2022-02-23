@@ -46,30 +46,36 @@ dat <- read_excel(path = here(glue("data/covid_vaccinations_{latest_date}.xlsx")
   rename(first_dose_administered = at_least_partially_vaccinated, 
          second_dose_administered = fully_vaccinated)
 
-dat_511 <- read_csv(file = here(glue("data/covid_vaccinations_5_11_yo_{latest_date}.csv")), 
-                    col_types = "ciic") |> 
-  clean_names() |> 
-  filter(dhb_of_residence != "Total") |> 
-  rename(first_dose_administered = at_least_partially_vacc) |> 
-  pivot_wider(names_from = ethnicity, values_from = c(first_dose_administered, 
-                                                      population), 
-              names_sep = ".") |> 
-  mutate(population.non_Maori_non_Pacific = 
-           population.All - population.Maori - population.Pacific) |> 
-  mutate(first_dose_administered.non_Maori_non_Pacific = 
-           first_dose_administered.All - first_dose_administered.Maori - first_dose_administered.Pacific) |> 
-  select(-first_dose_administered.All, 
-         -population.All) |> 
-  pivot_longer(cols = -dhb_of_residence) |> 
-  separate(col = name, into = c("measure", "ethnic_group"), sep = "\\.") |> 
-  pivot_wider(names_from = measure, values_from = value) |> 
-  mutate(ethnic_group = case_when(
-    ethnic_group == "Pacific" ~ "Pacific Peoples", 
-    ethnic_group == "non_Maori_non_Pacific" ~ "non-Maori non-Pacific", 
-    TRUE ~ ethnic_group
-  )) |> 
-  mutate(age_group = "5-11", 
-         week = "current")
+# dat_511 <- read_csv(file = here(glue("data/covid_vaccinations_5_11_yo_{latest_date}.csv")), 
+#                     col_types = "ciiic") |> 
+#   clean_names() |> 
+#   filter(dhb_of_residence != "Total") |> 
+#   rename(first_dose_administered = at_least_partially_vacc, 
+#          second_dose_administered = fully_vacc) |> 
+#   mutate(second_dose_administered = replace_na(second_dose_administered, replace = 0L)) |> 
+#   pivot_wider(names_from = ethnicity, values_from = c(first_dose_administered, 
+#                                                       second_dose_administered, 
+#                                                       population), 
+#               names_sep = ".") |> 
+#   mutate(population.non_Maori_non_Pacific = 
+#            population.All - population.Maori - population.Pacific) |> 
+#   mutate(first_dose_administered.non_Maori_non_Pacific = 
+#            first_dose_administered.All - first_dose_administered.Maori - first_dose_administered.Pacific) |> 
+#   mutate(second_dose_administered.non_Maori_non_Pacific = 
+#            second_dose_administered.All - second_dose_administered.Maori - second_dose_administered.Pacific) |> 
+#   select(-first_dose_administered.All, 
+#          -second_dose_administered.All, 
+#          -population.All) |> 
+#   pivot_longer(cols = -dhb_of_residence) |> 
+#   separate(col = name, into = c("measure", "ethnic_group"), sep = "\\.") |> 
+#   pivot_wider(names_from = measure, values_from = value) |> 
+#   mutate(ethnic_group = case_when(
+#     ethnic_group == "Pacific" ~ "Pacific Peoples", 
+#     ethnic_group == "non_Maori_non_Pacific" ~ "non-Maori non-Pacific", 
+#     TRUE ~ ethnic_group
+#   )) |> 
+#   mutate(age_group = "5-11", 
+#          week = "current")
 
 dat_prev <- read_excel(path = here(glue("data/covid_vaccinations_{prev_date}.xlsx")),
                        sheet = "DHBofResidence by ethnicity") |>
@@ -80,8 +86,7 @@ dat_prev <- read_excel(path = here(glue("data/covid_vaccinations_{prev_date}.xls
          second_dose_administered = fully_vaccinated)
 
 # Combine data and manipulate 
-dat_clean <- bind_rows(dat, dat_511) |> 
-  # bind_rows(dat, dat_prev) |> 
+dat_clean <- dat |> 
   # Create custom age groups
   mutate(age_group_2 = case_when(
     age_group == "5-11" ~ "5-11", 
@@ -258,7 +263,7 @@ chart_fully_vax_rate <- ggplot(dat_chart_vax_rate,
             family = "Fira Sans Custom", 
             fontface = "bold", 
             size = 2.5) + 
-  geom_hline(yintercept = c(1.5, 4.5, 5.5, 8.5, 12.5), colour = "black") + 
+  geom_hline(yintercept = c(1.5, 5.5, 9.5, 13.5), colour = "black") + 
   scale_fill_manual(values = c("Greater than 90%" = lighten(col = "red", amount = 0.9),
                                "80% to 90%" = lighten(col = "red", amount = 0.5),
                                "70% to 80%" = lighten(col = "red", amount = 0.1),
@@ -298,7 +303,7 @@ ggsave(filename = here(glue("outputs/latest/fully_vax_communities_{latest_date}.
        plot = chart_fully_vax_rate, 
        device = agg_png, 
        width = 2800, 
-       height = 2250, 
+       height = 2300, 
        units = "px", 
        bg = "white")
 
@@ -320,7 +325,7 @@ chart_first_doses_rate <- ggplot(dat_chart_vax_rate,
             family = "Fira Sans Custom", 
             fontface = "bold", 
             size = 2.5) + 
-  geom_hline(yintercept = c(1.5, 4.5, 5.5, 8.5, 12.5), colour = "black") + 
+  geom_hline(yintercept = c(1.5, 5.5, 9.5, 13.5), colour = "black") + 
   scale_fill_manual(values = c("Greater than 90%" = lighten(col = "red", amount = 0.9),
                                "80% to 90%" = lighten(col = "red", amount = 0.5),
                                "70% to 80%" = lighten(col = "red", amount = 0.1),
@@ -360,8 +365,169 @@ ggsave(filename = here(glue("outputs/latest/first_doses_communities_{latest_date
        plot = chart_first_doses_rate, 
        device = agg_png, 
        width = 2800, 
-       height = 2250, 
+       height = 2300, 
        units = "px", 
+       bg = "white")
+
+# *****************************************************************************
+
+
+# *****************************************************************************
+# Age-standardised vax rates ----
+# Age 5+
+
+# Standard age distributions (all ethnic groups combined)
+dist_pop_by_age <- dat |> 
+  group_by(age_group) |> 
+  summarise(population = sum(population)) |> 
+  ungroup() |> 
+  mutate(population_pct = population / sum(population)) 
+
+dist_pop_by_age_dhb <- dat |> 
+  group_by(dhb_of_residence, age_group) |> 
+  summarise(population = sum(population)) |> 
+  ungroup() |> 
+  mutate(population_pct = population / sum(population)) 
+
+# Vaccination rates by ethnic group 
+vax_rates_by_ethnic_group_age <- dat |> 
+  filter(ethnic_group != "Unknown", 
+         ethnic_group != "Various") |> 
+  group_by(ethnic_group, age_group) |> 
+  summarise(first_dose_administered = sum(first_dose_administered), 
+            second_dose_administered = sum(second_dose_administered), 
+            population = sum(population)) |> 
+  ungroup() |> 
+  mutate(first_dose_pct = first_dose_administered / population, 
+         second_dose_pct = second_dose_administered / population) 
+
+vax_rates_by_ethnic_group_age_dhb <- dat |> 
+  filter(ethnic_group != "Unknown", 
+         ethnic_group != "Various") |> 
+  group_by(ethnic_group, dhb_of_residence, age_group) |> 
+  summarise(first_dose_administered = sum(first_dose_administered), 
+            second_dose_administered = sum(second_dose_administered), 
+            population = sum(population)) |> 
+  ungroup() |> 
+  mutate(first_dose_pct = first_dose_administered / population, 
+         second_dose_pct = second_dose_administered / population) 
+
+# Unadjusted and adjusted vax rates by ethnicity
+vax_rates_by_ethnic_group_std <- bind_rows(
+  # Unadjusted rates
+  vax_rates_by_ethnic_group_age |> 
+    group_by(ethnic_group) |> 
+    summarise(first_dose_administered = sum(first_dose_administered), 
+              second_dose_administered = sum(second_dose_administered), 
+              population = sum(population)) |> 
+    ungroup() |> 
+    mutate(first_dose_pct = first_dose_administered / population, 
+           second_dose_pct = second_dose_administered / population) |> 
+    select(ethnic_group, first_dose_pct, second_dose_pct) |> 
+    mutate(type = "unadjusted"), 
+  
+  # Age-standardised rates
+  vax_rates_by_ethnic_group_age |> 
+    select(ethnic_group, age_group, first_dose_pct, second_dose_pct) |> 
+    left_join(y = dist_pop_by_age, by = "age_group") |> 
+    mutate(first_dose_pct_weighted = first_dose_pct * population_pct, 
+           second_dose_pct_weighted = second_dose_pct * population_pct) |> 
+    group_by(ethnic_group) |> 
+    summarise(first_dose_pct = sum(first_dose_pct_weighted), 
+              second_dose_pct = sum(second_dose_pct_weighted)) |> 
+    ungroup() |> 
+    mutate(type = "age-standardised"), 
+  
+  # Age- and DHB-standardised rates
+  vax_rates_by_ethnic_group_age_dhb |> 
+    select(ethnic_group, age_group, dhb_of_residence, first_dose_pct, second_dose_pct) |> 
+    left_join(y = dist_pop_by_age_dhb, by = c("age_group", "dhb_of_residence")) |> 
+    mutate(first_dose_pct_weighted = first_dose_pct * population_pct, 
+           second_dose_pct_weighted = second_dose_pct * population_pct) |> 
+    group_by(ethnic_group) |> 
+    summarise(first_dose_pct = sum(first_dose_pct_weighted), 
+              second_dose_pct = sum(second_dose_pct_weighted)) |> 
+    ungroup() |> 
+    mutate(type = "age-and-dhb-standardised")
+) |> 
+  pivot_longer(cols = c(first_dose_pct, second_dose_pct), 
+               values_to = "value", 
+               names_to = "dose") |> 
+  mutate(ethnic_group = factor(x = ethnic_group, 
+                               levels = c("Maori", 
+                                          "Pacific Peoples", 
+                                          "Asian", 
+                                          "European or Other", 
+                                          "All"), 
+                               labels = c("Māori", 
+                                          "Pacific Peoples", 
+                                          "Asian", 
+                                          "Pākehā or other", 
+                                          "All"), 
+                               ordered = TRUE)) |> 
+  mutate(type = factor(x = type, 
+                       levels = c("unadjusted", 
+                                  "age-standardised", 
+                                  "age-and-dhb-standardised"), 
+                       labels = c("Unadjusted", 
+                                  "Age standardised", 
+                                  "Age and DHB standardised"), 
+                       ordered = TRUE)) |> 
+  mutate(dose = factor(x = dose, 
+                       levels = c("first_dose_pct", 
+                                  "second_dose_pct"), 
+                       labels = c("First dose", 
+                                  "Second dose"), 
+                       ordered = TRUE))
+
+# Chart of rates by ethnic group
+chart_vax_rates_by_ethnic_group_std <- 
+  vax_rates_by_ethnic_group_std |> 
+  ggplot(mapping = aes(x = ethnic_group, 
+                       y = value, 
+                       label = percent(x = value, accuracy = 1), 
+                       colour = type,
+                       fill = type)) + 
+  geom_col(position = "dodge", size = 0) + 
+  geom_text(position = position_dodge(width = 0.9), 
+            vjust = -0.3, 
+            family = "Fira Sans Custom", 
+            size = 2.5) + 
+  scale_y_continuous(breaks = seq(0, 1, 0.1), 
+                     labels = percent_format(accuracy = 1)) + 
+  scale_colour_manual(values = c("Unadjusted" = "#003f5c",
+                                 "Age standardised" = "#bc5090",
+                                 "Age and DHB standardised" = "#ffa600"),
+                      name = NULL,
+                      aesthetics = c("colour", "fill")) +
+  facet_wrap(facets = vars(dose), nrow = 1) + 
+  ylab("") + 
+  xlab("") + 
+  ggtitle(label = "COVID-19 vaccination rates by ethnic group (age 5+)", 
+          subtitle = glue("As at {latest_date_nice}")) + 
+  theme_minimal(base_family = "Fira Sans Custom") + 
+  theme(panel.grid.minor = element_blank(), 
+        panel.grid.major.x = element_blank(), 
+        panel.grid.major.y = element_line(size = 0.25), 
+        axis.ticks.x = element_blank(), 
+        legend.position = "top", 
+        legend.direction = "horizontal", 
+        panel.spacing.x = unit(36, "pt"), 
+        strip.text = element_text(face = "bold", hjust = 0), 
+        plot.margin = margin(4, 4, 4, 4, "pt"), 
+        axis.title = element_blank(), 
+        plot.title = element_text(size = rel(1.1), 
+                                  margin = margin(0, 0, 4, 0, "pt")), 
+        plot.subtitle = element_text(size = rel(0.9), 
+                                     face = "bold", 
+                                     margin = margin(0, 0, 8, 0, "pt")))
+
+ggsave(filename = glue(here("outputs/latest/vax_rates_by_ethnicity_standardised_{latest_date}.png")), 
+       plot = chart_vax_rates_by_ethnic_group_std, 
+       width = 2400, 
+       height = 1600, 
+       units = "px", 
+       device = "png", 
        bg = "white")
 
 # *****************************************************************************
@@ -521,165 +687,3 @@ ggsave(filename = here(glue("outputs/latest/first_doses_communities_{latest_date
 #        bg = "white")
 
 # *****************************************************************************
-
-
-# *****************************************************************************
-# Age-standardised vax rates ----
-# Age 12+ only, until MoH makes 5-11yo ethnic groups consistent with 12+
-
-# Standard age distributions (all ethnic groups combined)
-dist_pop_by_age <- dat |> 
-  group_by(age_group) |> 
-  summarise(population = sum(population)) |> 
-  ungroup() |> 
-  mutate(population_pct = population / sum(population)) 
-
-dist_pop_by_age_dhb <- dat |> 
-  group_by(dhb_of_residence, age_group) |> 
-  summarise(population = sum(population)) |> 
-  ungroup() |> 
-  mutate(population_pct = population / sum(population)) 
-
-# Vaccination rates by ethnic group 
-vax_rates_by_ethnic_group_age <- dat |> 
-  filter(ethnic_group != "Unknown", 
-         ethnic_group != "Various") |> 
-  group_by(ethnic_group, age_group) |> 
-  summarise(first_dose_administered = sum(first_dose_administered), 
-            second_dose_administered = sum(second_dose_administered), 
-            population = sum(population)) |> 
-  ungroup() |> 
-  mutate(first_dose_pct = first_dose_administered / population, 
-         second_dose_pct = second_dose_administered / population) 
-
-vax_rates_by_ethnic_group_age_dhb <- dat |> 
-  filter(ethnic_group != "Unknown", 
-         ethnic_group != "Various") |> 
-  group_by(ethnic_group, dhb_of_residence, age_group) |> 
-  summarise(first_dose_administered = sum(first_dose_administered), 
-            second_dose_administered = sum(second_dose_administered), 
-            population = sum(population)) |> 
-  ungroup() |> 
-  mutate(first_dose_pct = first_dose_administered / population, 
-         second_dose_pct = second_dose_administered / population) 
-
-# Unadjusted and adjusted vax rates by ethnicity
-vax_rates_by_ethnic_group_std <- bind_rows(
-  # Unadjusted rates
-  vax_rates_by_ethnic_group_age |> 
-    group_by(ethnic_group) |> 
-    summarise(first_dose_administered = sum(first_dose_administered), 
-              second_dose_administered = sum(second_dose_administered), 
-              population = sum(population)) |> 
-    ungroup() |> 
-    mutate(first_dose_pct = first_dose_administered / population, 
-           second_dose_pct = second_dose_administered / population) |> 
-    select(ethnic_group, first_dose_pct, second_dose_pct) |> 
-    mutate(type = "unadjusted"), 
-  
-  # Age-standardised rates
-  vax_rates_by_ethnic_group_age |> 
-    select(ethnic_group, age_group, first_dose_pct, second_dose_pct) |> 
-    left_join(y = dist_pop_by_age, by = "age_group") |> 
-    mutate(first_dose_pct_weighted = first_dose_pct * population_pct, 
-           second_dose_pct_weighted = second_dose_pct * population_pct) |> 
-    group_by(ethnic_group) |> 
-    summarise(first_dose_pct = sum(first_dose_pct_weighted), 
-              second_dose_pct = sum(second_dose_pct_weighted)) |> 
-    ungroup() |> 
-    mutate(type = "age-standardised"), 
-  
-  # Age- and DHB-standardised rates
-  vax_rates_by_ethnic_group_age_dhb |> 
-    select(ethnic_group, age_group, dhb_of_residence, first_dose_pct, second_dose_pct) |> 
-    left_join(y = dist_pop_by_age_dhb, by = c("age_group", "dhb_of_residence")) |> 
-    mutate(first_dose_pct_weighted = first_dose_pct * population_pct, 
-           second_dose_pct_weighted = second_dose_pct * population_pct) |> 
-    group_by(ethnic_group) |> 
-    summarise(first_dose_pct = sum(first_dose_pct_weighted), 
-              second_dose_pct = sum(second_dose_pct_weighted)) |> 
-    ungroup() |> 
-    mutate(type = "age-and-dhb-standardised")
-) |> 
-  pivot_longer(cols = c(first_dose_pct, second_dose_pct), 
-               values_to = "value", 
-               names_to = "dose") |> 
-  mutate(ethnic_group = factor(x = ethnic_group, 
-                               levels = c("Maori", 
-                                          "Pacific Peoples", 
-                                          "Asian", 
-                                          "European or Other", 
-                                          "All"), 
-                               labels = c("Māori", 
-                                          "Pacific Peoples", 
-                                          "Asian", 
-                                          "Pākehā or other", 
-                                          "All"), 
-                               ordered = TRUE)) |> 
-  mutate(type = factor(x = type, 
-                       levels = c("unadjusted", 
-                                  "age-standardised", 
-                                  "age-and-dhb-standardised"), 
-                       labels = c("Unadjusted", 
-                                  "Age standardised", 
-                                  "Age and DHB standardised"), 
-                       ordered = TRUE)) |> 
-  mutate(dose = factor(x = dose, 
-                       levels = c("first_dose_pct", 
-                                  "second_dose_pct"), 
-                       labels = c("First dose", 
-                                  "Second dose"), 
-                       ordered = TRUE))
-
-# Chart of rates by ethnic group
-chart_vax_rates_by_ethnic_group_std <- 
-  vax_rates_by_ethnic_group_std |> 
-  ggplot(mapping = aes(x = ethnic_group, 
-                       y = value, 
-                       label = percent(x = value, accuracy = 1), 
-                       colour = type,
-                       fill = type)) + 
-  geom_col(position = "dodge", size = 0) + 
-  geom_text(position = position_dodge(width = 0.9), 
-            vjust = -0.3, 
-            family = "Fira Sans Custom", 
-            size = 2.5) + 
-  scale_y_continuous(breaks = seq(0, 1, 0.1), 
-                     labels = percent_format(accuracy = 1)) + 
-  scale_colour_manual(values = c("Unadjusted" = "#003f5c",
-                                 "Age standardised" = "#bc5090",
-                                 "Age and DHB standardised" = "#ffa600"),
-                      name = NULL,
-                      aesthetics = c("colour", "fill")) +
-  facet_wrap(facets = vars(dose), nrow = 1) + 
-  ylab("") + 
-  xlab("") + 
-  ggtitle(label = "COVID-19 vaccination rates by ethnic group (age 12+ only)", 
-          subtitle = glue("As at {latest_date_nice}")) + 
-  theme_minimal(base_family = "Fira Sans Custom") + 
-  theme(panel.grid.minor = element_blank(), 
-        panel.grid.major.x = element_blank(), 
-        panel.grid.major.y = element_line(size = 0.25), 
-        axis.ticks.x = element_blank(), 
-        legend.position = "top", 
-        legend.direction = "horizontal", 
-        panel.spacing.x = unit(36, "pt"), 
-        strip.text = element_text(face = "bold", hjust = 0), 
-        plot.margin = margin(4, 4, 4, 4, "pt"), 
-        axis.title = element_blank(), 
-        plot.title = element_text(size = rel(1.1), 
-                                  margin = margin(0, 0, 4, 0, "pt")), 
-        plot.subtitle = element_text(size = rel(0.9), 
-                                     face = "bold", 
-                                     margin = margin(0, 0, 8, 0, "pt")))
-
-ggsave(filename = glue(here("outputs/latest/vax_rates_by_ethnicity_standardised_{latest_date}.png")), 
-       plot = chart_vax_rates_by_ethnic_group_std, 
-       width = 2400, 
-       height = 1600, 
-       units = "px", 
-       device = "png", 
-       bg = "white")
-
-# *****************************************************************************
-

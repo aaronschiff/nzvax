@@ -1,0 +1,67 @@
+dhb_of_residence,at_least_partially_vacc,fully_vacc,population,ethnicity
+Northland,5571,34,19480,All
+Waitemata,34624,330,61881,All
+Auckland,24894,447,40861,All
+Counties Manukau,32289,589,65365,All
+Waikato,18121,115,43635,All
+Lakes,4152,21,11998,All
+Bay of Plenty,9134,49,25345,All
+Tairawhiti,2171,20,5647,All
+Taranaki,5062,23,12748,All
+Hawkes Bay,6777,43,17749,All
+MidCentral,7683,27,17720,All
+Whanganui,2194,11,6588,All
+Capital and Coast,16934,110,27051,All
+Hutt Valley,8644,31,14890,All
+Wairarapa,1941,18,4294,All
+Nelson Marlborough,6664,71,13612,All
+West Coast,982,NA,2733,All
+Canterbury,26214,104,49808,All
+South Canterbury,2405,11,5298,All
+Southern,14337,44,28939,All
+Overseas / Unknown,78,NA,652,All
+Total,230871,2103,476294,All
+Northland,1997,10,10478,Maori
+Waitemata,3096,38,8520,Maori
+Auckland,1788,32,4322,Maori
+Counties Manukau,3792,87,13654,Maori
+Waikato,3655,32,14353,Maori
+Lakes,1323,9,5837,Maori
+Bay of Plenty,2041,20,9663,Maori
+Tairawhiti,1097,10,3586,Maori
+Taranaki,1023,7,3891,Maori
+Hawkes Bay,1677,17,7110,Maori
+MidCentral,1589,6,5415,Maori
+Whanganui,566,NA,2707,Maori
+Capital and Coast,2084,16,4676,Maori
+Hutt Valley,1473,6,3674,Maori
+Wairarapa,388,10,1304,Maori
+Nelson Marlborough,823,9,2457,Maori
+West Coast,163,NA,548,Maori
+Canterbury,2758,10,7502,Maori
+South Canterbury,257,NA,788,Maori
+Southern,1729,NA,4918,Maori
+Overseas / Unknown,9,NA,159,Maori
+Total,33328,326,115562,Maori
+Northland,169,NA,582,Pacific
+Waitemata,2618,26,6497,Pacific
+Auckland,2911,69,7257,Pacific
+Counties Manukau,8245,199,20488,Pacific
+Waikato,787,5,1950,Pacific
+Lakes,142,NA,405,Pacific
+Bay of Plenty,230,NA,696,Pacific
+Tairawhiti,70,NA,128,Pacific
+Taranaki,74,NA,260,Pacific
+Hawkes Bay,328,NA,994,Pacific
+MidCentral,334,NA,932,Pacific
+Whanganui,71,NA,277,Pacific
+Capital and Coast,1208,5,2822,Pacific
+Hutt Valley,699,NA,1521,Pacific
+Wairarapa,60,NA,141,Pacific
+Nelson Marlborough,228,NA,477,Pacific
+West Coast,22,NA,56,Pacific
+Canterbury,988,NA,2442,Pacific
+South Canterbury,121,NA,211,Pacific
+Southern,534,NA,1171,Pacific
+Overseas / Unknown,10,NA,91,Pacific
+Total,19849,318,49398,Pacific

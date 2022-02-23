@@ -12,9 +12,9 @@ library(glue)
 library(janitor)
 library(here)
 
-latest_date <- "15_02_2022"                # Date of current week's data
-prev_date <- "08_02_2022"                  # Date of previous week's data 
-latest_date_nice <- "15 February 2022"     # For chart title
+latest_date <- "22_02_2022"                # Date of current week's data
+prev_date <- "15_02_2022"                  # Date of previous week's data 
+latest_date_nice <- "22 February 2022"     # For chart title
 
 # *****************************************************************************
 
@@ -31,7 +31,7 @@ if (dl_vax_data != 0L) {
   stop("* Download vaccination data spreadsheet failed")
 }
 
-# Scrape age 5-11 tables
+# Scrape age 5-11 tables (no longer required as data is in the main spreadsheet)
 vax_page <- read_html("https://www.health.govt.nz/covid-19-novel-coronavirus/covid-19-data-and-statistics/covid-19-vaccine-data")
 
 vax_page_tables <- html_table(vax_page)
@@ -40,33 +40,42 @@ vax_511_all <- vax_page_tables[[7]] |>
   clean_names() |> 
   mutate(at_least_partially_vacc = str_remove(string = at_least_partially_vacc, 
                                               pattern = "\\,")) |> 
+  mutate(fully_vacc = str_remove(string = fully_vacc, 
+                                 pattern = "\\,")) |>
   mutate(population = str_remove(string = population, 
                                  pattern = "\\,")) |> 
   mutate(at_least_partially_vacc = as.integer(at_least_partially_vacc), 
+         fully_vacc = as.integer(fully_vacc), 
          population = as.integer(population)) |> 
-  select(-at_least_partially_vacc_percent) |> 
+  select(-at_least_partially_vacc_percent, -fully_vacc_percent) |>  
   mutate(ethnicity = "All")
 
 vax_511_maori <- vax_page_tables[[8]] |> 
   clean_names() |> 
   mutate(at_least_partially_vacc = str_remove(string = at_least_partially_vacc, 
                                               pattern = "\\,")) |> 
+  mutate(fully_vacc = str_remove(string = fully_vacc, 
+                                 pattern = "\\,")) |>
   mutate(population = str_remove(string = population, 
                                  pattern = "\\,")) |> 
   mutate(at_least_partially_vacc = as.integer(at_least_partially_vacc), 
+         fully_vacc = as.integer(fully_vacc), 
          population = as.integer(population)) |> 
-  select(-at_least_partially_vacc_percent) |> 
+  select(-at_least_partially_vacc_percent, -fully_vacc_percent) |> 
   mutate(ethnicity = "Maori")
 
 vax_511_pacific <- vax_page_tables[[9]] |> 
   clean_names() |> 
   mutate(at_least_partially_vacc = str_remove(string = at_least_partially_vacc, 
                                               pattern = "\\,")) |> 
+  mutate(fully_vacc = str_remove(string = fully_vacc, 
+                                 pattern = "\\,")) |>
   mutate(population = str_remove(string = population, 
                                  pattern = "\\,")) |> 
   mutate(at_least_partially_vacc = as.integer(at_least_partially_vacc), 
+         fully_vacc = as.integer(fully_vacc), 
          population = as.integer(population)) |> 
-  select(-at_least_partially_vacc_percent) |> 
+  select(-at_least_partially_vacc_percent, -fully_vacc_percent) |> 
   mutate(ethnicity = "Pacific")
 
 vax_511 <- bind_rows(

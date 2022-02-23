@@ -44,28 +44,28 @@ dat <- read_excel(path = here(glue("data/covid_vaccinations_{latest_date}.xlsx")
   rename(first_dose_administered = at_least_partially_vaccinated, 
          second_dose_administered = fully_vaccinated)
 
-dat_511 <- read_excel(path = here(glue("data/covid_vaccinations_5_11_yo_{latest_date}.xlsx"))) |> 
-  clean_names() |> 
-  rename(first_dose_administered = at_least_partially_vaccinated) |> 
-  pivot_wider(names_from = ethnicity, values_from = c(first_dose_administered, 
-                                                      population), 
-              names_sep = ".") |> 
-  mutate(population.non_Maori_non_Pacific = 
-           population.All - population.Maori - population.Pacific) |> 
-  mutate(first_dose_administered.non_Maori_non_Pacific = 
-           first_dose_administered.All - first_dose_administered.Maori - first_dose_administered.Pacific) |> 
-  select(-first_dose_administered.All, 
-         -population.All) |> 
-  pivot_longer(cols = -dhb_of_residence) |> 
-  separate(col = name, into = c("measure", "ethnic_group"), sep = "\\.") |> 
-  pivot_wider(names_from = measure, values_from = value) |> 
-  mutate(ethnic_group = case_when(
-    ethnic_group == "Pacific" ~ "Pacific Peoples", 
-    ethnic_group == "non_Maori_non_Pacific" ~ "non-Maori non-Pacific", 
-    TRUE ~ ethnic_group
-  )) |> 
-  mutate(age_group = "5-11", 
-         week = "current")
+# dat_511 <- read_excel(path = here(glue("data/covid_vaccinations_5_11_yo_{latest_date}.xlsx"))) |> 
+#   clean_names() |> 
+#   rename(first_dose_administered = at_least_partially_vaccinated) |> 
+#   pivot_wider(names_from = ethnicity, values_from = c(first_dose_administered, 
+#                                                       population), 
+#               names_sep = ".") |> 
+#   mutate(population.non_Maori_non_Pacific = 
+#            population.All - population.Maori - population.Pacific) |> 
+#   mutate(first_dose_administered.non_Maori_non_Pacific = 
+#            first_dose_administered.All - first_dose_administered.Maori - first_dose_administered.Pacific) |> 
+#   select(-first_dose_administered.All, 
+#          -population.All) |> 
+#   pivot_longer(cols = -dhb_of_residence) |> 
+#   separate(col = name, into = c("measure", "ethnic_group"), sep = "\\.") |> 
+#   pivot_wider(names_from = measure, values_from = value) |> 
+#   mutate(ethnic_group = case_when(
+#     ethnic_group == "Pacific" ~ "Pacific Peoples", 
+#     ethnic_group == "non_Maori_non_Pacific" ~ "non-Maori non-Pacific", 
+#     TRUE ~ ethnic_group
+#   )) |> 
+#   mutate(age_group = "5-11", 
+#          week = "current")
 
 # Public hospitals
 # dat_hosp <- read_csv(file = here("data/nz_public_hospitals.csv"), 
@@ -85,7 +85,7 @@ dat_511 <- read_excel(path = here(glue("data/covid_vaccinations_5_11_yo_{latest_
 # Process data ----
 
 # Manipulate vaccination data for Māori
-dat_m <- bind_rows(dat, dat_511) |> 
+dat_m <- dat |> 
   # Filter Māori and exclude unknown DHB
   filter(ethnic_group == "Maori", 
          dhb_of_residence != "Overseas / Unknown") |> 
