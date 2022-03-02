@@ -12,7 +12,7 @@ library(glue)
 library(janitor)
 library(here)
 
-latest_date <- "22_02_2022"                # Date of current week's data
+latest_date <- "01_03_2022"                # Date of current week's data
 prev_date <- "15_02_2022"                  # Date of previous week's data 
 latest_date_nice <- "22 February 2022"     # For chart title
 

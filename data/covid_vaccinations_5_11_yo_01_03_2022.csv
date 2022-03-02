@@ -1,0 +1,67 @@
+dhb_of_residence,at_least_partially_vacc,fully_vacc,population,ethnicity
+Northland,5949,44,19480,All
+Waitemata,36087,624,61881,All
+Auckland,25695,758,40861,All
+Counties Manukau,33848,873,65365,All
+Waikato,19207,214,43635,All
+Lakes,4491,51,11998,All
+Bay of Plenty,9806,137,25345,All
+Tairawhiti,2343,37,5647,All
+Taranaki,5399,46,12748,All
+Hawkes Bay,7149,79,17749,All
+MidCentral,8220,64,17720,All
+Whanganui,2383,15,6588,All
+Capital and Coast,17575,196,27051,All
+Hutt Valley,9038,68,14890,All
+Wairarapa,2035,44,4294,All
+Nelson Marlborough,6880,96,13612,All
+West Coast,1086,5,2733,All
+Canterbury,28223,237,49808,All
+South Canterbury,2555,15,5298,All
+Southern,15057,113,28939,All
+Overseas / Unknown,83,NA,652,All
+Total,243109,3718,476294,All
+Northland,2205,16,10478,Maori
+Waitemata,3311,66,8520,Maori
+Auckland,1888,54,4322,Maori
+Counties Manukau,4020,126,13654,Maori
+Waikato,4038,61,14353,Maori
+Lakes,1484,27,5837,Maori
+Bay of Plenty,2289,47,9663,Maori
+Tairawhiti,1231,18,3586,Maori
+Taranaki,1103,11,3891,Maori
+Hawkes Bay,1806,36,7110,Maori
+MidCentral,1743,17,5415,Maori
+Whanganui,644,NA,2707,Maori
+Capital and Coast,2186,27,4676,Maori
+Hutt Valley,1567,15,3674,Maori
+Wairarapa,410,26,1304,Maori
+Nelson Marlborough,861,11,2457,Maori
+West Coast,178,NA,548,Maori
+Canterbury,3034,40,7502,Maori
+South Canterbury,282,NA,788,Maori
+Southern,1838,10,4918,Maori
+Overseas / Unknown,9,NA,159,Maori
+Total,36127,612,115562,Maori
+Northland,182,NA,582,Pacific
+Waitemata,2813,46,6497,Pacific
+Auckland,3101,106,7257,Pacific
+Counties Manukau,8852,271,20488,Pacific
+Waikato,871,11,1950,Pacific
+Lakes,156,NA,405,Pacific
+Bay of Plenty,263,NA,696,Pacific
+Tairawhiti,75,NA,128,Pacific
+Taranaki,88,NA,260,Pacific
+Hawkes Bay,369,NA,994,Pacific
+MidCentral,373,NA,932,Pacific
+Whanganui,82,NA,277,Pacific
+Capital and Coast,1320,19,2822,Pacific
+Hutt Valley,767,NA,1521,Pacific
+Wairarapa,76,NA,141,Pacific
+Nelson Marlborough,237,NA,477,Pacific
+West Coast,24,NA,56,Pacific
+Canterbury,1116,8,2442,Pacific
+South Canterbury,130,NA,211,Pacific
+Southern,566,5,1171,Pacific
+Overseas / Unknown,12,NA,91,Pacific
+Total,21473,484,49398,Pacific
