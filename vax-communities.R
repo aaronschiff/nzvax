@@ -115,7 +115,12 @@ dat_clean <- dat |>
             population = sum(population)) |> 
   ungroup() |> 
   mutate(second_dose_administered = replace_na(second_dose_administered, 
-                                               replace = 0))
+                                               replace = 0)) |> 
+  complete(dhb_of_residence, ethnic_group, age_group_2, week, 
+           fill = list(second_dose_administered = NA_real_, 
+                       first_dose_administered = NA_real_, 
+                       population = NA_real_)) |> 
+  arrange(dhb_of_residence, ethnic_group, age_group_2)
 
 # Add total for each DHB and manipulate for charting
 dat_combined <- bind_rows(
@@ -124,9 +129,9 @@ dat_combined <- bind_rows(
   # Add totals for each DHB
   dat_clean |> 
     group_by(week, dhb_of_residence) |> 
-    summarise(second_dose_administered = sum(second_dose_administered), 
-              first_dose_administered = sum(first_dose_administered), 
-              population = sum(population)) |> 
+    summarise(second_dose_administered = sum(second_dose_administered, na.rm = TRUE), 
+              first_dose_administered = sum(first_dose_administered, na.rm = TRUE), 
+              population = sum(population, na.rm = TRUE)) |> 
     mutate(ethnic_group = "All", age_group_2 = "All") |> 
     ungroup()
 ) |> 
@@ -222,12 +227,14 @@ dat_chart_vax_rate <- dat_combined |>
     fully_vax_rate > 0.9 ~ "Greater than 90%", 
     (fully_vax_rate > 0.8) & (fully_vax_rate <= 0.9) ~ "80% to 90%", 
     (fully_vax_rate >= 0.7) & (fully_vax_rate <= 0.8) ~ "70% to 80%", 
+    is.na(fully_vax_rate) ~ "Unknown", 
     TRUE ~ "Less than 70%"
   )) |> 
   mutate(first_dose_category = case_when(
     first_dose_rate > 0.9 ~ "Greater than 90%", 
     (first_dose_rate > 0.8) & (first_dose_rate <= 0.9) ~ "80% to 90%", 
     (first_dose_rate >= 0.7) & (first_dose_rate <= 0.8) ~ "70% to 80%", 
+    is.na(first_dose_rate) ~ "Unknown", 
     TRUE ~ "Less than 70%"
   )) |> 
   # Create factors for ordering
@@ -235,13 +242,15 @@ dat_chart_vax_rate <- dat_combined |>
                                      levels = c("Greater than 90%", 
                                                 "80% to 90%", 
                                                 "70% to 80%", 
-                                                "Less than 70%"), 
+                                                "Less than 70%", 
+                                                "Unknown"), 
                                      ordered = TRUE)) |> 
   mutate(first_dose_category = factor(x = first_dose_category, 
                                       levels = c("Greater than 90%", 
                                                  "80% to 90%", 
                                                  "70% to 80%", 
-                                                 "Less than 70%"), 
+                                                 "Less than 70%", 
+                                                 "Unknown"), 
                                       ordered = TRUE)) |> 
   arrange(dhb_of_residence, ethnicity_age)
 
@@ -267,7 +276,8 @@ chart_fully_vax_rate <- ggplot(dat_chart_vax_rate,
   scale_fill_manual(values = c("Greater than 90%" = lighten(col = "red", amount = 0.9),
                                "80% to 90%" = lighten(col = "red", amount = 0.5),
                                "70% to 80%" = lighten(col = "red", amount = 0.1),
-                               "Less than 70%" = darken(col = "red", amount = 0.25)),
+                               "Less than 70%" = darken(col = "red", amount = 0.25), 
+                               "Unknown" = grey(0.97)),
                     name = NULL) +
   scale_colour_manual(values = c("90+" = grey(0.75),
                                  "under-90" = "white"), 
@@ -329,7 +339,8 @@ chart_first_doses_rate <- ggplot(dat_chart_vax_rate,
   scale_fill_manual(values = c("Greater than 90%" = lighten(col = "red", amount = 0.9),
                                "80% to 90%" = lighten(col = "red", amount = 0.5),
                                "70% to 80%" = lighten(col = "red", amount = 0.1),
-                               "Less than 70%" = darken(col = "red", amount = 0.25)),
+                               "Less than 70%" = darken(col = "red", amount = 0.25), 
+                               "Unknown" = grey(0.97)),
                     name = NULL) +
   scale_colour_manual(values = c("90+" = grey(0.75),
                                  "under-90" = "white"), 
