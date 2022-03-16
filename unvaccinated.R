@@ -290,12 +290,12 @@ chart_60plus_bar <- dat_60plus |>
   geom_col(size = 0) + 
   geom_text(family = "Fira Sans Custom", 
             size = 3, 
-            nudge_y = 200) + 
+            nudge_y = 100) + 
   facet_wrap(facets = vars(ethnic_group), ncol = 1) + 
   scale_x_discrete(position = "top") + 
   scale_y_continuous(labels = comma_format(accuracy = 1),
-                     limits = c(0, 2000),
-                     breaks = seq(0, 2000, 500), 
+                     limits = c(0, 1500),
+                     breaks = seq(0, 1500, 250), 
                      expand = expansion(0, 0)) +
   scale_colour_manual(values = c("Māori" = "#6929c4", 
                                  "Pacific Peoples" = "#1192e8", 
