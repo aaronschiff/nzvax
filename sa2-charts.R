@@ -414,6 +414,95 @@ ggsave(filename = here(glue("outputs/latest/fully_vax_SA2_12plus_{latest_date}.p
        units = "px", 
        bg = "white")
 
+# Second doses age 5-11
+chart_fully_vax_5_11 <- dat_chart |> 
+  filter(age == "5-11") |> 
+  ggplot(mapping = aes(x = dose2_uptake / 100, 
+                       y = 0, 
+                       fill = fully_vax_category)) + 
+  geom_vline(xintercept = c(0.7, 0.8, 0.9), 
+             colour = grey(0.5), 
+             size = 0.25) + 
+  geom_beeswarm(priority = "random", 
+                groupOnX = FALSE, 
+                size = 0.8, 
+                shape = 21, 
+                colour = grey(0.75), 
+                stroke = 0.2) + 
+  geom_text(x = 0.705,  
+            y = 0.2,
+            label = "70%",
+            hjust = 0, 
+            family = "Fira Sans Custom", 
+            fontface = "bold", 
+            size = 2, 
+            colour = grey(0.5)) +   
+  geom_text(x = 0.805,  
+            y = 0.2,
+            label = "80%",
+            hjust = 0, 
+            family = "Fira Sans Custom", 
+            fontface = "bold", 
+            size = 2, 
+            colour = grey(0.5)) +
+  geom_text(x = 0.905,  
+            y = 0.2,
+            label = "90%",
+            hjust = 0, 
+            family = "Fira Sans Custom", 
+            fontface = "bold", 
+            size = 2, 
+            colour = grey(0.5)) +
+  # Used geom_text because annotate seems to interfere with geom_beeswarm
+  facet_wrap(facets = vars(regc2018_name),
+             ncol = 4) + 
+  scale_x_continuous(breaks = seq(0, 1, 0.1), 
+                     expand = expansion(0, 0), 
+                     limits = c(0, 0.99)) + 
+  scale_fill_manual(values = c("Greater than 90%" = lighten(col = "red", amount = 0.9),
+                               "80% to 90%" = lighten(col = "red", amount = 0.5),
+                               "70% to 80%" = lighten(col = "red", amount = 0.1),
+                               "Less than 70%" = darken(col = "red", amount = 0.25)),
+                    name = NULL) + 
+  guides(fill = guide_legend(override.aes = list(size = 2, 
+                                                 stroke = 0.35), 
+                             reverse = TRUE)) + 
+  xlab("") + 
+  ylab("") + 
+  labs(tag = "Chart by Aaron Schiff using data from the NZ Ministry of Health\nCC-BY 4.0. schiff.nz/covid/nz-vax/") + 
+  ggtitle(label = "Age 5-11 NZ COVID-19 vaccination rates for each suburb (SA2 area)", 
+          subtitle = glue("People who have received two doses to {latest_date_nice} (percent of age 5-11 population)")) + 
+  theme_minimal(base_family = "Fira Sans Custom") + 
+  theme(panel.grid.major.y = element_blank(), 
+        panel.grid.minor = element_blank(), 
+        panel.grid.major.x = element_line(size = 0.25), 
+        panel.spacing.y = unit(16, "pt"), 
+        panel.spacing.x = unit(16, "pt"), 
+        legend.position = "top", 
+        legend.box.margin = margin(0, 0, 0, 0, "pt"), 
+        legend.margin = margin(0, 0, 0, 0, "pt"), 
+        axis.text.y = element_blank(), 
+        axis.text.x = element_blank(), 
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        strip.text = element_text(face = "bold", hjust = -0.04), 
+        plot.margin = margin(4, 4, 4, 4, "pt"), 
+        plot.title = element_text(size = rel(1.1), 
+                                  margin = margin(0, 0, 4, 0, "pt")), 
+        plot.subtitle = element_text(size = rel(0.9), 
+                                     face = "bold", 
+                                     margin = margin(0, 0, 8, 0, "pt")), 
+        plot.tag.position = c(0.99, 0.985), 
+        plot.tag = element_text(hjust = 1, size = rel(0.6)))
+
+ggsave(filename = here(glue("outputs/latest/fully_vax_SA2_5_11_{latest_date}.png")), 
+       plot = chart_fully_vax_5_11, 
+       device = agg_png, 
+       width = 2600, 
+       height = 1800, 
+       units = "px", 
+       bg = "white")
+
 # Boosters
 chart_booster <- dat_chart |> 
   filter(age == "12+") |> 
