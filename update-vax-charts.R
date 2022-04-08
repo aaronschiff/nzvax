@@ -12,9 +12,9 @@ library(glue)
 library(janitor)
 library(here)
 
-latest_date <- "29_03_2022"                # Date of current week's data
-prev_date <- "22_03_2022"                  # Date of previous week's data 
-latest_date_nice <- "29 March 2022"         # For chart title
+latest_date <- "05_04_2022"                # Date of current week's data
+prev_date <- "29_03_2022"                  # Date of previous week's data 
+latest_date_nice <- "5 April 2022"         # For chart title
 
 # *****************************************************************************
 
@@ -156,5 +156,3 @@ file.rename(from = latest_website_files,
 cat("- Done! Please commit and push website repo now.")
 
 # *****************************************************************************
-
-
